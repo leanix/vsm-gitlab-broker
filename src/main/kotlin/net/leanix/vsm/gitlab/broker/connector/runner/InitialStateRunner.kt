@@ -7,13 +7,11 @@ import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
 
 @Component
-class InitialStateRunner: ApplicationRunner {
+class InitialStateRunner : ApplicationRunner {
 
     private val logger: Logger = LoggerFactory.getLogger(InitialStateRunner::class.java)
 
     override fun run(args: ApplicationArguments?) {
         logger.info("Started get initial state")
-
-        TODO("Not yet implemented")
     }
 }
