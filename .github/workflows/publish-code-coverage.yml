@@ -1,4 +1,4 @@
-name: vsm-github-broker-code-coverage
+name: vsm-gitlab-broker-code-coverage
 
 concurrency:
   group: vsm-gitlab-broker-code-coverage-${{ github.ref }}
