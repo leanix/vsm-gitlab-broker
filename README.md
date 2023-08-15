@@ -22,6 +22,6 @@ You can run the docker container by providing the relevant configuration:
 docker run --pull=always --restart=always \
            -p 8080:8080 \
            -e LEANIX_DOMAIN=<region>.leanix.net \
-           -e LEANIX_API_TOKEN=<technical_user-token>\
+           -e LEANIX_TECHNICAL_USER_TOKEN=<technical_user-token>\
         leanixacrpublic.azurecr.io/vsm-gitlab-broker
 ```

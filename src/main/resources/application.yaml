@@ -4,8 +4,7 @@ leanix:
     connector:
       api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
     events-broker:
-#      base-url: ${leanix.vsm.base-url}/vsm-events-broker
-      base-url: http://localhost:8083
+      base-url: ${leanix.vsm.base-url}/vsm-events-broker
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
 
