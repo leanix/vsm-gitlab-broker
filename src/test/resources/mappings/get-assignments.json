@@ -1,0 +1,14 @@
+{
+  "request": {
+    "url": "/gitlab-on-prem/assignments",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "X-LX-VsmGitLavBroker-Version": "v0.0.2",
+      "Content-Type": "application/json"
+    },
+    "body": "{ \"runId\": \"f1abfae5-f144-47e1-9cda-3eaa94e5286d\", \"configurationId\": \"a7a74e83-dde9-48a0-8b0d-c74f954671fb\", \"workspaceId\": \"38718fc9-d106-47a5-a25c-e4e595c8c2d4\", \"organizationNameList\": [ \"super-repo\", \"super-duper-repo\" ] }"
+  }
+}

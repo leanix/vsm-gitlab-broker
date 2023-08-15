@@ -11,6 +11,6 @@ class ShutdownService {
 
     @PreDestroy
     fun onDestroy() {
-        logger.info("Shutting down github broker")
+        logger.info("Shutting down gitlab on-prem")
     }
 }
