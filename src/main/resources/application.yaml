@@ -1,1 +1,12 @@
+leanix:
+  base-url: https://${LEANIX_DOMAIN}/services
+  vsm:
+    connector:
+      api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
+    events-broker:
+      base-url: ${leanix.vsm.base-url}/vsm-events-broker
+    auth:
+      access-token-uri: ${leanix.base-url}/mtm/v1
 
+server:
+  port: 8082
