@@ -1,0 +1,12 @@
+leanix:
+  base-url: http://localhost:8080
+  heartbeat:
+    interval: ${LEANIX_HEARTBEAT_INTERVAL:300000} #  5 minutes
+  vsm:
+    events-broker:
+      base-url: http://localhost:8080
+    auth:
+      access-token-uri: ${leanix.base-url}/mtm/v1
+
+server:
+  port: 8082

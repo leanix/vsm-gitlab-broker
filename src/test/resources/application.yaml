@@ -1,9 +1,11 @@
 leanix:
   base-url: http://localhost:${wiremock.server.port:6666}/services
+  heartbeat:
+    interval: ${LEANIX_HEARTBEAT_INTERVAL:300000} #  5 minutes
   vsm:
     connector:
       api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
-    events-broker:
-      base-url: http://localhost:${wiremock.server.port:6666}
+#    events-broker:
+#      base-url: http://localhost:${wiremock.server.port:6666}
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
