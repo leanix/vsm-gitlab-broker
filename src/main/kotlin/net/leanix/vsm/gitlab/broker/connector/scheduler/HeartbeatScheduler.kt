@@ -16,6 +16,7 @@ class HeartbeatScheduler(
     private val logger = LoggerFactory.getLogger(HeartbeatScheduler::class.java)
 
     @Scheduled(fixedRateString = "\${leanix.heartbeat.interval}")
+    @Suppress("ForbiddenComment")
     fun heartbeat() {
         AssignmentsCache.getAll().values.forEach { assignment ->
             logger.info("Sending heartbeat for runId: ${assignment.runId}")
@@ -24,6 +25,7 @@ class HeartbeatScheduler(
                 ?.also {
                     assignmentService.getAssignments()
                     // TODO: here we need to re-fetch everything for this config
+                    // remove @Suppress from function definition
                 }
         }
     }

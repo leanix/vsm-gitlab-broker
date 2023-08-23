@@ -21,7 +21,7 @@ class InitialStateRunner(
             assignmentService.getAssignments()?.forEach { assignment ->
                 logger.info(
                     "Received assignment for ${assignment.connectorConfiguration.orgName} " +
-                            "with configuration id: ${assignment.configurationId} and with run id: ${assignment.runId}"
+                        "with configuration id: ${assignment.configurationId} and with run id: ${assignment.runId}"
                 )
             }
         }.onSuccess {
