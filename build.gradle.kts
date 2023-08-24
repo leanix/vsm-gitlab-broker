@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.2"
 	id("io.gitlab.arturbosch.detekt") version "1.23.0"
 	id("org.cyclonedx.bom") version "1.7.4"
+	id("com.expediagroup.graphql") version "6.4.0"
 	kotlin("jvm") version "1.8.21"
 	kotlin("plugin.spring") version "1.8.21"
 	id("jacoco")
@@ -32,6 +33,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("com.expediagroup:graphql-kotlin-spring-client:6.4.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 	testImplementation("org.springframework.security:spring-security-test")
@@ -79,5 +81,13 @@ tasks.jacocoTestReport {
 tasks.processResources {
 	doLast {
 		file("build/resources/main/gradle.properties").writeText("version=${project.version}")
+	}
+}
+
+graphql {
+	client {
+		schemaFile = file("${project.projectDir}/src/main/resources/schemas/gitlab_schema.graphql")
+		packageName = "net.leanix.githubbroker.connector.adapter.graphql.data"
+		queryFileDirectory = "${project.projectDir}/src/main/resources/queries"
 	}
 }

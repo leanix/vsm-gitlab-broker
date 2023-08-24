@@ -1,0 +1,31 @@
+query AllGroupsQuery($group: String!, $pageCount: Int!, $cursor: String) {
+    group(fullPath: $group) {
+        id
+        name
+        projects(first: $pageCount, after: $cursor) {
+            pageInfo {
+                hasNextPage
+                endCursor
+            }
+            nodes {
+                name
+                id
+                archived
+                visibility
+                topics
+                webUrl
+                description
+                lastActivityAt
+                languages {
+                    name
+                    share
+                }
+                repository {
+                    codeOwnersPath
+                    diskPath
+                    rootRef
+                }
+            }
+        }
+    }
+}
