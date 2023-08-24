@@ -1,4 +1,4 @@
-package net.leanix.vsm.githubbroker.logs.adapter.feign.data
+package net.leanix.vsm.gitlab.broker.logs.adapter.feign.data
 
 import jakarta.validation.constraints.NotNull
 import net.leanix.vsm.gitlab.broker.logs.domain.AdminLog

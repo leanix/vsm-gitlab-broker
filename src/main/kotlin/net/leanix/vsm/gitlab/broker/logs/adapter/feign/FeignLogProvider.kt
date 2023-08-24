@@ -1,8 +1,8 @@
 package net.leanix.vsm.gitlab.broker.logs.adapter.feign
 
 import feign.FeignException
-import net.leanix.vsm.githubbroker.logs.adapter.feign.data.AdminRequest
-import net.leanix.vsm.githubbroker.logs.adapter.feign.data.StatusRequest
+import net.leanix.vsm.gitlab.broker.logs.adapter.feign.data.AdminRequest
+import net.leanix.vsm.gitlab.broker.logs.adapter.feign.data.StatusRequest
 import net.leanix.vsm.gitlab.broker.logs.domain.AdminLog
 import net.leanix.vsm.gitlab.broker.logs.domain.LogProvider
 import net.leanix.vsm.gitlab.broker.logs.domain.StatusLog
