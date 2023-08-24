@@ -13,11 +13,10 @@ import java.util.UUID
 internal class FeignLogProviderTest {
 
     private val loggingClient = mockk<LoggingClient>()
-    private val statusLogClient = mockk<StatusLogClient>()
-    private val feignLogProvider = FeignLogProvider(loggingClient, statusLogClient)
+    private val feignLogProvider = FeignLogProvider(loggingClient)
 
     @Test
-    fun `sending admin log should call correct client`() {
+    fun `sending admin or status log should call the logging client`() {
         val adminLog = AdminLog(
             runId = UUID.randomUUID(),
             configurationId = UUID.randomUUID(),
@@ -37,8 +36,8 @@ internal class FeignLogProviderTest {
             status = LogStatus.IN_PROGRESS,
             message = "Success"
         )
-        every { statusLogClient.sendStatusLog(any()) } returns Unit
+        every { loggingClient.sendStatusLog(any()) } returns Unit
         feignLogProvider.sendStatusLog(statusLog)
-        verify(exactly = 1) { statusLogClient.sendStatusLog(any()) }
+        verify(exactly = 1) { loggingClient.sendStatusLog(any()) }
     }
 }

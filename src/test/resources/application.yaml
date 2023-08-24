@@ -1,7 +1,6 @@
 leanix:
   base-url: http://localhost:${wiremock.server.port:6666}/services
   vsm:
-    base-url:  ${leanix.base-url}/vsm-canopy/v1
     connector:
       api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
     events-broker:
