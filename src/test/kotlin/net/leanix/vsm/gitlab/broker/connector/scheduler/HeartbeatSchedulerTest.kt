@@ -30,7 +30,6 @@ class HeartbeatSchedulerTest {
 
     @Test
     fun `should re-fetch assignments when new config available`() {
-
         `when`(vsmClient.heartbeat(runId.toString())).thenReturn(GitLabHeartbeatResponse("OK", true))
 
         subject.heartbeat()
@@ -40,7 +39,6 @@ class HeartbeatSchedulerTest {
 
     @Test
     fun `should not re-fetch assignments when no new config available`() {
-
         `when`(vsmClient.heartbeat(runId.toString())).thenReturn(GitLabHeartbeatResponse("OK", false))
 
         subject.heartbeat()
