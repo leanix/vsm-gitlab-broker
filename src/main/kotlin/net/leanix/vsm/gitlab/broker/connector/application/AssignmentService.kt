@@ -1,4 +1,4 @@
-package net.leanix.vsm.gitlab.broker.connector.applicaiton
+package net.leanix.vsm.gitlab.broker.connector.application
 
 import net.leanix.vsm.gitlab.broker.connector.domain.AssignmentProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
