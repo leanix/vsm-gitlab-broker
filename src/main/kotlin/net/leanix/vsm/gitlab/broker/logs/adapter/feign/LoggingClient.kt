@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody
 
 @FeignClient(
     name = "loggingClient",
-    url = "\${leanix.vsm.event-broker.base-url}",
+    url = "\${leanix.vsm.events-broker.base-url}",
     configuration = [MtmFeignClientConfiguration::class]
 )
 interface LoggingClient {

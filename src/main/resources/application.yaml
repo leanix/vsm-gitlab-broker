@@ -1,6 +1,7 @@
 leanix:
   base-url: https://${LEANIX_DOMAIN}/services
   vsm:
+    base-url:  ${leanix.base-url}/vsm-canopy/v1
     connector:
       api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
     events-broker:
