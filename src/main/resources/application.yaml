@@ -1,5 +1,7 @@
 leanix:
   base-url: https://${LEANIX_DOMAIN}/services
+  heartbeat:
+    interval: ${LEANIX_HEARTBEAT_INTERVAL:300000} #  5 minutes
   vsm:
     connector:
       api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
