@@ -6,7 +6,7 @@ leanix:
     events-broker:
       base-url: http://localhost:8080
     auth:
-      access-token-uri: ${leanix.base-url}/mtm/v1
+      access-token-uri: https://test-app-1.leanix.net/services/mtm/v1
 
 server:
   port: 8082
