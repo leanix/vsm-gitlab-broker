@@ -25,9 +25,9 @@ class InitialStateRunnerTest {
             )
 
             WireMock.verify(
-                    2,
-                    WireMock.postRequestedFor(urlEqualTo("/api/graphql"))
-                            .withRequestBody(WireMock.containing("AllGroupsQuery"))
+                1,
+                WireMock.postRequestedFor(urlEqualTo("/api/graphql"))
+                    .withRequestBody(WireMock.containing("AllGroupsQuery"))
 
             )
         }

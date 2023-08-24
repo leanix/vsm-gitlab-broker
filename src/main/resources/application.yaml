@@ -3,6 +3,8 @@ leanix:
   vsm:
     connector:
       api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
+      gitlab-token: ${GITLAB_TOKEN}
+      gitlab-url: ${GITLAB_URL}
     events-broker:
       base-url: ${leanix.vsm.base-url}/vsm-events-broker
     auth:

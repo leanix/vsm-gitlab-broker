@@ -2,8 +2,14 @@ leanix:
   base-url: http://localhost:${wiremock.server.port:6666}/services
   vsm:
     connector:
-      api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
+      api-user-token: api-token
+      gitlab-token: gitlab-token
+      gitlab-url: http://localhost:${wiremock.server.port:6666}
     events-broker:
       base-url: http://localhost:${wiremock.server.port:6666}
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
+
+application:
+  runner:
+    enabled: false
