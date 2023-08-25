@@ -39,6 +39,7 @@ dependencies {
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 
     developmentOnly("io.netty:netty-resolver-dns-native-macos:4.1.85.Final") {
         artifact {
