@@ -2,7 +2,7 @@ package net.leanix.vsm.gitlab.broker.webhook.domain
 
 import com.nimbusds.jose.shaded.gson.annotations.SerializedName
 
-data class CreateGitlabWebhookRequestDto(
+data class CreateGitlabWebhookRequest(
     val url: String,
     val token: String,
     @SerializedName("push_events")

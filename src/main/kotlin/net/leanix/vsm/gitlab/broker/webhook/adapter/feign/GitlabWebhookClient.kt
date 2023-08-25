@@ -1,6 +1,6 @@
 package net.leanix.vsm.gitlab.broker.webhook.adapter.feign
 
-import net.leanix.vsm.gitlab.broker.webhook.domain.GitlabWebhookDto
+import net.leanix.vsm.gitlab.broker.webhook.domain.GitlabWebhook
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam
 interface GitlabWebhookClient {
 
     @GetMapping("/hooks")
-    fun getAllWebhooks(): List<GitlabWebhookDto>
+    fun getAllWebhooks(): List<GitlabWebhook>
 
     @DeleteMapping("/hooks/{webhookId}")
     fun deleteWebhook(@PathVariable("webhookId") webhookId: Int)
@@ -31,5 +31,5 @@ interface GitlabWebhookClient {
         @RequestParam("merge_requests_events") receiveMergeRequestEvents: Boolean,
         @RequestParam("repository_update_events") receiveRepositoryUpdateEvents: Boolean,
         @RequestParam("enable_ssl_verification") enableSSLVerification: Boolean,
-    ): GitlabWebhookDto
+    ): GitlabWebhook
 }

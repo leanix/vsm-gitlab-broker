@@ -1,7 +1,7 @@
 package net.leanix.vsm.gitlab.broker.webhook.application
 
 import net.leanix.vsm.gitlab.broker.webhook.adapter.feign.WebhookProvider
-import net.leanix.vsm.gitlab.broker.webhook.domain.GitlabWebhookDto
+import net.leanix.vsm.gitlab.broker.webhook.domain.GitlabWebhook
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
@@ -32,7 +32,7 @@ class GitlabWebhookServiceImplTest {
     }
 }
 
-fun dummyGitlabWebhookDto(id: Int) = GitlabWebhookDto(
+fun dummyGitlabWebhookDto(id: Int) = GitlabWebhook(
     id = id,
     url = "https://gitlab.example.com/hook",
     createdAt = Date(),

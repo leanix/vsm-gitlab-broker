@@ -3,7 +3,7 @@ package net.leanix.vsm.gitlab.broker.webhook.domain
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Date
 
-data class GitlabWebhookDto(
+data class GitlabWebhook(
     val id: Int,
     val url: String,
     @JsonProperty("created_at")
