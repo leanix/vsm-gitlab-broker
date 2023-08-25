@@ -1,7 +1,7 @@
 package net.leanix.vsm.gitlab.broker.connector.scheduler
 
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.VsmClient
-import net.leanix.vsm.gitlab.broker.connector.applicaiton.AssignmentService
+import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabConfiguration
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabHeartbeatResponse
