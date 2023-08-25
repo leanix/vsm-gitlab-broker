@@ -40,7 +40,7 @@ class GitlabWebhookProvider(
     override fun createWebhook(): GitlabWebhookDto {
         return kotlin.runCatching {
             webhookClient.createWebhook(
-                url = gitlabWebhookUrl,
+                url = "$gitlabWebhookUrl/webhook",
                 token = leanixId,
                 receivePushEvents = true,
                 receiveTagPushEvents = false,
