@@ -2,7 +2,6 @@ package net.leanix.vsm.gitlab.broker.connector.runner
 
 import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
 import net.leanix.vsm.gitlab.broker.connector.application.InitialStateService
-import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,7 +20,7 @@ class InitialStateRunner(
     override fun run(args: ApplicationArguments?) {
         logger.info("Started to get initial state")
         runCatching {
-            getAssignments()?.let {
+            assignmentService.getAssignments()?.let {
                 initialStateService.initState(it)
             }
         }.onSuccess {
@@ -29,16 +28,5 @@ class InitialStateRunner(
         }.onFailure { e ->
             logger.error("Failed to get initial state", e)
         }
-    }
-
-    private fun getAssignments(): List<GitLabAssignment>? {
-        kotlin.runCatching {
-            val assignments = assignmentService.getAssignments()
-            AssignmentsCache.addAll(assignments)
-            return assignments
-        }.onFailure {
-            logger.error("Failed to get initial state. No assignment found for this workspace id")
-        }
-        return null
     }
 }
