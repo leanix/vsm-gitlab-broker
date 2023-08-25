@@ -1,4 +1,4 @@
-query AllGroupsQuery($group: String!, $pageCount: Int!, $cursor: String) {
+query AllGroupsQuery($group: ID!, $pageCount: Int!, $cursor: String) {
     group(fullPath: $group) {
         id
         name

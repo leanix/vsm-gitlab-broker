@@ -30,6 +30,9 @@ class InitialStateRunnerTest {
                     .withRequestBody(WireMock.containing("AllGroupsQuery"))
 
             )
+
+            WireMock.verify(6, WireMock.postRequestedFor(urlEqualTo("/services")))
+            WireMock.verify(1, WireMock.postRequestedFor(urlEqualTo("/commands")))
         }
     }
 }
