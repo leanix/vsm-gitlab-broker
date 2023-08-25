@@ -16,7 +16,8 @@ interface WebhookProvider {
 class GitlabWebhookProvider(
     private val webhookClient: GitlabWebhookClient,
     @Value("\${leanix.gitlab.webhook-url}") private val gitlabWebhookUrl: String,
-    @Value("\${leanix.gitlab.leanix-id}") private val leanixId: String
+    @Value("\${leanix.gitlab.leanix-id}") private val leanixId: String,
+    @Value("\${leanix.gitlab.enable-ssl-verification}") private val enableSSLVerification: Boolean,
 ) : WebhookProvider {
 
     private val logger = LoggerFactory.getLogger(AssignmentService::class.java)
@@ -50,7 +51,7 @@ class GitlabWebhookProvider(
                 receiveTagPushEvents = false,
                 receiveMergeRequestEvents = true,
                 receiveRepositoryUpdateEvents = true,
-                enableSSLVerification = false
+                enableSSLVerification = enableSSLVerification
             )
         }.onSuccess {
             logger.info("Webhook created with id ${it.id}")
