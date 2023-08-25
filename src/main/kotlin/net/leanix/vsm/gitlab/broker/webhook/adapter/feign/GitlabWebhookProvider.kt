@@ -20,6 +20,7 @@ class GitlabWebhookProvider(
 ) : WebhookProvider {
 
     private val logger = LoggerFactory.getLogger(AssignmentService::class.java)
+
     override fun getAllWebhooks(): List<GitlabWebhookDto> {
         return kotlin.runCatching {
             webhookClient.getAllWebhooks()
