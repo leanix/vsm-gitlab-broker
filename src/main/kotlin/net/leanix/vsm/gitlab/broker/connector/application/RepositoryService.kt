@@ -36,7 +36,7 @@ class RepositoryService(
         kotlin.runCatching {
             repositoryProvider.save(repository, assignment, eventType)
         }.onFailure {
-            logger.error("Failed save service", it)
+            logger.error(it) { "Failed save service" }
         }
     }
 

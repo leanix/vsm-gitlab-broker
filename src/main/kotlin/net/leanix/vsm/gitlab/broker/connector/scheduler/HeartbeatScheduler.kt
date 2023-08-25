@@ -1,7 +1,7 @@
 package net.leanix.vsm.gitlab.broker.connector.scheduler
 
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.VsmClient
-import net.leanix.vsm.gitlab.broker.connector.applicaiton.AssignmentService
+import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled

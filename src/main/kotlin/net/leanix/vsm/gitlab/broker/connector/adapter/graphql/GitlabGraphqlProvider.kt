@@ -34,7 +34,7 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
 
     override fun getAllRepositories(assignment: GitLabAssignment): Result<List<Repository>> {
         var cursor: String? = null
-        var hasNext = false
+        var hasNext: Boolean
         val repositories = mutableListOf<Repository>()
         do {
             val query = AllGroupsQuery(
