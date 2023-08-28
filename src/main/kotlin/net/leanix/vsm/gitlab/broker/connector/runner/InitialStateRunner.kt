@@ -40,9 +40,9 @@ class InitialStateRunner(
         runCatching {
             webhookService.registerWebhook()
         }.onSuccess {
-            logger.info("webhook registered successfully")
+            logger.info { "webhook registered successfully" }
         }.onFailure {
-            logger.info("webhook registration failed", it)
+            logger.error(it) { "webhook registration failed" }
         }
     }
 }
