@@ -3,6 +3,7 @@ package net.leanix.vsm.gitlab.broker.connector.adapter.graphql
 import com.expediagroup.graphql.client.spring.GraphQLWebClient
 import com.expediagroup.graphql.client.types.GraphQLClientRequest
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 import net.leanix.githubbroker.connector.adapter.graphql.data.AllGroupsQuery
 import net.leanix.githubbroker.connector.adapter.graphql.data.allgroupsquery.ProjectConnection
@@ -13,8 +14,6 @@ import net.leanix.vsm.gitlab.broker.connector.domain.Repository
 import net.leanix.vsm.gitlab.broker.shared.exception.VsmException
 import net.leanix.vsm.gitlab.broker.shared.exception.VsmException.GraphqlException
 import net.leanix.vsm.gitlab.broker.shared.properties.GitLabOnPremProperties
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -22,7 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient
 @Component
 class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProperties) : GitlabProvider {
 
-    private val logger: Logger = LoggerFactory.getLogger(GitlabGraphqlProvider::class.java)
+    private val logger = KotlinLogging.logger {}
 
     private val client = GraphQLWebClient(
         url = gitLabOnPremProperties.gitlabUrl + "/api/graphql",
@@ -83,7 +82,7 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
                     )
                 }
         } else {
-            logger.info("Zero repositories found")
+            logger.info { "Zero repositories found" }
             throw VsmException.NoRepositoriesFound()
         }
     }

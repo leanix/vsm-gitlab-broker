@@ -6,6 +6,7 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.Repository
 import net.leanix.vsm.gitlab.broker.connector.domain.RepositoryProvider
+import net.leanix.vsm.gitlab.broker.logs.domain.LogStatus
 import net.leanix.vsm.gitlab.broker.shared.exception.VsmException
 import org.springframework.stereotype.Service
 
@@ -13,18 +14,20 @@ import org.springframework.stereotype.Service
 class RepositoryService(
     private val gitlabProvider: GitlabProvider,
     private val repositoryProvider: RepositoryProvider
-) {
+) : BaseConnectorService() {
 
     private val logger = KotlinLogging.logger {}
 
     fun importAllRepositories(assignment: GitLabAssignment) {
+        logInfoStatus(runId = assignment.runId, status = LogStatus.IN_PROGRESS)
         gitlabProvider
             .getAllRepositories(assignment)
             .onSuccess {
+                logInfoMessages("vsm.repos.total", arrayOf(it.size), assignment)
                 it.forEach { repository ->
                     save(repository, assignment, EventType.STATE)
                 }
-                logger.info { "repositories imported" }
+                logInfoStatus(runId = assignment.runId, status = LogStatus.SUCCESSFUL)
             }
             .onFailure {
                 handleExceptions(it, assignment)
@@ -43,7 +46,7 @@ class RepositoryService(
     private fun handleExceptions(exception: Throwable, assignment: GitLabAssignment) {
         when (exception) {
             is VsmException.NoRepositoriesFound -> {
-                logger.error(exception.cause) { "failed ${exception.cause}" }
+                logFailedMessages("vsm.repos.not_found", arrayOf(assignment.connectorConfiguration.orgName), assignment)
             }
         }
     }

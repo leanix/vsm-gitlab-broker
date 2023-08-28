@@ -1,39 +1,35 @@
 package net.leanix.vsm.gitlab.broker.connector.application
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandEventAction
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class InitialStateService(
     private val repositoryService: RepositoryService,
-    private val commandProvider: CommandProvider,
-) {
+    private val commandProvider: CommandProvider
+) : BaseConnectorService() {
 
-    private val logger: Logger = LoggerFactory.getLogger(InitialStateService::class.java)
+    private val logger = KotlinLogging.logger {}
 
     fun initState(assignments: List<GitLabAssignment>) {
-        logger.info("Started get initial state")
+        logger.info { "Started get initial state" }
 
-        runCatching {
-            assignments.forEach {
-                logger.info(
-                    "Received assignment for ${it.connectorConfiguration.orgName} " +
-                        "with configuration id: ${it.configurationId} and with run id: ${it.runId}"
-                )
-                repositoryService.importAllRepositories(it)
-            }
-        }.onSuccess {
-            assignments.firstNotNullOf {
-                commandProvider.sendCommand(it, CommandEventAction.FINISHED)
-            }
-        }.onFailure { e ->
-            logger.error("Failed to get initial state", e)
-            assignments.firstNotNullOf {
-                commandProvider.sendCommand(it, CommandEventAction.FAILED)
+        assignments.forEach { assignment ->
+            runCatching {
+                logger.info {
+                    "Received assignment for ${assignment.connectorConfiguration.orgName} " +
+                        "with configuration id: ${assignment.configurationId} and with run id: ${assignment.runId}"
+                }
+                repositoryService.importAllRepositories(assignment)
+            }.onSuccess {
+                commandProvider.sendCommand(assignment, CommandEventAction.FINISHED)
+            }.onFailure { e ->
+                logger.error(e) { "Failed to get initial state" }
+                logFailedStatus("Failed to get initial state. Error: ${e.message}", assignment.runId)
+                commandProvider.sendCommand(assignment, CommandEventAction.FAILED)
             }
         }
     }
