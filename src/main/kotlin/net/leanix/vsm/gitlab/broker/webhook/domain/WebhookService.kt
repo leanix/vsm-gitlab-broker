@@ -1,4 +1,5 @@
 package net.leanix.vsm.gitlab.broker.webhook.domain
 
-class WebhookService {
+interface WebhookService {
+    fun registerWebhook(): GitlabWebhook
 }

@@ -2,15 +2,12 @@ package net.leanix.vsm.gitlab.broker.webhook.adapter.feign
 
 import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
 import net.leanix.vsm.gitlab.broker.webhook.domain.GitlabWebhook
+import net.leanix.vsm.gitlab.broker.webhook.domain.WebhookProvider
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
-interface WebhookProvider {
-    fun getAllWebhooks(): List<GitlabWebhook>
-    fun deleteWebhook(webhookId: Int)
-    fun createWebhook(): GitlabWebhook
-}
+const val LEANIX_WEBHOOK_PATH = "/leanix-vsm/webhook"
 
 @Component
 class GitlabWebhookProvider(
@@ -45,7 +42,7 @@ class GitlabWebhookProvider(
     override fun createWebhook(): GitlabWebhook {
         return kotlin.runCatching {
             webhookClient.createWebhook(
-                url = "$gitlabWebhookUrl/webhook",
+                url = "$gitlabWebhookUrl$LEANIX_WEBHOOK_PATH",
                 token = leanixId,
                 receivePushEvents = true,
                 receiveTagPushEvents = false,

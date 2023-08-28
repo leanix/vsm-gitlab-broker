@@ -2,7 +2,7 @@ package net.leanix.vsm.gitlab.broker.connector.runner
 
 import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
-import net.leanix.vsm.gitlab.broker.webhook.application.WebhookService
+import net.leanix.vsm.gitlab.broker.webhook.domain.WebhookService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.ApplicationArguments

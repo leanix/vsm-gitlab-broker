@@ -1,7 +1,8 @@
 package net.leanix.vsm.gitlab.broker.webhook.application
 
-import net.leanix.vsm.gitlab.broker.webhook.adapter.feign.WebhookProvider
+import net.leanix.vsm.gitlab.broker.webhook.adapter.feign.LEANIX_WEBHOOK_PATH
 import net.leanix.vsm.gitlab.broker.webhook.domain.GitlabWebhook
+import net.leanix.vsm.gitlab.broker.webhook.domain.WebhookProvider
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
@@ -34,7 +35,7 @@ class GitlabWebhookServiceImplTest {
 
 fun dummyGitlabWebhookDto(id: Int) = GitlabWebhook(
     id = id,
-    url = "https://gitlab.example.com/hook",
+    url = "https://gitlab.example.com$LEANIX_WEBHOOK_PATH",
     createdAt = Date(),
     pushEvents = true,
     tagPushEvents = false,
