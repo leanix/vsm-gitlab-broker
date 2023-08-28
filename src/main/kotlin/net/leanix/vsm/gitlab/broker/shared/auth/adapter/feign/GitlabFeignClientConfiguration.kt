@@ -1,4 +1,4 @@
-package net.leanix.vsm.gitlab.broker.webhook.adapter.feign
+package net.leanix.vsm.gitlab.broker.shared.auth.adapter.feign
 
 import feign.RequestInterceptor
 import org.springframework.beans.factory.annotation.Value
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class GitlabWebhookFeignClientConfiguration(
+class GitlabFeignClientConfiguration(
 
     @Value("\${leanix.gitlab.access-token}") private val gitlabAccessToken: String
 ) {

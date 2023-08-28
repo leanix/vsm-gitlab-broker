@@ -1,5 +1,6 @@
 package net.leanix.vsm.gitlab.broker.webhook.adapter.feign
 
+import net.leanix.vsm.gitlab.broker.shared.auth.adapter.feign.GitlabFeignClientConfiguration
 import net.leanix.vsm.gitlab.broker.webhook.domain.GitlabWebhook
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @FeignClient(
     name = "gitlabWebhookClient",
     url = "\${leanix.gitlab.base-url}",
-    configuration = [GitlabWebhookFeignClientConfiguration::class]
+    configuration = [GitlabFeignClientConfiguration::class]
 )
 interface GitlabWebhookClient {
 
