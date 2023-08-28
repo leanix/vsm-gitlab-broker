@@ -1,12 +1,10 @@
 package net.leanix.vsm.gitlab.broker.webhook.application
 
-import net.leanix.vsm.gitlab.broker.webhook.adapter.feign.WebhookProvider
+import net.leanix.vsm.gitlab.broker.webhook.adapter.feign.leanixWebhookPath
 import net.leanix.vsm.gitlab.broker.webhook.domain.GitlabWebhook
+import net.leanix.vsm.gitlab.broker.webhook.domain.WebhookProvider
+import net.leanix.vsm.gitlab.broker.webhook.domain.WebhookService
 import org.springframework.stereotype.Service
-
-interface WebhookService {
-    fun registerWebhook(): GitlabWebhook
-}
 
 @Service
 class GitlabWebhookServiceImpl(
@@ -17,7 +15,7 @@ class GitlabWebhookServiceImpl(
         val webhook = webhookProvider.createWebhook()
 
         webhookProvider.getAllWebhooks()
-            .filter { it.id != webhook.id }
+            .filter { it.url.contains(leanixWebhookPath) && it.id != webhook.id }
             .forEach { webhookProvider.deleteWebhook(it.id) }
 
         return webhook
