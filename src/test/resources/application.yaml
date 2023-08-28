@@ -9,3 +9,9 @@ leanix:
       base-url: http://localhost:${wiremock.server.port:6666}
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
+  gitlab:
+    base-url: dummy
+    access-token: dummy
+    webhook-url: dummy
+    leanix-id: dummy
+    enable-ssl-verification: false
