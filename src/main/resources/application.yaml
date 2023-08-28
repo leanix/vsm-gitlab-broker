@@ -12,6 +12,12 @@ leanix:
       base-url: ${leanix.vsm.base-url}/vsm-events-broker
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
+  gitlab:
+    base-url: ${GITLAB_URL}
+    access-token: ${GITLAB_TOKEN}
+    webhook-url: ${GITLAB_WEBHOOK_URL}
+    leanix-id: ${LEANIX_ID}
+    enable-ssl-verification: ${ENABLE_SSL_VERIFICATION:false}
 
 server:
   port: 8082
