@@ -4,5 +4,6 @@ enum class LogStatus {
     STARTED,
     IN_PROGRESS,
     FAILED,
-    SUCCESSFUL
+    SUCCESSFUL,
+    FINISHED
 }
