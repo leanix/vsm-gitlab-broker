@@ -13,4 +13,4 @@ leanix:
     base-url: dummy
     access-token: dummy
     webhook-url: dummy
-    leanix-id: dummy
+    enable-ssl-verification: false
