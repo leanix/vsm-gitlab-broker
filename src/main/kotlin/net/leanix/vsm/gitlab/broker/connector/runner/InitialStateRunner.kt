@@ -20,7 +20,7 @@ class InitialStateRunner(
 
     override fun run(args: ApplicationArguments?) {
         logger.info { "Started to get initial state" }
-        fetchAssignments()
+//        fetchAssignments()
         setupWebhook()
     }
 
