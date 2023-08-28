@@ -17,25 +17,27 @@ class GitlabWebhookServiceImplTest {
     private val subject = GitlabWebhookServiceImpl(webhookProvider)
 
     @Test
-    fun `given a new one webhook is created successfully when registerWebhook then delete all other webhooks`() {
+    fun `given a new one webhook is created successfully when registerWebhook then delete all other leanix webhooks`() {
         `when`(webhookProvider.createWebhook()).thenReturn(dummyGitlabWebhookDto(id = 1))
         `when`(webhookProvider.getAllWebhooks()).thenReturn(
             listOf(
                 dummyGitlabWebhookDto(id = 1),
-                dummyGitlabWebhookDto(id = 2)
+                dummyGitlabWebhookDto(id = 2),
+                dummyGitlabWebhookDto(id = 3, url = "https://gitlab.example.com/webhook"),
             )
         )
 
         subject.registerWebhook()
 
         verify(webhookProvider, times(0)).deleteWebhook(eq(1))
+        verify(webhookProvider, times(0)).deleteWebhook(eq(3))
         verify(webhookProvider).deleteWebhook(eq(2))
     }
 }
 
-fun dummyGitlabWebhookDto(id: Int) = GitlabWebhook(
+fun dummyGitlabWebhookDto(id: Int, url: String = "https://gitlab.example.com$LEANIX_WEBHOOK_PATH") = GitlabWebhook(
     id = id,
-    url = "https://gitlab.example.com$LEANIX_WEBHOOK_PATH",
+    url = url,
     createdAt = Date(),
     pushEvents = true,
     tagPushEvents = false,
