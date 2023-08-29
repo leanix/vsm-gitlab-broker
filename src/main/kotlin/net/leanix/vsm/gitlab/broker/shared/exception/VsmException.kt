@@ -11,3 +11,8 @@ class InvalidToken : VsmException()
 class AccessLevelValidationFailed : VsmException()
 
 class OrgNameValidationFailed : VsmException()
+
+class GitlabTokenException(token: String?) : VsmException(message = "Invalid gitlab payload token: $token")
+
+class GitlabPayloadNotSupportedException() :
+    VsmException(message = "Payload is neither for project creation nor for merge request being merged")

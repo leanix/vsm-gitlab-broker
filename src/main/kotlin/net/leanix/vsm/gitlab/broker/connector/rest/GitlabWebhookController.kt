@@ -44,7 +44,4 @@ class GitlabWebhookController(
             logger.error("Error consuming github event", it)
         }
     }
-
-    @GetMapping
-    fun health() = "OK"
 }
