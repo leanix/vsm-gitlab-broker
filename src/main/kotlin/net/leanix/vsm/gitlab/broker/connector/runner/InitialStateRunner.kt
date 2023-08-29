@@ -21,11 +21,11 @@ class InitialStateRunner(
 
     override fun run(args: ApplicationArguments?) {
         logger.info("Started to get initial state")
-        fetchAssignments()
+        fetchAndValidateAssignments()
         setupWebhook()
     }
 
-    private fun fetchAssignments() {
+    private fun fetchAndValidateAssignments() {
         runCatching {
             assignmentService.getAssignments()?.forEach { assignment ->
                 logger.info(
