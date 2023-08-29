@@ -28,7 +28,7 @@ class InitialStateService(
                 commandProvider.sendCommand(assignment, CommandEventAction.FINISHED)
             }.onFailure { e ->
                 logger.error(e) { "Failed to get initial state" }
-                logFailedStatus("Failed to get initial state. Error: ${e.message}", assignment.runId)
+                logFailedStatus("Failed to get initial state. Error: ${e.message}", assignment)
                 commandProvider.sendCommand(assignment, CommandEventAction.FAILED)
             }
         }

@@ -21,7 +21,8 @@ class LoggingServiceTest {
         val statusLog = StatusLog(
             runId = UUID.randomUUID(),
             status = LogStatus.SUCCESSFUL,
-            message = "Success"
+            message = "Success",
+            configurationId = UUID.randomUUID()
         )
         every { logProvider.sendStatusLog(any()) } returns Unit
         loggingService.sendStatusLog(statusLog)

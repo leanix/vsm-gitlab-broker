@@ -19,7 +19,10 @@ class RepositoryService(
     private val logger = KotlinLogging.logger {}
 
     fun importAllRepositories(assignment: GitLabAssignment) {
-        logInfoStatus(runId = assignment.runId, status = LogStatus.IN_PROGRESS)
+        logInfoStatus(
+            assignment = assignment,
+            status = LogStatus.IN_PROGRESS,
+        )
         gitlabProvider
             .getAllRepositories(assignment)
             .onSuccess {
@@ -27,7 +30,10 @@ class RepositoryService(
                 it.forEach { repository ->
                     save(repository, assignment, EventType.STATE)
                 }
-                logInfoStatus(runId = assignment.runId, status = LogStatus.SUCCESSFUL)
+                logInfoStatus(
+                    assignment = assignment,
+                    status = LogStatus.SUCCESSFUL,
+                )
             }
             .onFailure {
                 handleExceptions(it, assignment)

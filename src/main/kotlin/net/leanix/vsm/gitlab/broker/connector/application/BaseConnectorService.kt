@@ -10,7 +10,6 @@ import net.leanix.vsm.gitlab.broker.logs.domain.StatusLog
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import java.util.Locale
-import java.util.UUID
 
 open class BaseConnectorService {
 
@@ -22,17 +21,17 @@ open class BaseConnectorService {
 
     private val logger = KotlinLogging.logger {}
 
-    fun logFailedStatus(message: String? = "empty message", runId: UUID) {
+    fun logFailedStatus(message: String? = "empty message", assignment: GitLabAssignment) {
         logger.error { message }
         loggingService.sendStatusLog(
-            StatusLog(runId, LogStatus.FAILED, message)
+            StatusLog(assignment.runId, assignment.configurationId, LogStatus.FAILED, message)
         )
     }
 
-    fun logInfoStatus(message: String? = "", runId: UUID, status: LogStatus) {
+    fun logInfoStatus(message: String? = "", status: LogStatus, assignment: GitLabAssignment) {
         logger.info { message }
         loggingService.sendStatusLog(
-            StatusLog(runId, status, message)
+            StatusLog(assignment.runId, assignment.configurationId, status, message)
         )
     }
 
