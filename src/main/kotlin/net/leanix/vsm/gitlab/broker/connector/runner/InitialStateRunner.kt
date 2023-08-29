@@ -1,7 +1,6 @@
 package net.leanix.vsm.gitlab.broker.connector.runner
 
 import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
-import net.leanix.vsm.gitlab.broker.connector.application.ValidationService
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import net.leanix.vsm.gitlab.broker.webhook.domain.WebhookService
 import org.slf4j.Logger
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component
 @Component
 class InitialStateRunner(
     private val assignmentService: AssignmentService,
-    private val validationService: ValidationService,
     private val webhookService: WebhookService
 ) : ApplicationRunner {
 
@@ -21,18 +19,17 @@ class InitialStateRunner(
 
     override fun run(args: ApplicationArguments?) {
         logger.info("Started to get initial state")
-        fetchAndValidateAssignments()
+        fetchAssignments()
         setupWebhook()
     }
 
-    private fun fetchAndValidateAssignments() {
+    private fun fetchAssignments() {
         runCatching {
             assignmentService.getAssignments()?.forEach { assignment ->
                 logger.info(
                     "Received assignment for ${assignment.connectorConfiguration.orgName} " +
                         "with configuration id: ${assignment.configurationId} and with run id: ${assignment.runId}"
                 )
-                validationService.validateConfiguration(assignment)
             }
         }.onSuccess {
             logger.info("Cached ${AssignmentsCache.getAll().size} assignments")

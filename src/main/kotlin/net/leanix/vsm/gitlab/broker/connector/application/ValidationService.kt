@@ -6,6 +6,7 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.shared.exception.VsmException
 import org.springframework.stereotype.Component
 import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Component
 class ValidationService(
@@ -16,7 +17,7 @@ class ValidationService(
         val orgName = gitLabAssignment.connectorConfiguration.orgName
         runCatching {
             validateUserAccess()
-            validateOrgName(gitLabAssignment.connectorConfiguration.orgName)
+            validateOrgName(orgName)
         }.onSuccess {
             logInfoMessages("vsm.configuration.validation.successful", arrayOf(orgName), gitLabAssignment)
         }.onFailure { exception ->
@@ -33,7 +34,7 @@ class ValidationService(
 
     private fun validateOrgName(orgName: String) {
         runCatching {
-            gitlabClientProvider.getOrg(URLEncoder.encode(orgName, "UTF-8"))
+            gitlabClientProvider.getOrg(URLEncoder.encode(orgName, StandardCharsets.UTF_8.toString()))
         }.onFailure {
             throw VsmException.OrgNameValidationFailed()
         }
