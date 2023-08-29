@@ -20,7 +20,7 @@ class HeartbeatScheduler(
 
     private val logger = LoggerFactory.getLogger(HeartbeatScheduler::class.java)
 
-    @Scheduled(fixedRateString = "\${leanix.heartbeat.interval}")
+//    @Scheduled(fixedRateString = "\${leanix.heartbeat.interval}")
     fun heartbeat() {
         val assignments = AssignmentsCache.getAll()
         var newConfigAvailable = false

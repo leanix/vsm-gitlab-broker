@@ -1,11 +1,13 @@
 package net.leanix.vsm.gitlab.broker.connector.domain
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Date
 
 data class ProjectCreated(
     @JsonProperty("project_id")
     val id: Int,
+    @JsonProperty("event_name")
     val eventName: String,
     val name: String,
     val path: String,
@@ -13,6 +15,20 @@ data class ProjectCreated(
     val pathWithNamespace: String,
     @JsonProperty("project_visibility")
     val projectVisibility: String,
+)
+
+fun ProjectCreated.getNamespace() = pathWithNamespace.substringBefore("/$name")
+
+fun ProjectCreated.toRepository(gitlabUrl: String) = Repository(
+    id = id.toString(),
+    name = name,
+    description = null,
+    archived = false,
+    url = "$gitlabUrl/$pathWithNamespace",
+    visibility = projectVisibility,
+    languages = null,
+    tags = null,
+    defaultBranch = "empty-branch",
 )
 
 data class MergeRequest(
@@ -35,12 +51,18 @@ data class Project(
 
 data class ObjectAttributes(
     val description: String,
-    val created_at: Date,
-    val source_branch: String,
-    val target_branch: String,
+    @JsonProperty("created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss z")
+    val createdAt: Date,
+    @JsonProperty("source_branch")
+    val sourceBranch: String,
+    @JsonProperty("target_branch")
+    val targetBranch: String,
     val title: String,
-    val updated_at: String,
-    val last_commit: GitlabCommit,
+    @JsonProperty("updated_at")
+    val updatedAt: String,
+    @JsonProperty("last_commit")
+    val lastCommit: GitlabCommit,
     val state: String,
     val action: String,
 )

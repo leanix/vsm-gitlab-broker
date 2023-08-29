@@ -40,6 +40,7 @@ class GitlabWebhookController(
         runCatching {
             webhookService.consumeWebhookEvent(payloadToken, payload)
         }.onFailure {
+            logger.error("Error consuming github event: ${it.message}")
             logger.error("Error consuming github event", it)
         }
     }

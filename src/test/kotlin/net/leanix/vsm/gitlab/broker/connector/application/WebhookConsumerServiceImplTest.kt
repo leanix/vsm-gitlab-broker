@@ -1,12 +1,13 @@
-package net.leanix.vsm.gitlab.broker.connector.json
+package net.leanix.vsm.gitlab.broker.connector.application
 
+import net.leanix.vsm.gitlab.broker.connector.application.WebhookConsumerServiceImpl.Companion.computeWebhookEventType
 import net.leanix.vsm.gitlab.broker.connector.domain.WebhookEventType
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabPayloadNotSupportedException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class GitlabParseUtilTest {
+class WebhookConsumerServiceImplTest {
 
     @Test
     fun `should return webhook event type REPOSITORY when event_name=project_create in payload`() {

@@ -4,21 +4,21 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 
 object AssignmentsCache {
 
-    private val assigmentCache: MutableMap<String, GitLabAssignment> = mutableMapOf()
+    private val assignmentCache: MutableMap<String, GitLabAssignment> = mutableMapOf()
 
     fun addAll(newAssignments: List<GitLabAssignment>) {
-        newAssignments.forEach { assignment -> assigmentCache[assignment.connectorConfiguration.orgName] = assignment }
+        newAssignments.forEach { assignment -> assignmentCache[assignment.connectorConfiguration.orgName] = assignment }
     }
 
     fun get(key: String): GitLabAssignment? {
-        return assigmentCache[key]
+        return assignmentCache[key]
     }
 
     fun getAll(): Map<String, GitLabAssignment> {
-        return assigmentCache
+        return assignmentCache
     }
 
     fun deleteAll() {
-        assigmentCache.clear()
+        assignmentCache.clear()
     }
 }
