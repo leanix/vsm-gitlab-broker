@@ -13,7 +13,7 @@ const val LEANIX_WEBHOOK_PATH = "/leanix-vsm/webhook"
 class GitlabWebhookProvider(
     private val webhookClient: GitlabWebhookClient,
     @Value("\${leanix.gitlab.webhook-url}") private val gitlabWebhookUrl: String,
-    @Value("\${leanix.gitlab.leanix-id}") private val leanixId: String,
+    @Value("\${leanix.vsm.connector.api-user-token}") private val leanixId: String,
     @Value("\${leanix.gitlab.enable-ssl-verification}") private val enableSSLVerification: Boolean,
 ) : WebhookProvider {
 

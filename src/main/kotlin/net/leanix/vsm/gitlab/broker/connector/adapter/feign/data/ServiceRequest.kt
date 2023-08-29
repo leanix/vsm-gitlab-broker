@@ -35,7 +35,7 @@ data class ServiceRequest(
             languages = repository.languages,
             labels = repository.tags?.map { Tag(it, it) },
             contributors = emptyList(),
-            organizationName = assignment.connectorConfiguration.orgName
+            organizationName = repository.groupName
         )
     }
 }

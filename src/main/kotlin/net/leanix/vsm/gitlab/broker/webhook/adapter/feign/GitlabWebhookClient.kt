@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @FeignClient(
     name = "gitlabWebhookClient",
-    url = "\${leanix.gitlab.base-url}",
+    url = "\${leanix.vsm.connector.gitlab-url}",
     configuration = [GitlabWebhookFeignClientConfiguration::class]
 )
 interface GitlabWebhookClient {

@@ -2,7 +2,7 @@ query AllGroupsQuery($group: ID!, $pageCount: Int!, $cursor: String) {
     group(fullPath: $group) {
         id
         name
-        projects(first: $pageCount, after: $cursor) {
+        projects(first: $pageCount, after: $cursor, includeSubgroups: true) {
             pageInfo {
                 hasNextPage
                 endCursor
@@ -24,6 +24,9 @@ query AllGroupsQuery($group: ID!, $pageCount: Int!, $cursor: String) {
                     codeOwnersPath
                     diskPath
                     rootRef
+                }
+                group {
+                    fullPath
                 }
             }
         }

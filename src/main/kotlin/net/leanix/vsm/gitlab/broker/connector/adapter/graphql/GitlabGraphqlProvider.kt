@@ -79,6 +79,7 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
                         languages = LanguageParser.parse(project.languages),
                         tags = project.topics,
                         defaultBranch = project.repository?.rootRef ?: "empty-branch",
+                        groupName = project.group!!.fullPath
                     )
                 }
         } else {

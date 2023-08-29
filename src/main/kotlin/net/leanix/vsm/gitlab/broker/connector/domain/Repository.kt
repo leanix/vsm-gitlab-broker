@@ -9,5 +9,6 @@ data class Repository(
     val visibility: String?,
     val languages: List<Language>?,
     val tags: List<String>?,
-    val defaultBranch: String
+    val defaultBranch: String,
+    val groupName: String
 )
