@@ -34,7 +34,7 @@ class ValidationService(
 
     private fun validateOrgName(orgName: String) {
         runCatching {
-            gitlabClientProvider.getOrg(URLEncoder.encode(orgName, StandardCharsets.UTF_8.toString()))
+            gitlabClientProvider.getProjectByName(URLEncoder.encode(orgName, StandardCharsets.UTF_8.toString()))
         }.onFailure {
             throw VsmException.OrgNameValidationFailed()
         }

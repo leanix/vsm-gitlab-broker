@@ -4,7 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabClient
-import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabClientProvider
+import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabFeignClientProvider
 import net.leanix.vsm.gitlab.broker.connector.shared.DataBuilder
 import net.leanix.vsm.gitlab.broker.logs.application.LoggingService
 import net.leanix.vsm.gitlab.broker.shared.exception.VsmException
@@ -18,8 +18,8 @@ class ValidationServiceTest {
     private val messageSource = mockk<MessageSource>()
     private val loggingService = mockk<LoggingService>()
     private val gitlabClient = mockk<GitlabClient>()
-    private val gitlabClientProvider = GitlabClientProvider(gitlabClient)
-    private val validationService = ValidationService(gitlabClientProvider)
+    private val gitlabFeignClientProvider = GitlabFeignClientProvider(gitlabClient)
+    private val validationService = ValidationService(gitlabFeignClientProvider)
 
     @BeforeEach
     fun setUp() {
