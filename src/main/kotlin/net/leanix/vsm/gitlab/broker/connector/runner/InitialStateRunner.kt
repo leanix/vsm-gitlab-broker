@@ -1,10 +1,10 @@
 package net.leanix.vsm.gitlab.broker.connector.runner
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
+import net.leanix.vsm.gitlab.broker.connector.application.InitialStateService
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import net.leanix.vsm.gitlab.broker.webhook.domain.WebhookService
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
@@ -12,29 +12,27 @@ import org.springframework.stereotype.Component
 @Component
 class InitialStateRunner(
     private val assignmentService: AssignmentService,
+    private val initialStateService: InitialStateService,
     private val webhookService: WebhookService
 ) : ApplicationRunner {
 
-    private val logger: Logger = LoggerFactory.getLogger(InitialStateRunner::class.java)
+    private val logger = KotlinLogging.logger {}
 
     override fun run(args: ApplicationArguments?) {
-        logger.info("Started to get initial state")
+        logger.info { "Started to get initial state" }
         fetchAssignments()
         setupWebhook()
     }
 
     private fun fetchAssignments() {
         runCatching {
-            assignmentService.getAssignments()?.forEach { assignment ->
-                logger.info(
-                    "Received assignment for ${assignment.connectorConfiguration.orgName} " +
-                        "with configuration id: ${assignment.configurationId} and with run id: ${assignment.runId}"
-                )
+            assignmentService.getAssignments()?.let {
+                initialStateService.initState(it)
             }
         }.onSuccess {
-            logger.info("Cached ${AssignmentsCache.getAll().size} assignments")
+            logger.info { "Cached ${AssignmentsCache.getAll().size} assignments" }
         }.onFailure { e ->
-            logger.error("Failed to get initial state", e)
+            logger.error(e) { "Failed to get initial state: ${e.message}" }
         }
     }
 
@@ -42,9 +40,9 @@ class InitialStateRunner(
         runCatching {
             webhookService.registerWebhook()
         }.onSuccess {
-            logger.info("webhook registered successfully")
+            logger.info { "webhook registered successfully" }
         }.onFailure {
-            logger.info("webhook registration failed", it)
+            logger.error(it) { "webhook registration failed" }
         }
     }
 }

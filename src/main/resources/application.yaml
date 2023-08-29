@@ -3,17 +3,17 @@ leanix:
   heartbeat:
     interval: ${LEANIX_HEARTBEAT_INTERVAL:300000} #  5 minutes
   vsm:
+    base-url: ${leanix.base-url}/vsm-canopy/v1
     connector:
       api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
+      gitlab-token: ${GITLAB_TOKEN}
+      gitlab-url: ${GITLAB_URL}
     events-broker:
       base-url: ${leanix.vsm.base-url}/vsm-events-broker
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
   gitlab:
-    base-url: ${GITLAB_URL}
-    access-token: ${GITLAB_TOKEN}
     webhook-url: ${GITLAB_WEBHOOK_URL}
-    leanix-id: ${LEANIX_ID}
     enable-ssl-verification: ${ENABLE_SSL_VERIFICATION:false}
 
 server:

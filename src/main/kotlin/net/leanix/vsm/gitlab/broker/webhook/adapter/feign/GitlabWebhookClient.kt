@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @FeignClient(
     name = "gitlabWebhookClient",
-    url = "\${leanix.gitlab.base-url}",
+    url = "\${leanix.vsm.connector.gitlab-url}/api/v4/hooks",
     configuration = [GitlabWebhookFeignClientConfiguration::class]
 )
 interface GitlabWebhookClient {
 
-    @GetMapping("/hooks")
+    @GetMapping
     fun getAllWebhooks(): List<GitlabWebhook>
 
-    @DeleteMapping("/hooks/{webhookId}")
+    @DeleteMapping("/{webhookId}")
     fun deleteWebhook(@PathVariable("webhookId") webhookId: Int)
 
     @Suppress("LongParameterList")
-    @PostMapping("/hooks")
+    @PostMapping("/")
     fun createWebhook(
         @RequestParam("url") url: String,
         @RequestParam("token") token: String,

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class GitlabWebhookFeignClientConfiguration(
 
-    @Value("\${leanix.gitlab.access-token}") private val gitlabAccessToken: String
+    @Value("\${leanix.vsm.connector.gitlab-token}") private val gitlabAccessToken: String
 ) {
     @Bean
     fun requestInterceptor(): RequestInterceptor {

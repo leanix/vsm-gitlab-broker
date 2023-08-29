@@ -34,7 +34,8 @@ internal class FeignLogProviderTest {
         val statusLog = StatusLog(
             runId = UUID.randomUUID(),
             status = LogStatus.IN_PROGRESS,
-            message = "Success"
+            message = "Success",
+            configurationId = UUID.randomUUID()
         )
         every { loggingClient.sendStatusLog(any()) } returns Unit
         feignLogProvider.sendStatusLog(statusLog)
