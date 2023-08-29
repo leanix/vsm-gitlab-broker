@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.context.MessageSource
 
-class ValidationServiceTest{
+class ValidationServiceTest {
 
     private val messageSource = mockk<MessageSource>()
     private val loggingService = mockk<LoggingService>()
