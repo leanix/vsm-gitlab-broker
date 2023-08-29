@@ -11,8 +11,8 @@ import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.parser.LanguagePar
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.Repository
-import net.leanix.vsm.gitlab.broker.shared.exception.VsmException
-import net.leanix.vsm.gitlab.broker.shared.exception.VsmException.GraphqlException
+import net.leanix.vsm.gitlab.broker.shared.exception.GraphqlException
+import net.leanix.vsm.gitlab.broker.shared.exception.NoRepositoriesFound
 import net.leanix.vsm.gitlab.broker.shared.properties.GitLabOnPremProperties
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
@@ -84,7 +84,7 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
                 }
         } else {
             logger.info { "Zero repositories found" }
-            throw VsmException.NoRepositoriesFound()
+            throw NoRepositoriesFound()
         }
     }
 

@@ -7,7 +7,7 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.Repository
 import net.leanix.vsm.gitlab.broker.connector.domain.RepositoryProvider
 import net.leanix.vsm.gitlab.broker.logs.domain.LogStatus
-import net.leanix.vsm.gitlab.broker.shared.exception.VsmException
+import net.leanix.vsm.gitlab.broker.shared.exception.NoRepositoriesFound
 import org.springframework.stereotype.Service
 
 @Service
@@ -45,7 +45,7 @@ class RepositoryService(
 
     private fun handleExceptions(exception: Throwable, assignment: GitLabAssignment) {
         when (exception) {
-            is VsmException.NoRepositoriesFound -> {
+            is NoRepositoriesFound -> {
                 logFailedMessages("vsm.repos.not_found", arrayOf(assignment.connectorConfiguration.orgName), assignment)
             }
         }

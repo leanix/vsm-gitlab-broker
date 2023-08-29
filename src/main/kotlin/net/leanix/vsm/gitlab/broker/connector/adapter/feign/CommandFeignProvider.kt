@@ -19,7 +19,6 @@ class CommandFeignProvider(private val vsmClient: VsmClient) : CommandProvider {
         vsmClient.sendCommand(command)
     }
 
-    private fun buildScope(assignment: GitLabAssignment): String {
-        return "workspace/${assignment.workspaceId}/configuration/${assignment.configurationId}"
-    }
+    private fun buildScope(assignment: GitLabAssignment) =
+        "workspace/${assignment.workspaceId}/configuration/${assignment.configurationId}"
 }

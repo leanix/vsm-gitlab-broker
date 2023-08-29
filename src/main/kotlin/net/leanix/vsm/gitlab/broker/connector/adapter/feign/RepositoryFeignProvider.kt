@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class RepositoryFeignProvider(private val vsmClient: VsmClient) : RepositoryProvider {
-    override fun save(repository: Repository, assignment: GitLabAssignment, eventType: EventType) {
+    override fun save(repository: Repository, assignment: GitLabAssignment, eventType: EventType) =
         vsmClient.saveService(eventType.type, ServiceRequest.fromDomain(repository, assignment))
-    }
 }
