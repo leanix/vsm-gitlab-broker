@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Date
 
-data class ProjectCreated(
+data class ProjectChange(
     @JsonProperty("project_id")
     val id: Int,
     @JsonProperty("event_name")
@@ -13,13 +13,15 @@ data class ProjectCreated(
     val path: String,
     @JsonProperty("path_with_namespace")
     val pathWithNamespace: String,
+    @JsonProperty("old_path_with_namespace")
+    val oldPathWithNamespace: String?,
     @JsonProperty("project_visibility")
     val projectVisibility: String,
 )
 
-fun ProjectCreated.getNamespace() = pathWithNamespace.substringBefore("/$name")
+fun ProjectChange.getNamespace() = pathWithNamespace.substringBefore("/$path")
 
-fun ProjectCreated.toRepository(gitlabUrl: String) = Repository(
+fun ProjectChange.toRepository(gitlabUrl: String) = Repository(
     id = id.toString(),
     name = name,
     description = null,
@@ -29,6 +31,7 @@ fun ProjectCreated.toRepository(gitlabUrl: String) = Repository(
     languages = null,
     tags = null,
     defaultBranch = "empty-branch",
+    groupName = getNamespace()
 )
 
 data class MergeRequest(
