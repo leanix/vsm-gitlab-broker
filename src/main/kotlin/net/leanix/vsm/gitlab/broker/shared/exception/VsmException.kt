@@ -1,10 +1,13 @@
 package net.leanix.vsm.gitlab.broker.shared.exception
 
-sealed class VsmException(message: String? = null) : RuntimeException(message) {
+sealed class VsmException(message: String? = null) : RuntimeException(message)
 
-    class InvalidToken : VsmException()
+class NoRepositoriesFound : VsmException()
 
-    class AccessLevelValidationFailed : VsmException()
+class GraphqlException(message: String?) : VsmException(message)
 
-    class OrgNameValidationFailed : VsmException()
-}
+class InvalidToken : VsmException()
+
+class AccessLevelValidationFailed : VsmException()
+
+class OrgNameValidationFailed : VsmException()

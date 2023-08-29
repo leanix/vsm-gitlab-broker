@@ -2,9 +2,11 @@ package net.leanix.vsm.gitlab.broker.connector.scheduler
 
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.VsmClient
 import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
+import net.leanix.vsm.gitlab.broker.connector.application.InitialStateService
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabConfiguration
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabHeartbeatResponse
+import net.leanix.vsm.gitlab.broker.connector.domain.RunProvider
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -19,7 +21,9 @@ class HeartbeatSchedulerTest {
 
     private val vsmClient = mock(VsmClient::class.java)
     private val assignmentService = mock(AssignmentService::class.java)
-    private val subject = HeartbeatScheduler(vsmClient, assignmentService)
+    private val initialStateService = mock(InitialStateService::class.java)
+    private val runProvider = mock(RunProvider::class.java)
+    private val subject = HeartbeatScheduler(vsmClient, assignmentService, initialStateService, runProvider)
     private val runId: UUID = randomUUID()
 
     @BeforeEach

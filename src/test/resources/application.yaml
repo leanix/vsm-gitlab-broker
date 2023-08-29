@@ -4,7 +4,9 @@ leanix:
     interval: ${LEANIX_HEARTBEAT_INTERVAL:300000} #  5 minutes
   vsm:
     connector:
-      api-user-token: ${LEANIX_TECHNICAL_USER_TOKEN}
+      api-user-token: api-token
+      gitlab-token: gitlab-token
+      gitlab-url: http://localhost:${wiremock.server.port:6666}
     events-broker:
       base-url: http://localhost:${wiremock.server.port:6666}
     auth:
@@ -15,3 +17,7 @@ leanix:
     webhook-url: dummy
     leanix-id: dummy
     enable-ssl-verification: false
+
+application:
+  runner:
+    enabled: false

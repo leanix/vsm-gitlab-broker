@@ -1,15 +1,15 @@
 package net.leanix.vsm.gitlab.broker.connector.application
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.logs.application.LoggingService
 import net.leanix.vsm.gitlab.broker.logs.domain.AdminLog
 import net.leanix.vsm.gitlab.broker.logs.domain.LogLevel
 import net.leanix.vsm.gitlab.broker.logs.domain.LogStatus
 import net.leanix.vsm.gitlab.broker.logs.domain.StatusLog
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
-import java.util.*
+import java.util.Locale
 
 open class BaseConnectorService {
 
@@ -19,12 +19,19 @@ open class BaseConnectorService {
     @Autowired
     lateinit var messageSource: MessageSource
 
-    private val logger = LoggerFactory.getLogger(BaseConnectorService::class.java)
+    private val logger = KotlinLogging.logger {}
 
-    fun logFailedStatus(message: String? = "empty message", runId: UUID) {
-        logger.error(message)
+    fun logFailedStatus(message: String? = "empty message", assignment: GitLabAssignment) {
+        logger.error { message }
         loggingService.sendStatusLog(
-            StatusLog(runId, LogStatus.FAILED, message)
+            StatusLog(assignment.runId, assignment.configurationId, LogStatus.FAILED, message)
+        )
+    }
+
+    fun logInfoStatus(message: String? = "", status: LogStatus, assignment: GitLabAssignment) {
+        logger.info { message }
+        loggingService.sendStatusLog(
+            StatusLog(assignment.runId, assignment.configurationId, status, message)
         )
     }
 

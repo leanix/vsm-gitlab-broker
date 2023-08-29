@@ -3,10 +3,10 @@ package net.leanix.vsm.gitlab.broker.connector.application
 import feign.FeignException
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabClientProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
-import net.leanix.vsm.gitlab.broker.shared.exception.VsmException
+import net.leanix.vsm.gitlab.broker.shared.exception.AccessLevelValidationFailed
+import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
+import net.leanix.vsm.gitlab.broker.shared.exception.OrgNameValidationFailed
 import org.springframework.stereotype.Component
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Component
 class ValidationService(
@@ -28,15 +28,15 @@ class ValidationService(
     private fun validateUserAccess() {
         run {
             val user = gitlabClientProvider.getCurrentUser()
-            if (user.isAdmin != true) throw VsmException.AccessLevelValidationFailed()
+            if (user.isAdmin != true) throw AccessLevelValidationFailed()
         }
     }
 
     private fun validateOrgName(orgName: String) {
         runCatching {
-            gitlabClientProvider.getProjectByName(URLEncoder.encode(orgName, StandardCharsets.UTF_8.toString()))
+            gitlabClientProvider.getProjectByName(orgName)
         }.onFailure {
-            throw VsmException.OrgNameValidationFailed()
+            throw OrgNameValidationFailed()
         }
     }
 
@@ -46,15 +46,15 @@ class ValidationService(
         gitLabAssignment: GitLabAssignment
     ) {
         when (exception) {
-            is VsmException.InvalidToken -> {
+            is InvalidToken -> {
                 logFailedMessages("vsm.configuration.invalid_token", arrayOf(orgName), gitLabAssignment)
             }
 
-            is VsmException.AccessLevelValidationFailed -> {
+            is AccessLevelValidationFailed -> {
                 logFailedMessages("vsm.configuration.access_level", arrayOf(orgName), gitLabAssignment)
             }
 
-            is VsmException.OrgNameValidationFailed -> {
+            is OrgNameValidationFailed -> {
                 logFailedMessages("vsm.configuration.invalid_org_name", arrayOf(orgName), gitLabAssignment)
             }
 
@@ -62,7 +62,7 @@ class ValidationService(
                 logFailedMessages("vsm.configuration.validation.failed", arrayOf(orgName), gitLabAssignment)
             }
         }
-        logFailedStatus(exception.message, gitLabAssignment.runId)
+        logFailedStatus(exception.message, gitLabAssignment)
         throw exception
     }
 }

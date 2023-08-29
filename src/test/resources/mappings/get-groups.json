@@ -1,0 +1,208 @@
+{
+  "request": {
+    "url": "/api/graphql",
+    "method": "POST",
+    "bodyPatterns" : [{
+      "matchesJsonPath" : {
+        "expression": "$.query",
+        "contains": "AllGroupsQuery"
+      }
+    }]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "data": {
+        "group": {
+          "id": "gid://gitlab/Group/9970",
+          "name": "GitLab.org",
+          "projects": {
+            "pageInfo": {
+              "hasNextPage": false,
+              "endCursor": "eyJpZCI6IjM4NzgzMzc3In0"
+            },
+            "nodes": [
+              {
+                "name": "Gitlab Zoekt Indexer",
+                "id": "gid://gitlab/Project/46649240",
+                "archived": false,
+                "visibility": "public",
+                "topics": [],
+                "webUrl": "https://gitlab.com/gitlab-org/gitlab-zoekt-indexer",
+                "description": null,
+                "lastActivityAt": "2023-08-23T19:53:32Z",
+                "languages": [
+                  {
+                    "name": "Go",
+                    "share": 96.41
+                  },
+                  {
+                    "name": "Makefile",
+                    "share": 3.27
+                  },
+                  {
+                    "name": "Ruby",
+                    "share": 0.32
+                  }
+                ],
+                "repository": {
+                  "codeOwnersPath": null,
+                  "diskPath": null,
+                  "rootRef": "main"
+                },
+                "group": {
+                  "fullPath": "gitlab-org"
+                }
+              },
+              {
+                "name": "Data Quality",
+                "id": "gid://gitlab/Project/45393508",
+                "archived": false,
+                "visibility": "public",
+                "topics": [],
+                "webUrl": "https://gitlab.com/gitlab-org/data-quality",
+                "description": null,
+                "lastActivityAt": "2023-08-22T19:08:53Z",
+                "languages": [],
+                "repository": null,
+                "group": {
+                  "fullPath": "gitlab-org"
+                }
+              },
+              {
+                "name": "public-image-archive",
+                "id": "gid://gitlab/Project/44029359",
+                "archived": false,
+                "visibility": "public",
+                "topics": [],
+                "webUrl": "https://gitlab.com/gitlab-org/public-image-archive",
+                "description": null,
+                "lastActivityAt": "2023-03-22T00:11:40Z",
+                "languages": [],
+                "repository": {
+                  "codeOwnersPath": null,
+                  "diskPath": null,
+                  "rootRef": "main"
+                },
+                "group": {
+                  "fullPath": "gitlab-org"
+                }
+              },
+              {
+                "name": "GitLab Terraform Provider",
+                "id": "gid://gitlab/Project/40916776",
+                "archived": false,
+                "visibility": "public",
+                "topics": [
+                  "terraform",
+                  "infrastructure as code",
+                  "terraform-provider"
+                ],
+                "webUrl": "https://gitlab.com/gitlab-org/terraform-provider-gitlab",
+                "description": "Official GitLab Terraform Provider. ",
+                "lastActivityAt": "2023-08-24T00:56:25Z",
+                "languages": [
+                  {
+                    "name": "Go",
+                    "share": 99.21
+                  },
+                  {
+                    "name": "Shell",
+                    "share": 0.34
+                  },
+                  {
+                    "name": "Makefile",
+                    "share": 0.23
+                  },
+                  {
+                    "name": "Ruby",
+                    "share": 0.11
+                  },
+                  {
+                    "name": "Dockerfile",
+                    "share": 0.09
+                  }
+                ],
+                "repository": {
+                  "codeOwnersPath": "/gitlab-org/terraform-provider-gitlab/-/blob/main/.gitlab/CODEOWNERS",
+                  "diskPath": null,
+                  "rootRef": "main"
+                },
+                "group": {
+                  "fullPath": "gitlab-org"
+                }
+              },
+              {
+                "name": "GitLab Docs Archives",
+                "id": "gid://gitlab/Project/39455850",
+                "archived": false,
+                "visibility": "public",
+                "topics": [],
+                "webUrl": "https://gitlab.com/gitlab-org/gitlab-docs-archives",
+                "description": "https://archives.docs.gitlab.com/\r\n\r\nhttps://gitlab.com/groups/gitlab-org/-/epics/8937",
+                "lastActivityAt": "2023-08-23T19:36:21Z",
+                "languages": [
+                  {
+                    "name": "Vue",
+                    "share": 46.25
+                  },
+                  {
+                    "name": "Dockerfile",
+                    "share": 25.27
+                  },
+                  {
+                    "name": "HTML",
+                    "share": 10.22
+                  },
+                  {
+                    "name": "JavaScript",
+                    "share": 8.92
+                  },
+                  {
+                    "name": "Shell",
+                    "share": 4.86
+                  }
+                ],
+                "repository": {
+                  "codeOwnersPath": null,
+                  "diskPath": null,
+                  "rootRef": "main"
+                },
+                "group": {
+                  "fullPath": "gitlab-org"
+                }
+              },
+              {
+                "name": "customersdot-gitpod-workspace-image",
+                "id": "gid://gitlab/Project/38783377",
+                "archived": false,
+                "visibility": "public",
+                "topics": [],
+                "webUrl": "https://gitlab.com/gitlab-org/customersdot-gitpod-workspace-image",
+                "description": null,
+                "lastActivityAt": "2023-06-06T18:13:50Z",
+                "languages": [
+                  {
+                    "name": "Dockerfile",
+                    "share": 100.0
+                  }
+                ],
+                "repository": {
+                  "codeOwnersPath": null,
+                  "diskPath": null,
+                  "rootRef": "main"
+                },
+                "group": {
+                  "fullPath": "gitlab-org"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

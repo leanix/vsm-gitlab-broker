@@ -7,7 +7,9 @@ import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabClient
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabFeignClientProvider
 import net.leanix.vsm.gitlab.broker.connector.shared.DataBuilder
 import net.leanix.vsm.gitlab.broker.logs.application.LoggingService
-import net.leanix.vsm.gitlab.broker.shared.exception.VsmException
+import net.leanix.vsm.gitlab.broker.shared.exception.AccessLevelValidationFailed
+import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
+import net.leanix.vsm.gitlab.broker.shared.exception.OrgNameValidationFailed
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -50,7 +52,7 @@ class ValidationServiceTest {
         every { gitlabClient.getUserById(any()) } returns DataBuilder.getGitlabUser(true)
         every { gitlabClient.getProjectByNameWithNamespace(any()) } returns Unit
 
-        assertThrows<VsmException.InvalidToken> {
+        assertThrows<InvalidToken> {
             validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
         }
 
@@ -65,7 +67,7 @@ class ValidationServiceTest {
         every { gitlabClient.getUserById(any()) } returns DataBuilder.getGitlabUser(false)
         every { gitlabClient.getProjectByNameWithNamespace(any()) } returns Unit
 
-        assertThrows<VsmException.AccessLevelValidationFailed> {
+        assertThrows<AccessLevelValidationFailed> {
             validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
         }
 
@@ -80,7 +82,7 @@ class ValidationServiceTest {
         every { gitlabClient.getUserById(any()) } returns DataBuilder.getGitlabUser(true)
         every { gitlabClient.getProjectByNameWithNamespace(any()) } throws Exception()
 
-        assertThrows<VsmException.OrgNameValidationFailed> {
+        assertThrows<OrgNameValidationFailed> {
             validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
         }
 
