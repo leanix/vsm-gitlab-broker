@@ -19,6 +19,33 @@ class WebhookConsumerServiceImplTest {
     }
 
     @Test
+    fun `should return webhook event type REPOSITORY when event_name=project_update in payload`() {
+        val payload = this::class.java.getResource("/webhook_calls/project_name_changed.json")!!.readText()
+
+        val result = computeWebhookEventType(payload)
+
+        assertEquals(WebhookEventType.REPOSITORY, result)
+    }
+
+    @Test
+    fun `should return webhook event type REPOSITORY when event_name=project_rename in payload`() {
+        val payload = this::class.java.getResource("/webhook_calls/project_path_changed.json")!!.readText()
+
+        val result = computeWebhookEventType(payload)
+
+        assertEquals(WebhookEventType.REPOSITORY, result)
+    }
+
+    @Test
+    fun `should return webhook event type REPOSITORY when event_name=project_transfer in payload`() {
+        val payload = this::class.java.getResource("/webhook_calls/project_transferred.json")!!.readText()
+
+        val result = computeWebhookEventType(payload)
+
+        assertEquals(WebhookEventType.REPOSITORY, result)
+    }
+
+    @Test
     fun `should return webhook event type MERGE_REQUEST when object_kind=merge_request and action=merged in payload`() {
         val payload = this::class.java.getResource("/webhook_calls/merge_request_merged.json")!!.readText()
 
