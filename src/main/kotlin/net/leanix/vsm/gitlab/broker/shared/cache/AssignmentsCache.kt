@@ -4,14 +4,14 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 
 object AssignmentsCache {
 
-    private val assignmentCache: MutableMap<String, GitLabAssignment> = mutableMapOf()
+    private val assignmentCache: MutableMap<OrgName, GitLabAssignment> = mutableMapOf()
 
     fun addAll(newAssignments: List<GitLabAssignment>) {
         newAssignments.forEach { assignment -> assignmentCache[assignment.connectorConfiguration.orgName] = assignment }
     }
 
-    fun get(key: String): GitLabAssignment? {
-        return assignmentCache[key]
+    fun get(namespace: String): GitLabAssignment? {
+        return assignmentCache.entries.firstOrNull { it.key.matchesNamespace(namespace) }?.value
     }
 
     fun getAll(): Map<String, GitLabAssignment> {
@@ -22,3 +22,10 @@ object AssignmentsCache {
         assignmentCache.clear()
     }
 }
+
+typealias OrgName = String
+
+fun OrgName.matchesNamespace(
+    namespace: String
+) =
+    namespace == this || (namespace.startsWith(this) && namespace.elementAtOrNull(this.length) == '/')
