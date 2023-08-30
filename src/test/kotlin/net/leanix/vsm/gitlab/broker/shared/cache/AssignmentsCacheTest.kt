@@ -24,7 +24,6 @@ class AssignmentsCacheTest {
 
     @Test
     fun `should return GitlabAssignment when namespace = orgName`() {
-
         val result = AssignmentsCache.get("finance/special-ops")
         assertAll(
             { assertNotNull(result) },
@@ -34,7 +33,6 @@ class AssignmentsCacheTest {
 
     @Test
     fun `should return GitlabAssignment when  orgName starts with namespace`() {
-
         val result = AssignmentsCache.get("finance/special-ops/onlineshop")
         assertAll(
             { assertNotNull(result) },
@@ -44,7 +42,6 @@ class AssignmentsCacheTest {
 
     @Test
     fun `should return GitlabAssignment when  orgName starts with namespace plus subgroup`() {
-
         val result = AssignmentsCache.get("finance/special-ops/elite-ops/elite-spring")
         assertAll(
             { assertNotNull(result) },
@@ -54,7 +51,6 @@ class AssignmentsCacheTest {
 
     @Test
     fun `should return null when orgName does not namespace subgroup`() {
-
         val result = AssignmentsCache.get("finance")
         assertNull(result)
     }
