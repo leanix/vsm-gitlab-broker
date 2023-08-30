@@ -1,0 +1,29 @@
+query ProjectByPathQuery($fullPath: ID!){
+    project(fullPath: $fullPath) {
+        ...ProjectDetails
+    }
+}
+
+#maybe someday we can move it to a common file
+fragment ProjectDetails on Project {
+    name
+    id
+    archived
+    visibility
+    topics
+    webUrl
+    description
+    lastActivityAt
+    languages {
+        name
+        share
+    }
+    repository {
+        codeOwnersPath
+        diskPath
+        rootRef
+    }
+    group {
+        fullPath
+    }
+}
