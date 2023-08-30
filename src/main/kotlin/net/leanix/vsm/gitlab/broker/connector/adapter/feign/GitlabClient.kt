@@ -18,6 +18,6 @@ interface GitlabClient {
     @GetMapping("/users/{userId}")
     fun getUserById(@PathParam("userId") userId: Int): GitlabUser
 
-    @GetMapping("/projects/{projectName}")
-    fun getProjectByNameWithNamespace(@PathParam("projectName") projectName: String)
+    @GetMapping("/groups/{groupPath}")
+    fun getGroupByPath(@PathParam("groupPath") groupPath: String)
 }

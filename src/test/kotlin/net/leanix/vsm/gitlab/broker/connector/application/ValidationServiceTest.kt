@@ -37,20 +37,20 @@ class ValidationServiceTest {
     fun `it should validate the configuration`() {
         every { gitlabClient.getCurrentUser() } returns DataBuilder.getGitlabCurrentUser()
         every { gitlabClient.getUserById(any()) } returns DataBuilder.getGitlabUser(true)
-        every { gitlabClient.getProjectByNameWithNamespace(any()) } returns Unit
+        every { gitlabClient.getGroupByPath(any()) } returns Unit
 
         validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
         verify(exactly = 1) { gitlabClient.getUserById(any()) }
-        verify(exactly = 1) { gitlabClient.getProjectByNameWithNamespace(any()) }
+        verify(exactly = 1) { gitlabClient.getGroupByPath(any()) }
     }
 
     @Test
     fun `it should not validate the configuration if token is invalid`() {
         every { gitlabClient.getCurrentUser() } throws Exception()
         every { gitlabClient.getUserById(any()) } returns DataBuilder.getGitlabUser(true)
-        every { gitlabClient.getProjectByNameWithNamespace(any()) } returns Unit
+        every { gitlabClient.getGroupByPath(any()) } returns Unit
 
         assertThrows<InvalidToken> {
             validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
@@ -58,14 +58,14 @@ class ValidationServiceTest {
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
         verify(exactly = 0) { gitlabClient.getUserById(any()) }
-        verify(exactly = 0) { gitlabClient.getProjectByNameWithNamespace(any()) }
+        verify(exactly = 0) { gitlabClient.getGroupByPath(any()) }
     }
 
     @Test
     fun `it should not validate the configuration if user is not admin`() {
         every { gitlabClient.getCurrentUser() } returns DataBuilder.getGitlabCurrentUser()
         every { gitlabClient.getUserById(any()) } returns DataBuilder.getGitlabUser(false)
-        every { gitlabClient.getProjectByNameWithNamespace(any()) } returns Unit
+        every { gitlabClient.getGroupByPath(any()) } returns Unit
 
         assertThrows<AccessLevelValidationFailed> {
             validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
@@ -73,14 +73,14 @@ class ValidationServiceTest {
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
         verify(exactly = 1) { gitlabClient.getUserById(any()) }
-        verify(exactly = 0) { gitlabClient.getProjectByNameWithNamespace(any()) }
+        verify(exactly = 0) { gitlabClient.getGroupByPath(any()) }
     }
 
     @Test
     fun `it should not validate the configuration if org name is invalid`() {
         every { gitlabClient.getCurrentUser() } returns DataBuilder.getGitlabCurrentUser()
         every { gitlabClient.getUserById(any()) } returns DataBuilder.getGitlabUser(true)
-        every { gitlabClient.getProjectByNameWithNamespace(any()) } throws Exception()
+        every { gitlabClient.getGroupByPath(any()) } throws Exception()
 
         assertThrows<OrgNameValidationFailed> {
             validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
@@ -88,6 +88,6 @@ class ValidationServiceTest {
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
         verify(exactly = 1) { gitlabClient.getUserById(any()) }
-        verify(exactly = 1) { gitlabClient.getProjectByNameWithNamespace(any()) }
+        verify(exactly = 1) { gitlabClient.getGroupByPath(any()) }
     }
 }

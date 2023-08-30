@@ -34,7 +34,7 @@ class ValidationService(
 
     private fun validateOrgName(orgName: String) {
         runCatching {
-            gitlabClientProvider.getProjectByName(orgName)
+            gitlabClientProvider.getGroupByName(orgName)
         }.onFailure {
             throw OrgNameValidationFailed()
         }

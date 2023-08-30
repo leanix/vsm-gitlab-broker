@@ -4,8 +4,6 @@ import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.GitlabUser
 import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Component
 class GitlabFeignClientProvider(
@@ -25,11 +23,9 @@ class GitlabFeignClientProvider(
             .getOrThrow()
     }
 
-    override fun getProjectByName(orgName: String) {
+    override fun getGroupByName(orgName: String) {
         runCatching {
-            gitlabClient.getProjectByNameWithNamespace(
-                URLEncoder.encode(orgName, StandardCharsets.UTF_8.toString())
-            )
+            gitlabClient.getGroupByPath(orgName)
         }
             .onFailure { logger.error("Could not get org info for $orgName") }
             .getOrThrow()
