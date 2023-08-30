@@ -17,7 +17,7 @@ class ValidationService(
         val orgName = gitLabAssignment.connectorConfiguration.orgName
         runCatching {
             validateUserAccess()
-            validateOrgName(orgName)
+            validateGroupPath(orgName)
         }.onSuccess {
             logInfoMessages("vsm.configuration.validation.successful", arrayOf(orgName), gitLabAssignment)
         }.onFailure { exception ->
@@ -26,18 +26,11 @@ class ValidationService(
     }
 
     private fun validateUserAccess() {
-        run {
-            val user = gitlabClientProvider.getCurrentUser()
-            if (user.isAdmin != true) throw AccessLevelValidationFailed()
-        }
+        if (gitlabClientProvider.getCurrentUser().isAdmin != true) throw AccessLevelValidationFailed()
     }
 
-    private fun validateOrgName(orgName: String) {
-        runCatching {
-            gitlabClientProvider.getGroupByName(orgName)
-        }.onFailure {
-            throw OrgNameValidationFailed()
-        }
+    private fun validateGroupPath(fullPath: String) {
+        if (gitlabClientProvider.getGroupByFullPath(fullPath) == null) throw OrgNameValidationFailed()
     }
 
     private fun handleExceptions(
