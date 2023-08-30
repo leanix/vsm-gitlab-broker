@@ -26,7 +26,7 @@ val mapper: ObjectMapper = jacksonObjectMapper().configure(DeserializationFeatur
 class WebhookConsumerServiceImpl(
     @Value("\${leanix.vsm.connector.api-user-token}") private val apiUserToken: String,
     private val repositoryProvider: RepositoryProvider,
-    private val graphqlProvider: GitlabGraphqlProvider,
+    private val gitlabGraphqlProvider: GitlabGraphqlProvider,
 ) : WebhookConsumerService, BaseConnectorService() {
 
     override fun consumeWebhookEvent(payloadToken: String?, payload: String) {
@@ -46,7 +46,7 @@ class WebhookConsumerServiceImpl(
         AssignmentsCache.get(project.getNamespace())
             ?.also {
                 repositoryProvider.save(
-                    graphqlProvider.getRepositoryByPath(project.pathWithNamespace),
+                    gitlabGraphqlProvider.getRepositoryByPath(project.pathWithNamespace),
                     it,
                     EventType.CHANGE
                 )
