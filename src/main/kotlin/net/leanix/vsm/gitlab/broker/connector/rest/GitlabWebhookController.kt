@@ -25,9 +25,6 @@ class GitlabWebhookController(
         @RequestHeader("X-Gitlab-Token", required = false) payloadToken: String?,
         @RequestBody payload: String
     ) {
-        logger.info("payloadToken: $payloadToken")
-        logger.info("payload: $payload")
-
         runCatching {
             webhookService.consumeWebhookEvent(payloadToken, payload)
         }.onFailure {
