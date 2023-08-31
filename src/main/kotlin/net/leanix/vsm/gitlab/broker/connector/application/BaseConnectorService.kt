@@ -14,10 +14,10 @@ import java.util.Locale
 open class BaseConnectorService {
 
     @Autowired
-    private lateinit var loggingService: LoggingService
+    lateinit var loggingService: LoggingService
 
     @Autowired
-    private lateinit var messageSource: MessageSource
+    lateinit var messageSource: MessageSource
 
     private val logger = KotlinLogging.logger {}
 

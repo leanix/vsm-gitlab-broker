@@ -5,3 +5,9 @@ sealed class VsmException(message: String? = null) : RuntimeException(message)
 class NoRepositoriesFound : VsmException()
 
 class GraphqlException(message: String?) : VsmException(message)
+
+class InvalidToken : VsmException()
+
+class AccessLevelValidationFailed : VsmException()
+
+class OrgNameValidationFailed : VsmException()
