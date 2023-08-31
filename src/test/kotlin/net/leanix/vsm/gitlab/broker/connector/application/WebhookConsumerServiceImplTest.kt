@@ -1,5 +1,8 @@
 package net.leanix.vsm.gitlab.broker.connector.application
 
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.GitlabGraphqlProvider
 import net.leanix.vsm.gitlab.broker.connector.application.WebhookConsumerServiceImpl.Companion.computeWebhookEventType
@@ -14,21 +17,25 @@ import net.leanix.vsm.gitlab.broker.shared.exception.GitlabPayloadNotSupportedEx
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabTokenException
 import net.leanix.vsm.gitlab.broker.shared.exception.NamespaceNotFoundInCacheException
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
 import java.util.UUID.randomUUID
 
 const val PAYLOAD_TOKEN = "payload_token"
 
 class WebhookConsumerServiceImplTest {
 
-    private val repositoryProvider = mock(RepositoryProvider::class.java)
-    private val gitlabGraphqlProvider = mock(GitlabGraphqlProvider::class.java)
+    private val repositoryProvider: RepositoryProvider = mockk(relaxed = true)
+    private val gitlabGraphqlProvider: GitlabGraphqlProvider = mockk(relaxed = true)
 
-    private val subject = WebhookConsumerServiceImpl(PAYLOAD_TOKEN, repositoryProvider, gitlabGraphqlProvider)
+    private val subject = spyk(WebhookConsumerServiceImpl(PAYLOAD_TOKEN, repositoryProvider, gitlabGraphqlProvider))
+
+    @BeforeEach
+    fun setupMock() {
+        every { subject.logInfoMessages(any(), any(), any()) } returns Unit
+        every { subject.logFailedStatus(any(), any()) } returns Unit
+    }
 
     @Test
     fun `should return webhook event type REPOSITORY when event_name = project_create in payload`() {
@@ -124,11 +131,14 @@ class WebhookConsumerServiceImplTest {
         AssignmentsCache.addAll(listOf(gitlabAssignment))
 
         val repository = getRepository()
-        `when`(gitlabGraphqlProvider.getRepositoryByPath("cider/ops/ahmed-test-2")).thenReturn(repository)
+        every { gitlabGraphqlProvider.getRepositoryByPath("cider/ops/ahmed-test-2") } returns repository
 
         subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectPayload())
 
-        verify(repositoryProvider).save(repository, gitlabAssignment, EventType.CHANGE)
+        verify(exactly = 1) { repositoryProvider.save(repository, gitlabAssignment, eq(EventType.CHANGE)) }
+        verify(exactly = 1) {
+            subject.logInfoMessages(eq("vsm.repos.imported"), arrayOf("cider/ops/ahmed-test-2"), gitlabAssignment)
+        }
     }
 
     private fun getProjectPayload() = this::class.java.getResource("/webhook_calls/project_created.json")!!.readText()

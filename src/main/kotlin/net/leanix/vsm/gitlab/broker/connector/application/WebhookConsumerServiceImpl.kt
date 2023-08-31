@@ -44,18 +44,27 @@ class WebhookConsumerServiceImpl(
         val project = mapper.readValue<ProjectChange>(payload)
 
         AssignmentsCache.get(project.getNamespace())
-            ?.also {
-                repositoryProvider.save(
-                    gitlabGraphqlProvider.getRepositoryByPath(project.pathWithNamespace),
-                    it,
-                    EventType.CHANGE
-                )
+            ?.also { gitlabAssignment ->
+                runCatching {
+                    repositoryProvider.save(
+                        gitlabGraphqlProvider.getRepositoryByPath(project.pathWithNamespace),
+                        gitlabAssignment,
+                        EventType.CHANGE
+                    )
+                }.onSuccess {
+                    logInfoMessages("vsm.repos.imported", arrayOf(project.pathWithNamespace), gitlabAssignment)
+                }.onFailure {
+                    logFailedStatus("Error processing project: ${it.message}", gitlabAssignment)
+                    throw it
+                }
             }
             ?: throw NamespaceNotFoundInCacheException(project.getNamespace())
     }
 
+    @Suppress("ForbiddenComment")
     private fun processMergeRequest(payload: String) {
         val mergeRequest = mapper.readValue<MergeRequest>(payload)
+        // TODO: will be implemented later when we decide if we are fetching DORA metrics directly from Gitlab or not
         println(mergeRequest)
     }
 
