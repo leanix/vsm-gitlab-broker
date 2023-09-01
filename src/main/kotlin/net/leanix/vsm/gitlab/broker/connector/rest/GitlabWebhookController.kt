@@ -1,6 +1,6 @@
 package net.leanix.vsm.gitlab.broker.connector.rest
 
-import net.leanix.vsm.gitlab.broker.connector.domain.WebhookConsumerService
+import net.leanix.vsm.gitlab.broker.connector.application.WebhookConsumerService
 import net.leanix.vsm.gitlab.broker.webhook.adapter.feign.LEANIX_WEBHOOK_PATH
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus

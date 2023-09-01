@@ -4,7 +4,7 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 
 object AssignmentsCache {
 
-    private val assignmentCache: MutableMap<OrgName, GitLabAssignment> = mutableMapOf()
+    private val assignmentCache: MutableMap<Group, GitLabAssignment> = mutableMapOf()
 
     fun addAll(newAssignments: List<GitLabAssignment>) {
         newAssignments.forEach { assignment -> assignmentCache[assignment.connectorConfiguration.orgName] = assignment }
@@ -23,9 +23,9 @@ object AssignmentsCache {
     }
 }
 
-typealias OrgName = String
+typealias Group = String
 
-fun OrgName.matchesNamespace(
+fun Group.matchesNamespace(
     namespace: String
 ) =
     namespace == this || (namespace.startsWith(this) && namespace.elementAtOrNull(this.length) == '/')

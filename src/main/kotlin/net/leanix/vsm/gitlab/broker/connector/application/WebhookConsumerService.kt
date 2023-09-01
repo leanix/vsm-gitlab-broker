@@ -9,13 +9,12 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.MergeRequest
 import net.leanix.vsm.gitlab.broker.connector.domain.ProjectChange
 import net.leanix.vsm.gitlab.broker.connector.domain.RepositoryProvider
-import net.leanix.vsm.gitlab.broker.connector.domain.WebhookConsumerService
 import net.leanix.vsm.gitlab.broker.connector.domain.WebhookEventType
 import net.leanix.vsm.gitlab.broker.connector.domain.getNamespace
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabPayloadNotSupportedException
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabTokenException
-import net.leanix.vsm.gitlab.broker.shared.exception.NamespaceNotFoundInCacheException
+import net.leanix.vsm.gitlab.broker.shared.exception.NamespaceNotMatchException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -23,13 +22,13 @@ val PROJECT_EVENTS = listOf("project_create", "project_update", "project_rename"
 val mapper: ObjectMapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
 @Service
-class WebhookConsumerServiceImpl(
+class WebhookConsumerService(
     @Value("\${leanix.vsm.connector.api-user-token}") private val apiUserToken: String,
     private val repositoryProvider: RepositoryProvider,
     private val gitlabProvider: GitlabProvider,
-) : WebhookConsumerService, BaseConnectorService() {
+) : BaseConnectorService() {
 
-    override fun consumeWebhookEvent(payloadToken: String?, payload: String) {
+    fun consumeWebhookEvent(payloadToken: String?, payload: String) {
         if (payloadToken == null || payloadToken != apiUserToken) {
             throw GitlabTokenException(payloadToken)
         }
@@ -58,7 +57,7 @@ class WebhookConsumerServiceImpl(
                     throw it
                 }
             }
-            ?: throw NamespaceNotFoundInCacheException(project.getNamespace())
+            ?: throw NamespaceNotMatchException(project.getNamespace())
     }
 
     @Suppress("ForbiddenComment")

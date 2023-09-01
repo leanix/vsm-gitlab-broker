@@ -17,5 +17,5 @@ class GitlabTokenException(token: String?) : VsmException(message = "Invalid git
 class GitlabPayloadNotSupportedException :
     VsmException(message = "Payload is neither for project creation nor for merge request being merged")
 
-class NamespaceNotFoundInCacheException(namespace: String) :
-    VsmException(message = "Namespace '$namespace' not found on AssignmentCache")
+class NamespaceNotMatchException(namespace: String) :
+    VsmException(message = "Namespace '$namespace' does not match any group in AssignmentCache")

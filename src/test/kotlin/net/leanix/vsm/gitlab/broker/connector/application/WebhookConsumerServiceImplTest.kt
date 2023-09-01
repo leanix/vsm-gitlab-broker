@@ -5,7 +5,7 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.GitlabGraphqlProvider
-import net.leanix.vsm.gitlab.broker.connector.application.WebhookConsumerServiceImpl.Companion.computeWebhookEventType
+import net.leanix.vsm.gitlab.broker.connector.application.WebhookConsumerService.Companion.computeWebhookEventType
 import net.leanix.vsm.gitlab.broker.connector.domain.EventType
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabConfiguration
@@ -15,7 +15,7 @@ import net.leanix.vsm.gitlab.broker.connector.domain.WebhookEventType
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabPayloadNotSupportedException
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabTokenException
-import net.leanix.vsm.gitlab.broker.shared.exception.NamespaceNotFoundInCacheException
+import net.leanix.vsm.gitlab.broker.shared.exception.NamespaceNotMatchException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -29,7 +29,7 @@ class WebhookConsumerServiceImplTest {
     private val repositoryProvider: RepositoryProvider = mockk(relaxed = true)
     private val gitlabGraphqlProvider: GitlabGraphqlProvider = mockk(relaxed = true)
 
-    private val subject = spyk(WebhookConsumerServiceImpl(PAYLOAD_TOKEN, repositoryProvider, gitlabGraphqlProvider))
+    private val subject = spyk(WebhookConsumerService(PAYLOAD_TOKEN, repositoryProvider, gitlabGraphqlProvider))
 
     @BeforeEach
     fun setupMock() {
@@ -118,7 +118,7 @@ class WebhookConsumerServiceImplTest {
                 GitLabAssignment(randomUUID(), randomUUID(), randomUUID(), GitLabConfiguration("cider/ops/special"))
             )
         )
-        assertThrows<NamespaceNotFoundInCacheException> {
+        assertThrows<NamespaceNotMatchException> {
             subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectPayload())
         }
     }
