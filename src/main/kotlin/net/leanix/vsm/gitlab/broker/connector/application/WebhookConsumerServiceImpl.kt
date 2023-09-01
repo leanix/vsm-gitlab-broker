@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.GitlabGraphqlProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.EventType
+import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.MergeRequest
 import net.leanix.vsm.gitlab.broker.connector.domain.ProjectChange
 import net.leanix.vsm.gitlab.broker.connector.domain.RepositoryProvider
@@ -26,7 +26,7 @@ val mapper: ObjectMapper = jacksonObjectMapper().configure(DeserializationFeatur
 class WebhookConsumerServiceImpl(
     @Value("\${leanix.vsm.connector.api-user-token}") private val apiUserToken: String,
     private val repositoryProvider: RepositoryProvider,
-    private val gitlabGraphqlProvider: GitlabGraphqlProvider,
+    private val gitlabProvider: GitlabProvider,
 ) : WebhookConsumerService, BaseConnectorService() {
 
     override fun consumeWebhookEvent(payloadToken: String?, payload: String) {
@@ -47,7 +47,7 @@ class WebhookConsumerServiceImpl(
             ?.also { gitlabAssignment ->
                 runCatching {
                     repositoryProvider.save(
-                        gitlabGraphqlProvider.getRepositoryByPath(project.pathWithNamespace),
+                        gitlabProvider.getRepositoryByPath(project.pathWithNamespace),
                         gitlabAssignment,
                         EventType.CHANGE
                     )
