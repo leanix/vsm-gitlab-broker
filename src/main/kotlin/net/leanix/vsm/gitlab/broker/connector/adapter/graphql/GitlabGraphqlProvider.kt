@@ -1,15 +1,19 @@
 package net.leanix.vsm.gitlab.broker.connector.adapter.graphql
 
 import com.expediagroup.graphql.client.spring.GraphQLWebClient
+import com.expediagroup.graphql.client.types.GraphQLClientError
 import com.expediagroup.graphql.client.types.GraphQLClientRequest
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 import net.leanix.githubbroker.connector.adapter.graphql.data.AllGroupsQuery
+import net.leanix.githubbroker.connector.adapter.graphql.data.ProjectByPathQuery
 import net.leanix.githubbroker.connector.adapter.graphql.data.allgroupsquery.ProjectConnection
+import net.leanix.githubbroker.connector.adapter.graphql.data.projectbypathquery.Project
 import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.parser.LanguageParser
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
+import net.leanix.vsm.gitlab.broker.connector.domain.Language
 import net.leanix.vsm.gitlab.broker.connector.domain.Repository
 import net.leanix.vsm.gitlab.broker.shared.exception.GraphqlException
 import net.leanix.vsm.gitlab.broker.shared.exception.NoRepositoriesFound
@@ -45,12 +49,7 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
             )
             val response = executeQuery(query)
             if (response.errors != null && response.errors?.isNotEmpty() == true) {
-                return Result.failure(
-                    GraphqlException(
-                        response.errors!!.map { error -> error.message }
-                            .joinToString { s -> s },
-                    )
-                )
+                return Result.failure(GraphqlException(makeErrorString(response.errors!!)))
             } else {
                 repositories += parseProjects(
                     response.data?.group?.projects
@@ -62,6 +61,15 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
 
         return Result.success(repositories)
     }
+
+    override fun getRepositoryByPath(
+        nameWithNamespace: String
+    ) =
+        executeQuery(ProjectByPathQuery(ProjectByPathQuery.Variables(fullPath = nameWithNamespace)))
+            .data
+            ?.project
+            ?.toRepository()
+            ?: throw GraphqlException("No gitlab project found at path: $nameWithNamespace")
 
     private fun parseProjects(
         repositories: ProjectConnection?
@@ -94,3 +102,19 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
         }
     }
 }
+
+fun Project.toRepository() = Repository(
+    id = id,
+    name = name,
+    description = description,
+    archived = archived,
+    url = webUrl!!,
+    visibility = visibility,
+    languages = languages?.map { Language(it.name, it.name, it.share!!) },
+    tags = topics,
+    defaultBranch = repository?.rootRef ?: "empty-branch",
+    groupName = group!!.fullPath
+)
+
+fun makeErrorString(errors: List<GraphQLClientError>) = errors.map { error -> error.message }
+    .joinToString { s -> s }

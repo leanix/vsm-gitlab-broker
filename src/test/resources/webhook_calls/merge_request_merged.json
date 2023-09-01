@@ -1,0 +1,145 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "id": 8,
+    "name": "Ahmed Ali",
+    "username": "ahmed-ali-55",
+    "avatar_url": "https://secure.gravatar.com/avatar/cd5bd633e516139a5de35eac1c27d362?s=80&d=identicon",
+    "email": "[REDACTED]"
+  },
+  "project": {
+    "id": 19,
+    "name": "ahmed-test",
+    "description": null,
+    "web_url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test",
+    "avatar_url": null,
+    "git_ssh_url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+    "git_http_url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test.git",
+    "namespace": "Ahmed Ali",
+    "visibility_level": 0,
+    "path_with_namespace": "ahmed-ali-55/ahmed-test",
+    "default_branch": "main",
+    "ci_config_path": null,
+    "homepage": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test",
+    "url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+    "ssh_url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+    "http_url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test.git"
+  },
+  "object_attributes": {
+    "assignee_id": null,
+    "author_id": 8,
+    "created_at": "2023-08-28 12:48:17 UTC",
+    "description": "",
+    "head_pipeline_id": null,
+    "id": 37,
+    "iid": 3,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": "128317429f9286c8ad819abc0580043ac5c78910",
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": "1"
+    },
+    "merge_status": "can_be_merged",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "feature/readme-update-2",
+    "source_project_id": 19,
+    "state_id": 3,
+    "target_branch": "main",
+    "target_project_id": 19,
+    "time_estimate": 0,
+    "title": "Feature/readme update 2",
+    "updated_at": "2023-08-28 12:48:28 UTC",
+    "updated_by_id": null,
+    "url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test/-/merge_requests/3",
+    "source": {
+      "id": 19,
+      "name": "ahmed-test",
+      "description": null,
+      "web_url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test",
+      "avatar_url": null,
+      "git_ssh_url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+      "git_http_url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test.git",
+      "namespace": "Ahmed Ali",
+      "visibility_level": 0,
+      "path_with_namespace": "ahmed-ali-55/ahmed-test",
+      "default_branch": "main",
+      "ci_config_path": null,
+      "homepage": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test",
+      "url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+      "ssh_url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+      "http_url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test.git"
+    },
+    "target": {
+      "id": 19,
+      "name": "ahmed-test",
+      "description": null,
+      "web_url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test",
+      "avatar_url": null,
+      "git_ssh_url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+      "git_http_url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test.git",
+      "namespace": "Ahmed Ali",
+      "visibility_level": 0,
+      "path_with_namespace": "ahmed-ali-55/ahmed-test",
+      "default_branch": "main",
+      "ci_config_path": null,
+      "homepage": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test",
+      "url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+      "ssh_url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+      "http_url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test.git"
+    },
+    "last_commit": {
+      "id": "040a8b73ef3daed874c74a31d136f0af362ffa3e",
+      "message": "Merge branch 'feature/readme-update-3' into 'feature/readme-update-2'\n\nUpdate README.md\n\nSee merge request ahmed-ali-55/ahmed-test!2",
+      "title": "Merge branch 'feature/readme-update-3' into 'feature/readme-update-2'",
+      "timestamp": "2023-08-28T10:55:01+00:00",
+      "url": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test/-/commit/040a8b73ef3daed874c74a31d136f0af362ffa3e",
+      "author": {
+        "name": "Ahmed Ali",
+        "email": "ahmed.ali@leanix.net"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "time_change": 0,
+    "human_total_time_spent": null,
+    "human_time_change": null,
+    "human_time_estimate": null,
+    "assignee_ids": [
+
+    ],
+    "reviewer_ids": [
+
+    ],
+    "labels": [
+
+    ],
+    "state": "merged",
+    "blocking_discussions_resolved": true,
+    "first_contribution": false,
+    "detailed_merge_status": "not_open",
+    "action": "merge"
+  },
+  "labels": [
+
+  ],
+  "changes": {
+    "state_id": {
+      "previous": 4,
+      "current": 3
+    },
+    "updated_at": {
+      "previous": "2023-08-28 12:48:28 UTC",
+      "current": "2023-08-28 12:48:28 UTC"
+    }
+  },
+  "repository": {
+    "name": "ahmed-test",
+    "url": "git@cider-gitlab.westeurope.cloudapp.azure.com:ahmed-ali-55/ahmed-test.git",
+    "description": null,
+    "homepage": "https://cider-gitlab.westeurope.cloudapp.azure.com/ahmed-ali-55/ahmed-test"
+  }
+}

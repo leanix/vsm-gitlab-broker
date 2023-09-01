@@ -26,8 +26,6 @@ val springCloudVersion: String by extra("2022.0.3")
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -37,7 +35,6 @@ dependencies {
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
-    testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
 

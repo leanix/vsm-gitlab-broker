@@ -12,10 +12,7 @@ leanix:
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
   gitlab:
-    base-url: dummy
-    access-token: dummy
     webhook-url: dummy
-    leanix-id: dummy
     enable-ssl-verification: false
 
 application:
