@@ -13,7 +13,7 @@ leanix:
       access-token-uri: ${leanix.base-url}/mtm/v1
   gitlab:
     webhook-url: dummy
-    enable-ssl-verification: false
+    webhook-enable-ssl-verification: false
 
 application:
   runner:

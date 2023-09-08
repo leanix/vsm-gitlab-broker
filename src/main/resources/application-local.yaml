@@ -9,7 +9,7 @@ leanix:
       access-token-uri: https://test-app-1.leanix.net/services/mtm/v1
   gitlab:
     webhook-url: ${GITLAB_WEBHOOK_URL:dummy}
-    enable-ssl-verification: ${ENABLE_SSL_VERIFICATION:false}
+    webhook-enable-ssl-verification: ${ENABLE_WEBHOOK_SSL:false}
 
 server:
   port: 8082
