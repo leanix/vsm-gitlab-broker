@@ -16,13 +16,13 @@ class ShutdownService(private val runProvider: RunProvider) {
     fun onDestroy() {
         logger.info("Shutting down gitlab on-prem")
         if (AssignmentsCache.getAll().isEmpty()) {
-            logger.info("Shutting down github broker before receiving any assignment")
+            logger.info("Shutting down gitlab broker before receiving any assignment")
         } else {
             AssignmentsCache.getAll().values.forEach { assignment ->
                 runProvider.updateRun(
                     runState = RunState.FINISHED,
                     assignment = assignment,
-                    message = "gracefully stopped GitHub broker"
+                    message = "gracefully stopped GitLab broker"
                 )
             }
         }

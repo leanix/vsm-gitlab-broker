@@ -39,21 +39,26 @@ class GitlabWebhookProvider(
         }.getOrThrow()
     }
 
-    override fun createWebhook(): GitlabWebhook {
-        return kotlin.runCatching {
-            webhookClient.createWebhook(
-                url = "$gitlabWebhookUrl$LEANIX_WEBHOOK_PATH",
-                token = leanixId,
-                receivePushEvents = true,
-                receiveTagPushEvents = false,
-                receiveMergeRequestEvents = true,
-                receiveRepositoryUpdateEvents = true,
-                enableSSLVerification = enableSSLVerification
-            )
-        }.onSuccess {
-            logger.info("Webhook created with id ${it.id}")
-        }.onFailure {
-            logger.error("Error creating webhook: ${it.message}")
-        }.getOrThrow()
+    override fun createWebhook(): GitlabWebhook? {
+        return if (gitlabWebhookUrl.isNotBlank()) {
+            kotlin.runCatching {
+                webhookClient.createWebhook(
+                    url = "$gitlabWebhookUrl$LEANIX_WEBHOOK_PATH",
+                    token = leanixId,
+                    receivePushEvents = true,
+                    receiveTagPushEvents = false,
+                    receiveMergeRequestEvents = true,
+                    receiveRepositoryUpdateEvents = true,
+                    enableSSLVerification = enableSSLVerification
+                )
+            }.onSuccess {
+                logger.info("Webhook created with id ${it.id}")
+            }.onFailure {
+                logger.error("Error creating webhook: ${it.message}")
+            }.getOrThrow()
+        } else {
+            logger.warn("Missing GITLAB_WEBHOOK_URL, webhook not created")
+            null
+        }
     }
 }

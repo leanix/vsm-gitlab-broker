@@ -11,12 +11,14 @@ class GitlabWebhookServiceImpl(
     private val webhookProvider: WebhookProvider
 ) : WebhookService {
 
-    override fun registerWebhook(): GitlabWebhook {
+    override fun registerWebhook(): GitlabWebhook? {
         val webhook = webhookProvider.createWebhook()
 
-        webhookProvider.getAllWebhooks()
-            .filter { it.url.contains(LEANIX_WEBHOOK_PATH) && it.id != webhook.id }
-            .forEach { webhookProvider.deleteWebhook(it.id) }
+        if (webhook != null) {
+            webhookProvider.getAllWebhooks()
+                .filter { it.url.contains(LEANIX_WEBHOOK_PATH) && it.id != webhook.id }
+                .forEach { webhookProvider.deleteWebhook(it.id) }
+        }
 
         return webhook
     }

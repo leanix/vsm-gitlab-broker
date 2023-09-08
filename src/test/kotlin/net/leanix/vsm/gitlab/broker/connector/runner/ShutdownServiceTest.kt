@@ -54,7 +54,7 @@ class ShutdownServiceTest {
             runProvider.updateRun(
                 eq(assignment),
                 eq(RunState.FINISHED),
-                eq("gracefully stopped GitHub broker")
+                eq("gracefully stopped GitLab broker")
             )
         }
     }
