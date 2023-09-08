@@ -14,7 +14,7 @@ class GitlabWebhookProvider(
     private val webhookClient: GitlabWebhookClient,
     @Value("\${leanix.gitlab.webhook-url}") private val gitlabWebhookUrl: String,
     @Value("\${leanix.vsm.connector.api-user-token}") private val leanixId: String,
-    @Value("\${leanix.gitlab.enable-ssl-verification}") private val enableSSLVerification: Boolean,
+    @Value("\${leanix.gitlab.webhook-enable-ssl-verification}") private val enableSSLVerification: Boolean,
 ) : WebhookProvider {
 
     private val logger = LoggerFactory.getLogger(AssignmentService::class.java)
