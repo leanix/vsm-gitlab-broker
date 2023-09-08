@@ -1,0 +1,26 @@
+query PullRequestsForProjectQuery($fullPath: ID!, $defaultBranch: String!, $mergedAfter: Time) {
+    project(fullPath: $fullPath) {
+        name
+        repository {
+            rootRef
+        }
+        mergeRequests(state: merged, mergedAfter: $mergedAfter, targetBranches: [$defaultBranch]) {
+            nodes {
+                id
+                targetBranch
+                mergedAt
+                commits {
+                    nodes {
+                        id
+                        authoredDate
+                        authorEmail
+                        author {
+                            name
+                            username
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

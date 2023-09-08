@@ -154,5 +154,6 @@ fun getRepository() = Repository(
     languages = emptyList(),
     tags = emptyList(),
     defaultBranch = "empty-branch",
-    groupName = "cider/ops/"
+    groupName = "cider/ops/",
+    path = "ahmed-test-2"
 )

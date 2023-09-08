@@ -18,12 +18,12 @@ class RepositoryService(
 
     private val logger = KotlinLogging.logger {}
 
-    fun importAllRepositories(assignment: GitLabAssignment) {
+    fun importAllRepositories(assignment: GitLabAssignment): List<Repository> {
         logInfoStatus(
             assignment = assignment,
             status = LogStatus.IN_PROGRESS,
         )
-        gitlabProvider
+        return gitlabProvider
             .getAllRepositories(assignment)
             .onSuccess {
                 logInfoMessages("vsm.repos.total", arrayOf(it.size), assignment)
@@ -38,7 +38,7 @@ class RepositoryService(
             .onFailure {
                 handleExceptions(it, assignment)
                 throw it
-            }
+            }.getOrThrow()
     }
 
     fun save(repository: Repository, assignment: GitLabAssignment, eventType: EventType) {

@@ -6,11 +6,17 @@ import com.expediagroup.graphql.client.types.GraphQLClientRequest
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
+import net.leanix.githubbroker.connector.adapter.graphql.parser.LanguageParser
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.AllGroupsQuery
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.ProjectByPathQuery
+import net.leanix.gitlabbroker.connector.adapter.graphql.data.PullRequestsForProjectQuery
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.allgroupsquery.ProjectConnection
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.projectbypathquery.Project
-import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.parser.LanguageParser
+import net.leanix.gitlabbroker.connector.adapter.graphql.data.pullrequestsforprojectquery.MergeRequest
+import net.leanix.vsm.githubbroker.connector.domain.Author
+import net.leanix.vsm.githubbroker.connector.domain.Commit
+import net.leanix.vsm.githubbroker.connector.domain.Dora
+import net.leanix.vsm.githubbroker.connector.domain.PullRequest
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.Language
@@ -71,6 +77,24 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
             ?.toRepository()
             ?: throw GraphqlException("No gitlab project found at path: $nameWithNamespace")
 
+    override fun getDoraRawData(
+        repository: Repository,
+        periodInDaysInString: String
+    ) =
+        PullRequestsForProjectQuery.Variables(
+            fullPath = "${repository.groupName}/${repository.path}",
+            defaultBranch = repository.defaultBranch
+        )
+            .let { PullRequestsForProjectQuery(it) }
+            .let { executeQuery(it) }
+            .data
+            ?.project
+            ?.mergeRequests
+            ?.nodes
+            ?.filterNotNull()
+            ?.map { Dora(repository.name, repository.url, it.toPullRequest()) }
+            ?: throw GraphqlException("No gitlab project found at path: ${repository.groupName}/${repository.path}")
+
     private fun parseProjects(
         repositories: ProjectConnection?
     ): List<Repository> {
@@ -87,7 +111,8 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
                         languages = LanguageParser.parse(project.languages),
                         tags = project.topics,
                         defaultBranch = project.repository?.rootRef ?: "empty-branch",
-                        groupName = project.group!!.fullPath
+                        groupName = project.group!!.fullPath,
+                        path = project.path
                     )
                 }
         } else {
@@ -113,7 +138,25 @@ fun Project.toRepository() = Repository(
     languages = languages?.map { Language(it.name, it.name, it.share!!) },
     tags = topics,
     defaultBranch = repository?.rootRef ?: "empty-branch",
-    groupName = group!!.fullPath
+    groupName = group!!.fullPath,
+    path = path
+)
+
+fun MergeRequest.toPullRequest() = PullRequest(
+    id = id,
+    baseRefName = targetBranch,
+    mergedAt = mergedAt.toString(),
+    commits = commits
+        ?.nodes
+        ?.filterNotNull()
+        ?.map {
+            Commit(
+                id = it.id,
+                changeTime = it.authoredDate.toString(),
+                author = Author(it.author?.name ?: "", it.authorEmail ?: "", it.author?.username)
+            )
+        }
+        ?: emptyList()
 )
 
 fun makeErrorString(errors: List<GraphQLClientError>) = errors.map { error -> error.message }

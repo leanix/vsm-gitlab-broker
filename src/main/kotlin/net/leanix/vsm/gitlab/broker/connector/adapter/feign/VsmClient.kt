@@ -1,6 +1,7 @@
 package net.leanix.vsm.gitlab.broker.connector.adapter.feign
 
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.CommandRequest
+import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.DoraRequest
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.ServiceRequest
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.UpdateRunStateRequest
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
@@ -45,4 +46,7 @@ interface VsmClient {
         @RequestParam("runId") runId: UUID,
         @RequestBody runState: UpdateRunStateRequest,
     )
+
+    @PostMapping("/dora")
+    fun saveDora(doraRequest: DoraRequest)
 }

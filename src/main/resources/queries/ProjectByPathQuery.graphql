@@ -7,6 +7,7 @@ query ProjectByPathQuery($fullPath: ID!){
 #maybe someday we can move it to a common file
 fragment ProjectDetails on Project {
     name
+    path
     id
     archived
     visibility

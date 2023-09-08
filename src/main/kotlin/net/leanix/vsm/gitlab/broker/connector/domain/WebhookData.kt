@@ -31,7 +31,8 @@ fun ProjectChange.toRepository(gitlabUrl: String) = Repository(
     languages = null,
     tags = null,
     defaultBranch = "empty-branch",
-    groupName = getNamespace()
+    groupName = getNamespace(),
+    path = path
 )
 
 data class MergeRequest(

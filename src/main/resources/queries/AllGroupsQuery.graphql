@@ -9,6 +9,7 @@ query AllGroupsQuery($group: ID!, $pageCount: Int!, $cursor: String) {
             }
             nodes {
                 name
+                path
                 id
                 archived
                 visibility
