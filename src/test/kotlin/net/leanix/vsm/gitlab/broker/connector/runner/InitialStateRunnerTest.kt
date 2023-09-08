@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 
-@SpringBootTest(properties = ["application.runner.enabled=true"])
+@SpringBootTest(properties = ["application.runner.enabled=true", "async.enabled=false"])
 @AutoConfigureWireMock(port = 6666)
 class InitialStateRunnerTest {
 
@@ -31,7 +31,15 @@ class InitialStateRunnerTest {
 
             )
 
+            WireMock.verify(
+                6,
+                WireMock.postRequestedFor(urlEqualTo("/api/graphql"))
+                    .withRequestBody(WireMock.containing("PullRequestsForProjectQuery"))
+
+            )
+
             WireMock.verify(6, WireMock.postRequestedFor(urlEqualTo("/services")))
+//            WireMock.verify(6, WireMock.postRequestedFor(urlEqualTo("/dora")))
             WireMock.verify(1, WireMock.postRequestedFor(urlEqualTo("/commands")))
         }
     }

@@ -1,0 +1,52 @@
+{
+  "request": {
+    "url": "/api/graphql",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$.query",
+          "contains": "PullRequestsForProjectQuery"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "project": {
+        "data": {
+          "name": "",
+          "repository": {
+            "rootRef": ""
+          },
+          "mergeRequests": {
+            "nodes": [
+              {
+                "id": "",
+                "targetBranch": "",
+                "mergedAt": "",
+                "commits": {
+                  "nodes": [
+                    {
+                      "id": "",
+                      "authoredDate": "",
+                      "authorEmail": "",
+                      "author": {
+                        "name": "",
+                        "username": ""
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

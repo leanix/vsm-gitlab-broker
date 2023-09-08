@@ -22,7 +22,7 @@ class DoraService(
     @Async
     fun generateDoraEvents(repository: Repository, assignment: GitLabAssignment) {
         val periodInDaysInString = LocalDate.now().minusDays(periodInDays).toString()
-        gitlabProvider.getDoraRawData(repository, periodInDaysInString)
+        gitlabProvider.getMergeRequestsForRepository(repository, periodInDaysInString)
             .takeIf { it.isNotEmpty() }
             ?.forEach { doraProvider.saveDora(it, assignment, repository) }
             ?: {

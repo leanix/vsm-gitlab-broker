@@ -77,7 +77,7 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
             ?.toRepository()
             ?: throw GraphqlException("No gitlab project found at path: $nameWithNamespace")
 
-    override fun getDoraRawData(
+    override fun getMergeRequestsForRepository(
         repository: Repository,
         periodInDaysInString: String
     ) =

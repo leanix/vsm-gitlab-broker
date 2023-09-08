@@ -8,5 +8,5 @@ interface GitlabProvider {
 
     fun getRepositoryByPath(nameWithNamespace: String): Repository
 
-    fun getDoraRawData(repository: Repository, periodInDaysInString: String): List<Dora>
+    fun getMergeRequestsForRepository(repository: Repository, periodInDaysInString: String): List<Dora>
 }

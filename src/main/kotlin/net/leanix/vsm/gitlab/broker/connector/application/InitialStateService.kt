@@ -26,8 +26,14 @@ class InitialStateService(
                 }
                 repositoryService
                     .importAllRepositories(assignment)
-                    .forEach {
-                        doraService.generateDoraEvents(it, assignment)
+                    .forEach { repository ->
+                        runCatching {
+                            doraService.generateDoraEvents(repository, assignment)
+                        }.onFailure {
+                            logger.info { "Failed to generate DORA for repository: ${repository.name}: ${it.message}" }
+                        }.onSuccess {
+                            logger.error { "DORA generated for repository ${repository.name}" }
+                        }
                     }
             }.onSuccess {
                 commandProvider.sendCommand(assignment, CommandEventAction.FINISHED)
