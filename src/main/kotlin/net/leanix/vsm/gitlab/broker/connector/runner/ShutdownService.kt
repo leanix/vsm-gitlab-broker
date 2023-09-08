@@ -22,7 +22,7 @@ class ShutdownService(private val runProvider: RunProvider) {
                 runProvider.updateRun(
                     runState = RunState.FINISHED,
                     assignment = assignment,
-                    message = "gracefully stopped gitlab broker"
+                    message = "gracefully stopped GitLab broker"
                 )
             }
         }
