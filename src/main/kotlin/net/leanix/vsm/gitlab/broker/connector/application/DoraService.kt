@@ -24,9 +24,7 @@ class DoraService(
         val periodInDaysInString = LocalDate.now().minusDays(periodInDays).toString()
         gitlabProvider.getDoraRawData(repository, periodInDaysInString)
             .takeIf { it.isNotEmpty() }
-            ?.forEach {
-                doraProvider.saveDora(it, assignment, repository)
-            }
+            ?.forEach { doraProvider.saveDora(it, assignment, repository) }
             ?: {
                 logger.info(
                     "Repository does not have any valid pull requests for DORA metrics. " +

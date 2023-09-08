@@ -16,9 +16,6 @@ class FeignDoraProvider(
 
     private val logger = LoggerFactory.getLogger(FeignDoraProvider::class.java)
     override fun saveDora(dora: Dora, assignment: GitLabAssignment, repository: Repository) {
-        println("assignment: $assignment")
-        println("repository: $repository")
-        println("dora: $dora")
         kotlin.runCatching {
             vsmClient.saveDora(
                 DoraRequest(
@@ -32,6 +29,6 @@ class FeignDoraProvider(
                     pullRequest = dora.pullRequest
                 )
             )
-        }.onFailure { logger.error("Failed save dora events: ${dora.repositoryName}", it) }
+        }.onFailure { logger.error("Failed to save dora events: ${dora.repositoryName}", it) }
     }
 }
