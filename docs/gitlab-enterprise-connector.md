@@ -12,8 +12,6 @@ category: 62b439a44f5a3e003566e740
 
 The LeanIX VSM GitLab Repository integration offers an easy way to auto-discover all your services from your on-premise GitLab Enterprise instance. Based on this VSM's mapping inbox allows you to easily sift through all the stale information from GitLab to decide, which services are really useful to your organization and hence should be part of your service catalog. This will help you to maintain a high standard of data quality when you subsequently map your services to their individual teams to create clear team ownership.
 
-![](https://files.readme.io/539f1a5-image.png)
-
 ##### Integrate with GitLab Enterprise to:
 
 - Automatically discover your services to build your company-wide service catalog

@@ -5,15 +5,17 @@ import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
 import net.leanix.vsm.gitlab.broker.connector.application.InitialStateService
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import net.leanix.vsm.gitlab.broker.webhook.domain.WebhookService
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
 
 @Component
 class InitialStateRunner(
+    @Value("\${leanix.gitlab.webhook-url}") private val gitlabWebhookUrl: String,
     private val assignmentService: AssignmentService,
     private val initialStateService: InitialStateService,
-    private val webhookService: WebhookService
+    private val webhookService: WebhookService,
 ) : ApplicationRunner {
 
     private val logger = KotlinLogging.logger {}
@@ -37,12 +39,19 @@ class InitialStateRunner(
     }
 
     private fun setupWebhook() {
-        runCatching {
-            webhookService.registerWebhook()
-        }.onSuccess {
-            logger.info { "webhook registered successfully" }
-        }.onFailure {
-            logger.error(it) { "webhook registration failed" }
+        if (gitlabWebhookUrl.isNotBlank() && gitlabWebhookUrl.isNotEmpty()) {
+            logger.info { "Registering webhook" }
+            runCatching {
+                webhookService.registerWebhook()
+            }.onSuccess {
+                if (it == null) {
+                    logger.info { "no webhook registered" }
+                } else logger.info { "webhook registered successfully" }
+            }.onFailure {
+                logger.error(it) { "webhook registration failed" }
+            }
+        } else {
+            logger.warn { "Missing GITLAB_WEBHOOK_URL, webhook not created" }
         }
     }
 }
