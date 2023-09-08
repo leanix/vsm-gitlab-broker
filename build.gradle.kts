@@ -93,7 +93,7 @@ tasks.processResources {
 graphql {
     client {
         schemaFile = file("${project.projectDir}/src/main/resources/schemas/gitlab_schema.graphql")
-        packageName = "net.leanix.githubbroker.connector.adapter.graphql.data"
+        packageName = "net.leanix.gitlabbroker.connector.adapter.graphql.data"
         queryFileDirectory = "${project.projectDir}/src/main/resources/queries"
     }
 }

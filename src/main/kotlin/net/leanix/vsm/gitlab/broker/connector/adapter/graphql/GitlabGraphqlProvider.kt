@@ -6,10 +6,10 @@ import com.expediagroup.graphql.client.types.GraphQLClientRequest
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
-import net.leanix.githubbroker.connector.adapter.graphql.data.AllGroupsQuery
-import net.leanix.githubbroker.connector.adapter.graphql.data.ProjectByPathQuery
-import net.leanix.githubbroker.connector.adapter.graphql.data.allgroupsquery.ProjectConnection
-import net.leanix.githubbroker.connector.adapter.graphql.data.projectbypathquery.Project
+import net.leanix.gitlabbroker.connector.adapter.graphql.data.AllGroupsQuery
+import net.leanix.gitlabbroker.connector.adapter.graphql.data.ProjectByPathQuery
+import net.leanix.gitlabbroker.connector.adapter.graphql.data.allgroupsquery.ProjectConnection
+import net.leanix.gitlabbroker.connector.adapter.graphql.data.projectbypathquery.Project
 import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.parser.LanguageParser
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
