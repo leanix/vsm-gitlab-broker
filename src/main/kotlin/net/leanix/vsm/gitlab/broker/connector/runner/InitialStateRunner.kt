@@ -15,7 +15,7 @@ class InitialStateRunner(
     @Value("\${leanix.gitlab.webhook-url}") private val gitlabWebhookUrl: String,
     private val assignmentService: AssignmentService,
     private val initialStateService: InitialStateService,
-    private val webhookService: WebhookService,
+    private val webhookService: WebhookService
 ) : ApplicationRunner {
 
     private val logger = KotlinLogging.logger {}
