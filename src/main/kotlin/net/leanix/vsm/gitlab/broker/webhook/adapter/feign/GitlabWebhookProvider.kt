@@ -40,7 +40,7 @@ class GitlabWebhookProvider(
     }
 
     override fun createWebhook(): GitlabWebhook? {
-        return if (gitlabWebhookUrl.isEmpty() || gitlabWebhookUrl.isNotBlank()) {
+        return if (gitlabWebhookUrl.isNotBlank()) {
             kotlin.runCatching {
                 webhookClient.createWebhook(
                     url = "$gitlabWebhookUrl$LEANIX_WEBHOOK_PATH",

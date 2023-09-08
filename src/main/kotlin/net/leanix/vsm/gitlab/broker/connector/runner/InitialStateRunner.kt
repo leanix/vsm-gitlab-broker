@@ -39,7 +39,7 @@ class InitialStateRunner(
     }
 
     private fun setupWebhook() {
-        if (gitlabWebhookUrl.isNotBlank() && gitlabWebhookUrl.isNotEmpty()) {
+        if (gitlabWebhookUrl.isNotBlank()) {
             logger.info { "Registering webhook" }
             runCatching {
                 webhookService.registerWebhook()
