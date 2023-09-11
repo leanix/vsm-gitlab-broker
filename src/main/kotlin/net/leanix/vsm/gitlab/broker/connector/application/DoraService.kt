@@ -22,11 +22,12 @@ class DoraService(
     @Async
     fun generateDoraEvents(repository: Repository, assignment: GitLabAssignment) {
         val periodInDaysInString = LocalDate.now().minusDays(periodInDays).toString()
-        gitlabProvider.getMergeRequestsForRepository(repository, periodInDaysInString)
+        gitlabProvider
+            .getMergeRequestsForRepository(repository, periodInDaysInString)
             .takeIf { it.isNotEmpty() }
             ?.forEach { doraProvider.saveDora(it, assignment, repository) }
             ?: {
-                logger.info {
+                logger.error {
                     "Repository does not have any valid pull requests for DORA metrics. " +
                         "Repository: ${repository.name}"
                 }

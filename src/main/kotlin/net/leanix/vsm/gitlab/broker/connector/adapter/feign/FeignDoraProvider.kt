@@ -7,7 +7,6 @@ import net.leanix.vsm.gitlab.broker.connector.domain.DoraProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.Repository
 import net.leanix.vsm.gitlab.broker.shared.Constants.GITLAB_ENTERPRISE_CONNECTOR
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

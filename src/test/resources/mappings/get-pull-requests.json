@@ -17,27 +17,27 @@
       "Content-Type": "application/json"
     },
     "jsonBody": {
-      "project": {
-        "data": {
-          "name": "",
+      "data": {
+        "project": {
+          "name": "test-1",
           "repository": {
-            "rootRef": ""
+            "rootRef": "main"
           },
           "mergeRequests": {
             "nodes": [
               {
-                "id": "",
-                "targetBranch": "",
-                "mergedAt": "",
+                "id": "gid://gitlab/MergeRequest/41",
+                "targetBranch": "main",
+                "mergedAt": "2023-09-08T10:42:13Z",
                 "commits": {
                   "nodes": [
                     {
-                      "id": "",
-                      "authoredDate": "",
-                      "authorEmail": "",
+                      "id": "gid://gitlab/CommitPresenter/526dff0f022e6907331c5640b7dbb1c9d79f4065",
+                      "authoredDate": "2023-09-06T08:22:54Z",
+                      "authorEmail": "testuser@dummy.com",
                       "author": {
-                        "name": "",
-                        "username": ""
+                        "name": "Author",
+                        "username": "testuser"
                       }
                     }
                   ]

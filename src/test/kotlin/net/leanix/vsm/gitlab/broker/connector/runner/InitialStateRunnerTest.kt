@@ -39,7 +39,7 @@ class InitialStateRunnerTest {
             )
 
             WireMock.verify(6, WireMock.postRequestedFor(urlEqualTo("/services")))
-//            WireMock.verify(6, WireMock.postRequestedFor(urlEqualTo("/dora")))
+            WireMock.verify(6, WireMock.postRequestedFor(urlEqualTo("/dora")))
             WireMock.verify(1, WireMock.postRequestedFor(urlEqualTo("/commands")))
         }
     }
