@@ -1,10 +1,10 @@
 package net.leanix.vsm.gitlab.broker.connector.application
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.leanix.vsm.gitlab.broker.connector.domain.DoraProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.Repository
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
@@ -17,7 +17,7 @@ class DoraService(
     @Value("\${leanix.vsm.dora.total-days:30}") val periodInDays: Long = 0
 ) {
 
-    private val logger = LoggerFactory.getLogger(DoraService::class.java)
+    private val logger = KotlinLogging.logger {}
 
     @Async
     fun generateDoraEvents(repository: Repository, assignment: GitLabAssignment) {
@@ -26,10 +26,10 @@ class DoraService(
             .takeIf { it.isNotEmpty() }
             ?.forEach { doraProvider.saveDora(it, assignment, repository) }
             ?: {
-                logger.info(
+                logger.info {
                     "Repository does not have any valid pull requests for DORA metrics. " +
                         "Repository: ${repository.name}"
-                )
+                }
             }
     }
 }

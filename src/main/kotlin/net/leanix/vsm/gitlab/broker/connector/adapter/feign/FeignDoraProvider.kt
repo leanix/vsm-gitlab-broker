@@ -1,5 +1,6 @@
 package net.leanix.vsm.gitlab.broker.connector.adapter.feign
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.leanix.vsm.githubbroker.connector.domain.Dora
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.DoraRequest
 import net.leanix.vsm.gitlab.broker.connector.domain.DoraProvider
@@ -14,7 +15,7 @@ class FeignDoraProvider(
     private val vsmClient: VsmClient
 ) : DoraProvider {
 
-    private val logger = LoggerFactory.getLogger(FeignDoraProvider::class.java)
+    private val logger = KotlinLogging.logger {}
     override fun saveDora(dora: Dora, assignment: GitLabAssignment, repository: Repository) {
         kotlin.runCatching {
             vsmClient.saveDora(
@@ -29,6 +30,6 @@ class FeignDoraProvider(
                     pullRequest = dora.pullRequest
                 )
             )
-        }.onFailure { logger.error("Failed to save dora events: ${dora.repositoryName}", it) }
+        }.onFailure { logger.error(it) { "Failed to save dora events: ${dora.repositoryName}" } }
     }
 }
