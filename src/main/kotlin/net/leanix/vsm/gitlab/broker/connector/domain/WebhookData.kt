@@ -53,6 +53,8 @@ data class Project(
     val defaultBranch: String,
 )
 
+fun Project.getNamespace() = pathWithNamespace.substringBeforeLast("/")
+
 data class ObjectAttributes(
     val description: String,
     @JsonProperty("created_at")
