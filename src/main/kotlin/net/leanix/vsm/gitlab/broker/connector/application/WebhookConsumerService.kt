@@ -59,7 +59,6 @@ class WebhookConsumerService(
             ?: throw NamespaceNotMatchException(project.getNamespace())
     }
 
-    @Suppress("ForbiddenComment")
     private fun processMergeRequest(payload: String) {
         val mergeRequest = mapper.readValue<MergeRequest>(payload)
         AssignmentsCache.get(mergeRequest.project.getNamespace())
