@@ -6,7 +6,6 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.Repository
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -19,7 +18,6 @@ class DoraService(
 
     private val logger = KotlinLogging.logger {}
 
-    @Async
     fun generateDoraEvents(repository: Repository, assignment: GitLabAssignment) {
         val periodInDaysInString = LocalDate.now().minusDays(periodInDays).toString()
         runCatching {
