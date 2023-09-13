@@ -3,6 +3,7 @@ package net.leanix.vsm.gitlab.broker.logs.adapter.feign.data
 import jakarta.validation.constraints.NotNull
 import net.leanix.vsm.gitlab.broker.logs.domain.AdminLog
 import net.leanix.vsm.gitlab.broker.logs.domain.LogLevel
+import net.leanix.vsm.gitlab.broker.shared.Constants.GITLAB_ENTERPRISE_CONNECTOR
 import java.util.UUID
 
 data class AdminRequest(
@@ -15,7 +16,8 @@ data class AdminRequest(
     @field:NotNull(message = "Field \"level\" cannot be empty")
     val level: LogLevel?,
     @field:NotNull(message = "Field \"message\" cannot be empty")
-    val message: String?
+    val message: String?,
+    val integrationName: String
 ) {
     companion object {
         fun fromDomain(admin: AdminLog): AdminRequest {
@@ -25,6 +27,7 @@ data class AdminRequest(
                 subject = admin.subject,
                 level = admin.level,
                 message = admin.message,
+                integrationName = GITLAB_ENTERPRISE_CONNECTOR
             )
         }
     }

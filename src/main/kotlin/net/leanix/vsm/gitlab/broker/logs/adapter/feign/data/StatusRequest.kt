@@ -3,6 +3,7 @@ package net.leanix.vsm.gitlab.broker.logs.adapter.feign.data
 import jakarta.validation.constraints.NotNull
 import net.leanix.vsm.gitlab.broker.logs.domain.LogStatus
 import net.leanix.vsm.gitlab.broker.logs.domain.StatusLog
+import net.leanix.vsm.gitlab.broker.shared.Constants.GITLAB_ENTERPRISE_CONNECTOR
 import java.util.UUID
 
 data class StatusRequest(
@@ -12,7 +13,8 @@ data class StatusRequest(
     val configurationId: UUID?,
     @field:NotNull(message = "Field \"status\" cannot be empty")
     val status: LogStatus?,
-    val message: String? = null
+    val message: String? = null,
+    val integrationName: String
 ) {
     companion object {
         fun fromDomain(status: StatusLog): StatusRequest {
@@ -20,7 +22,8 @@ data class StatusRequest(
                 runId = status.runId,
                 status = status.status,
                 message = status.message,
-                configurationId = status.configurationId
+                configurationId = status.configurationId,
+                integrationName = GITLAB_ENTERPRISE_CONNECTOR
             )
         }
     }
