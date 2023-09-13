@@ -13,7 +13,7 @@ leanix:
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
     dora:
-      total-days: 30
+      total-days: ${DORA_PERIOD_IN_DAYS:30}
   gitlab:
     webhook-url: ${GITLAB_WEBHOOK_URL:}
     webhook-enable-ssl-verification: ${ENABLE_WEBHOOK_SSL:true}

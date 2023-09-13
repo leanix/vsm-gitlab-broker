@@ -7,6 +7,7 @@ import net.leanix.vsm.gitlab.broker.connector.application.InitialStateService
 import net.leanix.vsm.gitlab.broker.connector.domain.RunProvider
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,7 +20,7 @@ class HeartbeatScheduler(
 
     private val logger = LoggerFactory.getLogger(HeartbeatScheduler::class.java)
 
-//    @Scheduled(fixedRateString = "\${leanix.heartbeat.interval}")
+    @Scheduled(fixedRateString = "\${leanix.heartbeat.interval}")
     fun heartbeat() {
         val assignments = AssignmentsCache.getAll()
         var newConfigAvailable = false
