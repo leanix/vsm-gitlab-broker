@@ -14,7 +14,7 @@ class DoraService(
     private val gitlabProvider: GitlabProvider,
     private val doraProvider: DoraProvider,
     @Value("\${leanix.vsm.dora.total-days:30}") val periodInDays: Long = 0
-) {
+) : BaseConnectorService() {
 
     private val logger = KotlinLogging.logger {}
 
@@ -33,8 +33,18 @@ class DoraService(
                 }
         }.onFailure {
             logger.error { "Failed to generate DORA for repository: ${repository.name}: ${it.message}" }
+            logFailedMessages(
+                code = "vsm.dora.failed",
+                arguments = arrayOf(assignment.runId, assignment.configurationId),
+                assignment = assignment
+            )
         }.onSuccess {
             logger.info { "DORA generated for repository ${repository.name}" }
+            logInfoMessages(
+                code = "vsm.dora.success",
+                arguments = arrayOf(assignment.runId, assignment.configurationId),
+                assignment = assignment
+            )
         }
     }
 }

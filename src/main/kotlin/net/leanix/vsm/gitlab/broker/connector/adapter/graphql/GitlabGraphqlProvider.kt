@@ -6,7 +6,6 @@ import com.expediagroup.graphql.client.types.GraphQLClientRequest
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
-import net.leanix.githubbroker.connector.adapter.graphql.parser.LanguageParser
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.AllGroupsQuery
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.ProjectByPathQuery
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.PullRequestsForProjectQuery
@@ -17,6 +16,7 @@ import net.leanix.vsm.githubbroker.connector.domain.Author
 import net.leanix.vsm.githubbroker.connector.domain.Commit
 import net.leanix.vsm.githubbroker.connector.domain.Dora
 import net.leanix.vsm.githubbroker.connector.domain.PullRequest
+import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.parser.LanguageParser
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.Language
@@ -79,7 +79,7 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
 
     override fun getMergeRequestsForRepository(
         repository: Repository,
-        periodInDaysInString: String
+        periodInDays: String
     ) =
         PullRequestsForProjectQuery.Variables(
             fullPath = "${repository.groupName}/${repository.path}",
@@ -149,11 +149,12 @@ fun MergeRequest.toPullRequest() = PullRequest(
     commits = commits
         ?.nodes
         ?.filterNotNull()
+        ?.filter { !it.authorEmail.isNullOrBlank() }
         ?.map {
             Commit(
                 id = it.id,
                 changeTime = it.authoredDate.toString(),
-                author = Author(it.author?.name ?: "", it.authorEmail ?: "", it.author?.username)
+                author = Author(it.author?.name ?: "", it.authorEmail!!, it.author?.username)
             )
         }
         ?: emptyList()
