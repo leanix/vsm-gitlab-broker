@@ -5,7 +5,9 @@ import io.mockk.mockk
 import io.mockk.verify
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabClient
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabFeignClientProvider
-import net.leanix.vsm.gitlab.broker.connector.shared.DataBuilder
+import net.leanix.vsm.gitlab.broker.connector.shared.getAllGroups
+import net.leanix.vsm.gitlab.broker.connector.shared.getGitlabAssignment
+import net.leanix.vsm.gitlab.broker.connector.shared.getGitlabCurrentUser
 import net.leanix.vsm.gitlab.broker.logs.application.LoggingService
 import net.leanix.vsm.gitlab.broker.shared.exception.AccessLevelValidationFailed
 import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
@@ -35,10 +37,10 @@ class ValidationServiceTest {
 
     @Test
     fun `it should validate the configuration`() {
-        every { gitlabClient.getCurrentUser() } returns DataBuilder.getGitlabCurrentUser(true)
-        every { gitlabClient.getAllGroups() } returns DataBuilder.getAllGroups()
+        every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
+        every { gitlabClient.getAllGroups() } returns getAllGroups()
 
-        validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
+        validationService.validateConfiguration(getGitlabAssignment())
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
         verify(exactly = 1) { gitlabClient.getAllGroups() }
@@ -47,10 +49,10 @@ class ValidationServiceTest {
     @Test
     fun `it should not validate the configuration if token is invalid`() {
         every { gitlabClient.getCurrentUser() } throws Exception()
-        every { gitlabClient.getAllGroups() } returns DataBuilder.getAllGroups()
+        every { gitlabClient.getAllGroups() } returns getAllGroups()
 
         assertThrows<InvalidToken> {
-            validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
+            validationService.validateConfiguration(getGitlabAssignment())
         }
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
@@ -59,11 +61,11 @@ class ValidationServiceTest {
 
     @Test
     fun `it should not validate the configuration if user is not admin`() {
-        every { gitlabClient.getCurrentUser() } returns DataBuilder.getGitlabCurrentUser(false)
-        every { gitlabClient.getAllGroups() } returns DataBuilder.getAllGroups()
+        every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(false)
+        every { gitlabClient.getAllGroups() } returns getAllGroups()
 
         assertThrows<AccessLevelValidationFailed> {
-            validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
+            validationService.validateConfiguration(getGitlabAssignment())
         }
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
@@ -72,11 +74,11 @@ class ValidationServiceTest {
 
     @Test
     fun `it should not validate the configuration if group name is invalid`() {
-        every { gitlabClient.getCurrentUser() } returns DataBuilder.getGitlabCurrentUser(true)
+        every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
         every { gitlabClient.getAllGroups() } throws Exception()
 
         assertThrows<OrgNameValidationFailed> {
-            validationService.validateConfiguration(DataBuilder.getGitlabAssignment())
+            validationService.validateConfiguration(getGitlabAssignment())
         }
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }

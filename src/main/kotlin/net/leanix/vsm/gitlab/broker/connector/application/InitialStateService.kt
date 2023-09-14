@@ -35,8 +35,6 @@ class InitialStateService(
             }.onSuccess {
                 successAssignments.add(assignment)
                 logger.info { "Successfully processed assignment => configurationId: ${assignment.configurationId}, runId: ${assignment.runId}" }
-                commandProvider.sendCommand(assignment, CommandEventAction.FINISHED)
-                logger.info { "command sent with action: CommandEventAction.FINISHED for runId: ${assignment.runId}" }
             }.onFailure { e ->
                 failedAssignments.add(assignment)
                 logger.error(e) { "Failed to process assignment => configurationId: ${assignment.configurationId}, runId: ${assignment.runId}: ${e.message}" }
