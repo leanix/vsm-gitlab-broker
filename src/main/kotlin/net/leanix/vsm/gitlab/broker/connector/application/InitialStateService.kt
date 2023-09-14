@@ -34,7 +34,10 @@ class InitialStateService(
                     }
             }.onSuccess {
                 successAssignments.add(assignment)
-                logger.info { "Successfully processed assignment => configurationId: ${assignment.configurationId}, runId: ${assignment.runId}" }
+                logger.info {
+                    "Successfully processed assignment => " +
+                        "configurationId: ${assignment.configurationId}, runId: ${assignment.runId}"
+                }
             }.onFailure { e ->
                 failedAssignments.add(assignment)
                 logger.error(e) { "Failed to process assignment => configurationId: ${assignment.configurationId}, runId: ${assignment.runId}: ${e.message}" }

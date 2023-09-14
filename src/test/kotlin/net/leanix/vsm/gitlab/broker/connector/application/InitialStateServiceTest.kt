@@ -24,7 +24,6 @@ class InitialStateServiceTest {
 
     @Test
     fun `should send correct command for successful and failed assignments`() {
-
         val assignmentToSucceed = getGitlabAssignment()
         val assignmentToFail = getGitlabAssignment()
 
