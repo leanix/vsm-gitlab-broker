@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verifyAll
+import io.mockk.verifyOrder
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandEventAction
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandProvider
 import net.leanix.vsm.gitlab.broker.connector.shared.getGitlabAssignment
@@ -32,11 +33,11 @@ class InitialStateServiceTest {
 
         initialStateService.initState(listOf(assignmentToSucceed, assignmentToFail))
 
-        verifyAll {
+        verifyOrder {
             repositoryService.importAllRepositories(assignmentToSucceed)
-            commandProvider.sendCommand(assignmentToSucceed, CommandEventAction.FINISHED)
-
             repositoryService.importAllRepositories(assignmentToFail)
+
+            commandProvider.sendCommand(assignmentToSucceed, CommandEventAction.FINISHED)
             commandProvider.sendCommand(assignmentToFail, CommandEventAction.FAILED)
         }
     }
