@@ -3,7 +3,6 @@ package net.leanix.vsm.gitlab.broker.connector.application
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import io.mockk.verifyAll
 import io.mockk.verifyOrder
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandEventAction
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandProvider
