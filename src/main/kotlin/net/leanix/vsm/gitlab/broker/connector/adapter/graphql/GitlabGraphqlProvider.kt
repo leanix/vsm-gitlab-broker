@@ -149,7 +149,7 @@ fun MergeRequest.toPullRequest() = PullRequest(
     commits = commits
         ?.nodes
         ?.filterNotNull()
-        ?.filter { !it.authorEmail.isNullOrBlank() }
+        ?.filter { !it.authorEmail.isNullOrBlank() && it.author?.name != null }
         ?.map {
             Commit(
                 id = it.id,
