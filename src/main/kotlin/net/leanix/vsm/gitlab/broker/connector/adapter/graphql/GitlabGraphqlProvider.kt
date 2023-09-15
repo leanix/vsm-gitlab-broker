@@ -12,10 +12,10 @@ import net.leanix.gitlabbroker.connector.adapter.graphql.data.PullRequestsForPro
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.allgroupsquery.ProjectConnection
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.projectbypathquery.Project
 import net.leanix.gitlabbroker.connector.adapter.graphql.data.pullrequestsforprojectquery.MergeRequest
-import net.leanix.vsm.githubbroker.connector.domain.Author
-import net.leanix.vsm.githubbroker.connector.domain.Commit
-import net.leanix.vsm.githubbroker.connector.domain.Dora
-import net.leanix.vsm.githubbroker.connector.domain.PullRequest
+import net.leanix.vsm.gitlab.broker.connector.domain.Author
+import net.leanix.vsm.gitlab.broker.connector.domain.Commit
+import net.leanix.vsm.gitlab.broker.connector.domain.Dora
+import net.leanix.vsm.gitlab.broker.connector.domain.PullRequest
 import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.parser.LanguageParser
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider

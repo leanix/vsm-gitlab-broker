@@ -1,7 +1,7 @@
 package net.leanix.vsm.gitlab.broker.connector.adapter.feign
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import net.leanix.vsm.githubbroker.connector.domain.Dora
+import net.leanix.vsm.gitlab.broker.connector.domain.Dora
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.DoraRequest
 import net.leanix.vsm.gitlab.broker.connector.domain.DoraProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment

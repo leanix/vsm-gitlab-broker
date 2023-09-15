@@ -1,4 +1,4 @@
-package net.leanix.vsm.githubbroker.connector.domain
+package net.leanix.vsm.gitlab.broker.connector.domain
 
 data class Dora(
     val repositoryName: String,

@@ -1,6 +1,6 @@
 package net.leanix.vsm.gitlab.broker.connector.adapter.feign.data
 
-import net.leanix.vsm.githubbroker.connector.domain.PullRequest
+import net.leanix.vsm.gitlab.broker.connector.domain.PullRequest
 import java.util.UUID
 
 data class DoraRequest(
