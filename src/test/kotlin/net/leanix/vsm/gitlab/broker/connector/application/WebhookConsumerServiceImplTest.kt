@@ -28,8 +28,10 @@ class WebhookConsumerServiceImplTest {
 
     private val repositoryProvider: RepositoryProvider = mockk(relaxed = true)
     private val gitlabGraphqlProvider: GitlabGraphqlProvider = mockk(relaxed = true)
+    private val doraService: DoraService = mockk(relaxed = true)
 
-    private val subject = spyk(WebhookConsumerService(PAYLOAD_TOKEN, repositoryProvider, gitlabGraphqlProvider))
+    private val subject =
+        spyk(WebhookConsumerService(PAYLOAD_TOKEN, repositoryProvider, gitlabGraphqlProvider, doraService))
 
     @BeforeEach
     fun setupMock() {
@@ -136,6 +138,7 @@ class WebhookConsumerServiceImplTest {
         subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectPayload())
 
         verify(exactly = 1) { repositoryProvider.save(repository, gitlabAssignment, eq(EventType.CHANGE)) }
+        verify(exactly = 1) { doraService.generateDoraEvents(repository, gitlabAssignment) }
         verify(exactly = 1) {
             subject.logInfoMessages(eq("vsm.repos.imported"), arrayOf("cider/ops/ahmed-test-2"), gitlabAssignment)
         }
@@ -154,5 +157,6 @@ fun getRepository() = Repository(
     languages = emptyList(),
     tags = emptyList(),
     defaultBranch = "empty-branch",
-    groupName = "cider/ops/"
+    groupName = "cider/ops/",
+    path = "ahmed-test-2"
 )

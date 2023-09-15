@@ -26,6 +26,7 @@ class WebhookConsumerService(
     @Value("\${leanix.vsm.connector.api-user-token}") private val apiUserToken: String,
     private val repositoryProvider: RepositoryProvider,
     private val gitlabProvider: GitlabProvider,
+    private val doraService: DoraService
 ) : BaseConnectorService() {
 
     fun consumeWebhookEvent(payloadToken: String?, payload: String) {
@@ -45,11 +46,9 @@ class WebhookConsumerService(
         AssignmentsCache.get(project.getNamespace())
             ?.also { gitlabAssignment ->
                 runCatching {
-                    repositoryProvider.save(
-                        gitlabProvider.getRepositoryByPath(project.pathWithNamespace),
-                        gitlabAssignment,
-                        EventType.CHANGE
-                    )
+                    gitlabProvider.getRepositoryByPath(project.pathWithNamespace)
+                        .also { repositoryProvider.save(it, gitlabAssignment, EventType.CHANGE) }
+                        .also { doraService.generateDoraEvents(it, gitlabAssignment) }
                 }.onSuccess {
                     logInfoMessages("vsm.repos.imported", arrayOf(project.pathWithNamespace), gitlabAssignment)
                 }.onFailure {
@@ -60,11 +59,14 @@ class WebhookConsumerService(
             ?: throw NamespaceNotMatchException(project.getNamespace())
     }
 
-    @Suppress("ForbiddenComment")
     private fun processMergeRequest(payload: String) {
         val mergeRequest = mapper.readValue<MergeRequest>(payload)
-        // TODO: will be implemented later when we decide if we are fetching DORA metrics directly from Gitlab or not
-        println(mergeRequest)
+        AssignmentsCache.get(mergeRequest.project.getNamespace())
+            ?.also { gitlabAssignment ->
+                gitlabProvider.getRepositoryByPath(mergeRequest.project.pathWithNamespace)
+                    .also { doraService.generateDoraEvents(it, gitlabAssignment) }
+            }
+            ?: throw NamespaceNotMatchException(mergeRequest.project.getNamespace())
     }
 
     companion object {

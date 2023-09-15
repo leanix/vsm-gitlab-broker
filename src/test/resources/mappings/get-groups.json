@@ -27,6 +27,7 @@
             "nodes": [
               {
                 "name": "Gitlab Zoekt Indexer",
+                "path": "gitlab-zoekt-indexer",
                 "id": "gid://gitlab/Project/46649240",
                 "archived": false,
                 "visibility": "public",
@@ -59,6 +60,7 @@
               },
               {
                 "name": "Data Quality",
+                "path": "data-quality",
                 "id": "gid://gitlab/Project/45393508",
                 "archived": false,
                 "visibility": "public",
@@ -74,6 +76,7 @@
               },
               {
                 "name": "public-image-archive",
+                "path": "public-image-archive",
                 "id": "gid://gitlab/Project/44029359",
                 "archived": false,
                 "visibility": "public",
@@ -93,6 +96,7 @@
               },
               {
                 "name": "GitLab Terraform Provider",
+                "path": "Gitlab-terraform-provider",
                 "id": "gid://gitlab/Project/40916776",
                 "archived": false,
                 "visibility": "public",
@@ -137,6 +141,7 @@
               },
               {
                 "name": "GitLab Docs Archives",
+                "path": "gitlab-docs-archives",
                 "id": "gid://gitlab/Project/39455850",
                 "archived": false,
                 "visibility": "public",
@@ -177,6 +182,7 @@
               },
               {
                 "name": "customersdot-gitpod-workspace-image",
+                "path": "customersdot-gitpod-workspace-image",
                 "id": "gid://gitlab/Project/38783377",
                 "archived": false,
                 "visibility": "public",

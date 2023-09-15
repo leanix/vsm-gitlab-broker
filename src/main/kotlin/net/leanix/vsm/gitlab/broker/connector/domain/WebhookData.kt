@@ -31,7 +31,8 @@ fun ProjectChange.toRepository(gitlabUrl: String) = Repository(
     languages = null,
     tags = null,
     defaultBranch = "empty-branch",
-    groupName = getNamespace()
+    groupName = getNamespace(),
+    path = path
 )
 
 data class MergeRequest(
@@ -51,6 +52,8 @@ data class Project(
     @JsonProperty("default_branch")
     val defaultBranch: String,
 )
+
+fun Project.getNamespace() = pathWithNamespace.substringBeforeLast("/")
 
 data class ObjectAttributes(
     val description: String,
