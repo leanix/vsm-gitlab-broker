@@ -1,5 +1,6 @@
 package net.leanix.vsm.gitlab.broker.connector.adapter.feign
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.CommandRequest
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandEventAction
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandProvider
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component
 @Component
 class CommandFeignProvider(private val vsmClient: VsmClient) : CommandProvider {
 
+    private val logger = KotlinLogging.logger {}
+
     override fun sendCommand(assignment: GitLabAssignment, action: CommandEventAction) {
         val command = CommandRequest(
             type = EventType.COMMAND.type,
@@ -17,6 +20,10 @@ class CommandFeignProvider(private val vsmClient: VsmClient) : CommandProvider {
             scope = buildScope(assignment)
         )
         vsmClient.sendCommand(command)
+        logger.info {
+            "Command sent with type ${EventType.COMMAND.type}, action ${action.action} " +
+                "for run ${assignment.runId} and config ${assignment.configurationId}"
+        }
     }
 
     private fun buildScope(assignment: GitLabAssignment) =

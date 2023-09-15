@@ -40,7 +40,10 @@ class InitialStateService(
                 }
             }.onFailure { e ->
                 failedAssignments.add(assignment)
-                logger.error(e) { "Failed to process assignment => configurationId: ${assignment.configurationId}, runId: ${assignment.runId}: ${e.message}" }
+                logger.error(e) {
+                    "Failed to process assignment => " +
+                        "configurationId: ${assignment.configurationId}, runId: ${assignment.runId}: ${e.message}"
+                }
                 logFailedStatus("Failed to get initial state. Error: ${e.message}", assignment)
             }
         }
