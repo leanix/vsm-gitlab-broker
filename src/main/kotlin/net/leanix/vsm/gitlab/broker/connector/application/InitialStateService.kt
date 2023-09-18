@@ -18,6 +18,9 @@ class InitialStateService(
     fun initState(assignments: List<GitLabAssignment>) {
         logger.info { "Started get initial state" }
 
+        val successAssignments = mutableListOf<GitLabAssignment>()
+        val failedAssignments = mutableListOf<GitLabAssignment>()
+
         assignments.forEach { assignment ->
             runCatching {
                 logger.info {
@@ -30,13 +33,22 @@ class InitialStateService(
                         doraService.generateDoraEvents(repository, assignment)
                     }
             }.onSuccess {
-                commandProvider.sendCommand(assignment, CommandEventAction.FINISHED)
-                logger.info { "command sent with action: CommandEventAction.FINISHED for runId: ${assignment.runId}" }
+                successAssignments.add(assignment)
+                logger.info {
+                    "Successfully processed assignment => " +
+                        "configurationId: ${assignment.configurationId}, runId: ${assignment.runId}"
+                }
             }.onFailure { e ->
-                logger.error(e) { "Failed to get initial state: ${e.message}" }
+                failedAssignments.add(assignment)
+                logger.error(e) {
+                    "Failed to process assignment => " +
+                        "configurationId: ${assignment.configurationId}, runId: ${assignment.runId}: ${e.message}"
+                }
                 logFailedStatus("Failed to get initial state. Error: ${e.message}", assignment)
-                commandProvider.sendCommand(assignment, CommandEventAction.FAILED)
             }
         }
+
+        successAssignments.forEach { commandProvider.sendCommand(it, CommandEventAction.FINISHED) }
+        failedAssignments.forEach { commandProvider.sendCommand(it, CommandEventAction.FAILED) }
     }
 }
