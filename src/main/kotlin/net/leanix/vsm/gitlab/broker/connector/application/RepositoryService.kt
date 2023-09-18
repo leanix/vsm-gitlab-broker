@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 class RepositoryService(
     private val gitlabProvider: GitlabProvider,
     private val repositoryProvider: RepositoryProvider,
-    @Value("\${leanix.vsm.events-broker.batch-size}") private val batchSize: Int
+    @Value("\${leanix.vsm.events-broker.batch-size:10}") private val batchSize: Int
 ) : BaseConnectorService() {
 
     private val logger = KotlinLogging.logger {}

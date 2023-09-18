@@ -9,7 +9,6 @@ leanix:
       gitlab-url: http://localhost:${wiremock.server.port:6666}
     events-broker:
       base-url: http://localhost:${wiremock.server.port:6666}
-      batch-size: 10
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
   gitlab:

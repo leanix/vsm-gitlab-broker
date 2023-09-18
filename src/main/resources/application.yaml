@@ -10,7 +10,6 @@ leanix:
       gitlab-url: ${GITLAB_URL}
     events-broker:
       base-url: ${leanix.vsm.base-url}/vsm-events-broker
-      batch-size: ${BATCH_SIZE:10}
     auth:
       access-token-uri: ${leanix.base-url}/mtm/v1
     dora:
