@@ -8,12 +8,14 @@ import net.leanix.vsm.gitlab.broker.connector.domain.Repository
 import net.leanix.vsm.gitlab.broker.connector.domain.RepositoryProvider
 import net.leanix.vsm.gitlab.broker.logs.domain.LogStatus
 import net.leanix.vsm.gitlab.broker.shared.exception.NoRepositoriesFound
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
 class RepositoryService(
     private val gitlabProvider: GitlabProvider,
-    private val repositoryProvider: RepositoryProvider
+    private val repositoryProvider: RepositoryProvider,
+    @Value("\${leanix.vsm.events-broker.batch-size}") private val batchSize: Int
 ) : BaseConnectorService() {
 
     private val logger = KotlinLogging.logger {}
@@ -27,9 +29,7 @@ class RepositoryService(
             .getAllRepositories(assignment)
             .onSuccess {
                 logInfoMessages("vsm.repos.total", arrayOf(it.size), assignment)
-                it.forEach { repository ->
-                    save(repository, assignment, EventType.STATE)
-                }
+                saveAll(it, assignment, EventType.STATE)
                 logInfoStatus(
                     assignment = assignment,
                     status = LogStatus.SUCCESSFUL,
@@ -41,9 +41,14 @@ class RepositoryService(
             }.getOrThrow()
     }
 
-    fun save(repository: Repository, assignment: GitLabAssignment, eventType: EventType) {
+    fun saveAll(repositories: List<Repository>, assignment: GitLabAssignment, eventType: EventType) {
         kotlin.runCatching {
-            repositoryProvider.save(repository, assignment, eventType)
+            repositories
+                .takeIf { it.isNotEmpty() }
+                ?.chunked(batchSize)
+                ?.forEach {
+                    repositoryProvider.saveAll(it, assignment, eventType)
+                }
         }.onFailure {
             logger.error(it) { "Failed save service" }
         }

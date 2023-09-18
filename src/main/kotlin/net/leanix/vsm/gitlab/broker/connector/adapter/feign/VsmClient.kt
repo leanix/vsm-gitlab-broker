@@ -36,6 +36,12 @@ interface VsmClient {
         @RequestBody serviceRequest: ServiceRequest,
     )
 
+    @PostMapping("/services/bulk")
+    fun bulkSaveServices(
+        @RequestHeader(name = EVENT_TYPE_HEADER) eventType: String,
+        @RequestBody serviceRequest: List<ServiceRequest>,
+    )
+
     @PostMapping("/commands")
     fun sendCommand(
         @RequestBody commandRequest: CommandRequest,
