@@ -25,7 +25,7 @@ To use the Broker client with a GitLab Enterprise deployment, run `docker pull l
 - `LEANIX_API_TOKEN` - the LeanIX token, obtained from your admin panel. :warning: Make sure the api token has `ADMIN`rights.
 - `GITLAB_TOKEN` - a [personal access token](#personal-access-token) with `api` scope.
 - `GITLAB_URL` - the hostname of your GitLab deployment, such as `https://gl.domain.com`. This must include the protocol of the GitLab deployment (http vs https), default is `http`.
-- `GITLAB_WEBHOOK_CREATION` - a boolean switch to turn on the webhook capability of the broker. When not set, the broker won't place any webhook and will just run on a 1x day schedule. Default: `false`.
+- `GITLAB_WEBHOOK_URL` - public endpoint which resolves to gitlab-on-prem-broker. When not set, the broker won't place any webhook.
 
 ### Personal Access Token
 As part of the setup the vsm-broker requires a personal access token (PAT) with according rights to run effectively. For more details on how to create the PAT, see [GitLab's documentation](https://docs.gitlab.com/16.1/ee/user/profile/personal_access_tokens.html#personal-access-token-scopes).
@@ -48,7 +48,7 @@ docker run --pull=always --restart=always \
            -e LEANIX_TECHNICAL_USER_TOKEN=<technical_user-token>\
            -e GITLAB_TOKEN=<secret-gitlab-token> \
            -e GITLAB_URL=<GitLab Ent URL(https://gl.domain.com)> \
-           -e GITLAB_WEBHOOK_CREATION=<true or false> \
+           -e GITLAB_WEBHOOK_URL=<GitLab Broker URL> \
         leanixacrpublic.azurecr.io/vsm-gitlab-broker
 ```
 
