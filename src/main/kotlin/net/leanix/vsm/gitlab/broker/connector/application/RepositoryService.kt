@@ -29,6 +29,7 @@ class RepositoryService(
             .getAllRepositories(assignment)
             .onSuccess {
                 logInfoMessages("vsm.repos.total", arrayOf(it.size), assignment)
+                logger.info { "Pulled ${it.size} repos. (run: ${assignment.runId})" }
                 saveAll(it, assignment, EventType.STATE)
                 logInfoStatus(
                     assignment = assignment,
@@ -42,16 +43,24 @@ class RepositoryService(
     }
 
     fun saveAll(repositories: List<Repository>, assignment: GitLabAssignment, eventType: EventType) {
-        kotlin.runCatching {
-            repositories
-                .takeIf { it.isNotEmpty() }
-                ?.chunked(batchSize)
-                ?.forEach {
-                    repositoryProvider.saveAll(it, assignment, eventType)
+        repositories
+            .takeIf { it.isNotEmpty() }
+            ?.chunked(batchSize)
+            ?.forEach { batch ->
+                runCatching {
+                    repositoryProvider.saveAll(batch, assignment, eventType)
+                }.onFailure {
+                    logger.error {
+                        "Error pushing ${batch.size} repos " +
+                            "(run: ${assignment.runId}: ${it.message})"
+                    }
+                }.onSuccess {
+                    logger.info {
+                        "Successfully pushed ${batch.size} repos " +
+                            "(run: ${assignment.runId})"
+                    }
                 }
-        }.onFailure {
-            logger.error(it) { "Failed save service" }
-        }
+            }
     }
 
     private fun handleExceptions(exception: Throwable, assignment: GitLabAssignment) {
