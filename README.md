@@ -25,7 +25,7 @@ To use the Broker client with a GitLab Enterprise deployment, run `docker pull l
 - `LEANIX_API_TOKEN` - the LeanIX token, obtained from your admin panel. :warning: Make sure the api token has `ADMIN`rights.
 - `GITLAB_TOKEN` - a [personal access token](#personal-access-token) with `api` scope.
 - `GITLAB_URL` - the hostname of your GitLab deployment, such as `https://gl.domain.com`. This must include the protocol of the GitLab deployment (http vs https), default is `http`.
-- `GITLAB_WEBHOOK_URL` - public endpoint which resolves to gitlab-on-prem-broker. When not set, the broker won't place any webhook.
+- `GITLAB_WEBHOOK_URL` - public endpoint which resolves to gitlab-on-prem-broker. When not set, the broker won't place any webhooks.
 
 ### Personal Access Token
 As part of the setup the vsm-broker requires a personal access token (PAT) with according rights to run effectively. For more details on how to create the PAT, see [GitLab's documentation](https://docs.gitlab.com/16.1/ee/user/profile/personal_access_tokens.html#personal-access-token-scopes).
