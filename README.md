@@ -6,11 +6,11 @@ on premise deployments that are not publicly accessible from the internet.
 <h2 align="center">Table of Contents </h2>
 
 1. [Usage](#usage)
-    1. [Personal Access Token](#personal-access-token)
-    2. [Command-line arguments](#command-line-arguments)
-3. [Troubleshooting](#troubleshooting)
+   1. [Personal Access Token](#personal-access-token)
+   2. [Command-line arguments](#command-line-arguments)
+2. [Troubleshooting](#troubleshooting)
    1. [Using a Proxy](#using-over-a-http-proxy-system)
-   3. [Using with M1 chips](#using-amd64-images-on-apple-m1)
+   2. [Using with M1 chips](#using-amd64-images-on-apple-m1)
 4. [Release Process](#release-process)
 5. [Broker Architecture](#broker-architecture)
 
