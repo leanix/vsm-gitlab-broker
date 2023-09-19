@@ -11,8 +11,8 @@ on premise deployments that are not publicly accessible from the internet.
 2. [Troubleshooting](#troubleshooting)
    1. [Using a Proxy](#using-over-a-http-proxy-system)
    2. [Using with M1 chips](#using-amd64-images-on-apple-m1)
-4. [Release Process](#release-process)
-5. [Broker Architecture](#broker-architecture)
+3. [Release Process](#release-process)
+4. [Broker Architecture](#broker-architecture)
 
 ---
 
