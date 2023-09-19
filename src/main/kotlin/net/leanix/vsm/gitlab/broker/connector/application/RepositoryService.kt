@@ -44,9 +44,8 @@ class RepositoryService(
 
     fun saveAll(repositories: List<Repository>, assignment: GitLabAssignment, eventType: EventType) {
         repositories
-            .takeIf { it.isNotEmpty() }
-            ?.chunked(batchSize)
-            ?.forEach { batch ->
+            .chunked(batchSize)
+            .forEach { batch ->
                 runCatching {
                     repositoryProvider.saveAll(batch, assignment, eventType)
                 }.onFailure {
