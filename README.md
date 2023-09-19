@@ -8,6 +8,9 @@ on premise deployments that are not publicly accessible from the internet.
 1. [Usage](#usage)
     1. [Personal Access Token](#personal-access-token)
     2. [Command-line arguments](#command-line-arguments)
+3. [Troubleshooting](#troubleshooting)
+   1. [Using a Proxy](#using-over-a-http-proxy-system)
+   3. [Using with M1 chips](#using-amd64-images-on-apple-m1)
 3. [Release Process](#release-process)
 4. [Broker Architecture](#broker-architecture)
 
@@ -49,6 +52,30 @@ docker run --pull=always --restart=always \
            -e GITLAB_TOKEN=<secret-gitlab-token> \
            -e GITLAB_URL=<GitLab Ent URL(https://gl.domain.com)> \
            -e GITLAB_WEBHOOK_URL=<GitLab Broker URL> \
+        leanixacrpublic.azurecr.io/vsm-gitlab-broker
+```
+
+### Troubleshooting
+
+#### Using over a http proxy system
+
+Add the following properties on the command:
+
+```console
+docker run 
+           ...
+           -e JAVA_OPTS="-Dhttp.proxyHost=<HTTP_HOST> -Dhttp.proxyPort=<HTTP_PORT> -Dhttp.proxyUser=<PROXY_USER> -Dhttp.proxyPassword=<PROXY_PASS> -Dhttps.proxyHost=<HTTPS_HOST> -Dhttps.proxyPort=<HTTPS_PORT> -Dhttps.proxyUser=<PROXY_USER> -Dhttps.proxyPassword=<PROXY_PASS>" \
+        leanixacrpublic.azurecr.io/vsm-gitlab-broker
+```
+
+#### Using amd64 images on Apple M1
+
+Just run the container by providing the following command:
+
+```console
+
+docker run --platform linux/amd64 \
+           ...
         leanixacrpublic.azurecr.io/vsm-gitlab-broker
 ```
 
