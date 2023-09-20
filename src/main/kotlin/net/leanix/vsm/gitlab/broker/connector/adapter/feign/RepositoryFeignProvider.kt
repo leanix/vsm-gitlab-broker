@@ -11,4 +11,13 @@ import org.springframework.stereotype.Component
 class RepositoryFeignProvider(private val vsmClient: VsmClient) : RepositoryProvider {
     override fun save(repository: Repository, assignment: GitLabAssignment, eventType: EventType) =
         vsmClient.saveService(eventType.type, ServiceRequest.fromDomain(repository, assignment))
+
+    override fun saveAll(
+        repositories: List<Repository>,
+        assignment: GitLabAssignment,
+        eventType: EventType
+    ) =
+        repositories
+            .map { ServiceRequest.fromDomain(it, assignment) }
+            .let { vsmClient.bulkSaveServices(eventType.type, it) }
 }

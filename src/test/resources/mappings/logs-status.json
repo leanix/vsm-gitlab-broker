@@ -1,0 +1,12 @@
+{
+  "request": {
+    "url": "/logs/status",
+    "method": "POST"
+  },
+  "response": {
+    "status": 202,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
