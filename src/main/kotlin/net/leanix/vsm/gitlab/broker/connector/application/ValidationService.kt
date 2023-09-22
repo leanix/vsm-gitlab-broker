@@ -49,6 +49,7 @@ class ValidationService(
 
             is OrgNameValidationFailed -> {
                 logFailedMessages("vsm.configuration.invalid_org_name", arrayOf(orgName), gitLabAssignment)
+                logIntegrationConfigError("orgNames", "Invalid organization name: $orgName", gitLabAssignment)
             }
 
             is FeignException -> {

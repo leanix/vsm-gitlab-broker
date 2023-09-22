@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service
 class InitialStateService(
     private val repositoryService: RepositoryService,
     private val commandProvider: CommandProvider,
-    private val doraService: DoraService
+    private val doraService: DoraService,
+    private val validationService: ValidationService
 ) : BaseConnectorService() {
 
     private val logger = KotlinLogging.logger {}
@@ -27,6 +28,7 @@ class InitialStateService(
                     "Received assignment for ${assignment.connectorConfiguration.orgName} " +
                         "with configuration id: ${assignment.configurationId} and with run id: ${assignment.runId}"
                 }
+                validationService.validateConfiguration(assignment)
                 repositoryService
                     .importAllRepositories(assignment)
                     .forEach { repository ->
