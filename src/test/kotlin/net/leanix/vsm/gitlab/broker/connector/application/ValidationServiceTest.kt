@@ -33,6 +33,7 @@ class ValidationServiceTest {
         every { messageSource.getMessage(allAny(), allAny(), allAny()) } returns "mock-message"
         every { loggingService.sendAdminLog(any()) } returns Unit
         every { loggingService.sendStatusLog(any()) } returns Unit
+        every { loggingService.sendIntegrationConfigLog(any()) } returns Unit
     }
 
     @Test
@@ -75,7 +76,7 @@ class ValidationServiceTest {
     @Test
     fun `it should not validate the configuration if group name is invalid`() {
         every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
-        every { gitlabClient.getAllGroups() } throws Exception()
+        every { gitlabClient.getAllGroups() } returns emptyList()
 
         assertThrows<OrgNameValidationFailed> {
             validationService.validateConfiguration(getGitlabAssignment())

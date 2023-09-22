@@ -1,0 +1,16 @@
+{
+  "request": {
+    "url": "/api/v4/user",
+    "method": "GET"
+  },
+  "response": {
+    "status": 202,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "1",
+      "is_admin": true
+    }
+  }
+}
