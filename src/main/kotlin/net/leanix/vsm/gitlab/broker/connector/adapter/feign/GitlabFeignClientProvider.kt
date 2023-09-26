@@ -1,6 +1,5 @@
 package net.leanix.vsm.gitlab.broker.connector.adapter.feign
 
-import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.GitlabGroup
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.GitlabUser
 import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
 import net.leanix.vsm.gitlab.broker.shared.exception.OrgNameValidationFailed
@@ -21,9 +20,11 @@ class GitlabFeignClientProvider(
         }.getOrThrow()
     }
 
-    override fun getGroupByFullPath(fullPath: String): GitlabGroup? {
-        return runCatching {
-            gitlabClient.getAllGroups().first { it.fullPath == fullPath }
-        }.onFailure { throw OrgNameValidationFailed() }.getOrThrow()
-    }
+    override fun getGroupByFullPath(
+        fullPath: String
+    ) =
+        gitlabClient
+            .getAllGroups()
+            .firstOrNull { it.fullPath == fullPath }
+            ?: throw OrgNameValidationFailed()
 }

@@ -1,6 +1,7 @@
 package net.leanix.vsm.gitlab.broker.logs.adapter.feign
 
 import net.leanix.vsm.gitlab.broker.logs.adapter.feign.data.AdminRequest
+import net.leanix.vsm.gitlab.broker.logs.adapter.feign.data.IntegrationConfigLogRequest
 import net.leanix.vsm.gitlab.broker.logs.adapter.feign.data.StatusRequest
 import net.leanix.vsm.gitlab.broker.shared.auth.adapter.feign.config.MtmFeignClientConfiguration
 import org.springframework.cloud.openfeign.FeignClient
@@ -19,4 +20,7 @@ interface LoggingClient {
 
     @PostMapping(value = ["/logs/admin"], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun sendAdminLog(@RequestBody request: AdminRequest)
+
+    @PostMapping(value = ["/logs/integration-config"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun sendIntegrationConfigLog(@RequestBody request: IntegrationConfigLogRequest)
 }

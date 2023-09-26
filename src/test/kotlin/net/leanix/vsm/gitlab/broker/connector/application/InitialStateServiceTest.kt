@@ -15,14 +15,18 @@ class InitialStateServiceTest {
     private val repositoryService = mockk<RepositoryService>()
     private val commandProvider = mockk<CommandProvider>()
     private val doraService = mockk<DoraService>()
+    private val validationService = mockk<ValidationService>()
     private val initialStateService =
-        spyk<InitialStateService>(InitialStateService(repositoryService, commandProvider, doraService))
+        spyk<InitialStateService>(
+            InitialStateService(repositoryService, commandProvider, doraService, validationService)
+        )
 
     @BeforeEach
     fun setup() {
         every { initialStateService.logFailedStatus(any(), any()) } returns Unit
         every { commandProvider.sendCommand(any(), any()) } returns Unit
         every { doraService.generateDoraEvents(any(), any()) } returns Unit
+        every { validationService.validateConfiguration(any()) } returns Unit
     }
 
     @Test

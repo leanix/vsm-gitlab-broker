@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.logs.application.LoggingService
 import net.leanix.vsm.gitlab.broker.logs.domain.AdminLog
+import net.leanix.vsm.gitlab.broker.logs.domain.IntegrationConfigLog
 import net.leanix.vsm.gitlab.broker.logs.domain.LogLevel
 import net.leanix.vsm.gitlab.broker.logs.domain.LogStatus
 import net.leanix.vsm.gitlab.broker.logs.domain.StatusLog
@@ -65,6 +66,21 @@ open class BaseConnectorService {
                 subject = LogLevel.ERROR.toString(),
                 level = LogLevel.ERROR,
                 message = message
+            )
+        )
+    }
+
+    fun logIntegrationConfigError(
+        field: String,
+        error: String,
+        assignment: GitLabAssignment
+    ) {
+        loggingService.sendIntegrationConfigLog(
+            IntegrationConfigLog(
+                runId = assignment.runId,
+                configurationId = assignment.configurationId,
+                field,
+                error
             )
         )
     }

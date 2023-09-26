@@ -1,6 +1,7 @@
 package net.leanix.vsm.gitlab.broker.logs.application
 
 import net.leanix.vsm.gitlab.broker.logs.domain.AdminLog
+import net.leanix.vsm.gitlab.broker.logs.domain.IntegrationConfigLog
 import net.leanix.vsm.gitlab.broker.logs.domain.LogProvider
 import net.leanix.vsm.gitlab.broker.logs.domain.StatusLog
 import org.slf4j.Logger
@@ -21,5 +22,10 @@ class LoggingService(
     fun sendAdminLog(adminLog: AdminLog) {
         logger.info("Sending admin log with runId: ${adminLog.runId}")
         logProvider.sendAdminLog(adminLog)
+    }
+
+    fun sendIntegrationConfigLog(integrationConfigLog: IntegrationConfigLog) {
+        logger.info("Sending integration config log with runId: ${integrationConfigLog.runId}")
+        logProvider.sendIntegrationConfigLog(integrationConfigLog)
     }
 }

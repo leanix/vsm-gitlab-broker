@@ -1,0 +1,18 @@
+{
+  "request": {
+    "url": "/api/v4/groups",
+    "method": "GET"
+  },
+  "response": {
+    "status": 202,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      {
+        "id": "1",
+        "full_path": "gitlab"
+      }
+    ]
+  }
+}
