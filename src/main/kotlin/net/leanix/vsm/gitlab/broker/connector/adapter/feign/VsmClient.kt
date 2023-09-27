@@ -20,14 +20,14 @@ import java.util.UUID
 @FeignClient(
     name = "vsmClient",
     url = "\${leanix.vsm.events-broker.base-url}",
-    configuration = [MtmFeignClientConfiguration::class]
+    configuration = [MtmFeignClientConfiguration::class],
 )
 interface VsmClient {
 
     @GetMapping("/gitlab-on-prem/assignments")
     fun getAssignments(): List<GitLabAssignment>
 
-    @PutMapping("/gitlab-on-prem/heartbeat")
+    @PutMapping("/gitlab-on-prem/health/heartbeat")
     fun heartbeat(@RequestParam("runId") runId: String): GitLabHeartbeatResponse
 
     @PostMapping("/services")
