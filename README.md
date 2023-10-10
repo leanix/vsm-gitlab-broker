@@ -1,9 +1,7 @@
 # vsm-gitlab-broker
->
 
-    💡 **Early Access**
-
-    This integration is currently in early access. To find more information about the release stages of our integrations, see [Release Stages](https://docs-vsm.leanix.net/docs/release-stages).
+>💡 **Early Access** <br>
+This integration is currently in early access. To find more information about the release stages of our integrations, see [Release Stages](https://docs-vsm.leanix.net/docs/release-stages).
 
 VSM GitLab Broker is used to establish the communication between VSM SaaS Application and GitLab Enterprise 
 on premise deployments that are not publicly accessible from the internet.
