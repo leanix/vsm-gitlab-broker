@@ -6,17 +6,21 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.shared.exception.AccessLevelValidationFailed
 import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
 import net.leanix.vsm.gitlab.broker.shared.exception.OrgNameValidationFailed
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class ValidationService(
-    private val gitlabClientProvider: GitlabClientProvider
+    private val gitlabClientProvider: GitlabClientProvider,
+    @Value("\${leanix.gitlab.webhook-url}") private val gitlabWebhookUrl: String,
 ) : BaseConnectorService() {
 
     fun validateConfiguration(gitLabAssignment: GitLabAssignment) {
         val orgName = gitLabAssignment.connectorConfiguration.orgName
         runCatching {
-            validateUserAccess()
+            if (gitlabWebhookUrl.isNotBlank()) {
+                validateUserAccess()
+            }
             validateGroupPath(orgName)
         }.onSuccess {
             logInfoMessages("vsm.configuration.validation.successful", arrayOf(orgName), gitLabAssignment)

@@ -15,7 +15,7 @@ class InitialStateRunner(
     @Value("\${leanix.gitlab.webhook-url}") private val gitlabWebhookUrl: String,
     private val assignmentService: AssignmentService,
     private val initialStateService: InitialStateService,
-    private val webhookService: WebhookService
+    private val webhookService: WebhookService,
 ) : ApplicationRunner {
 
     private val logger = KotlinLogging.logger {}
@@ -46,7 +46,9 @@ class InitialStateRunner(
             }.onSuccess {
                 if (it == null) {
                     logger.info { "no webhook registered" }
-                } else logger.info { "webhook registered successfully" }
+                } else {
+                    logger.info { "webhook registered successfully" }
+                }
             }.onFailure {
                 logger.error(it) { "webhook registration failed" }
             }

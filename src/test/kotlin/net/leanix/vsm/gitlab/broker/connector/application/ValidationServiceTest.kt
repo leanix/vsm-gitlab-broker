@@ -23,13 +23,10 @@ class ValidationServiceTest {
     private val loggingService = mockk<LoggingService>()
     private val gitlabClient = mockk<GitlabClient>()
     private val gitlabFeignClientProvider = GitlabFeignClientProvider(gitlabClient)
-    private val validationService = ValidationService(gitlabFeignClientProvider)
+    private var validationService: ValidationService? = null
 
     @BeforeEach
     fun setUp() {
-        validationService.messageSource = messageSource
-        validationService.loggingService = loggingService
-
         every { messageSource.getMessage(allAny(), allAny(), allAny()) } returns "mock-message"
         every { loggingService.sendAdminLog(any()) } returns Unit
         every { loggingService.sendStatusLog(any()) } returns Unit
@@ -37,11 +34,12 @@ class ValidationServiceTest {
     }
 
     @Test
-    fun `it should validate the configuration`() {
+    fun `it should validate the current user and groups from configuration`() {
+        setupService()
         every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
         every { gitlabClient.getAllGroups() } returns getAllGroups()
 
-        validationService.validateConfiguration(getGitlabAssignment())
+        validationService!!.validateConfiguration(getGitlabAssignment())
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
         verify(exactly = 1) { gitlabClient.getAllGroups() }
@@ -49,11 +47,12 @@ class ValidationServiceTest {
 
     @Test
     fun `it should not validate the configuration if token is invalid`() {
+        setupService()
         every { gitlabClient.getCurrentUser() } throws Exception()
         every { gitlabClient.getAllGroups() } returns getAllGroups()
 
         assertThrows<InvalidToken> {
-            validationService.validateConfiguration(getGitlabAssignment())
+            validationService!!.validateConfiguration(getGitlabAssignment())
         }
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
@@ -62,11 +61,12 @@ class ValidationServiceTest {
 
     @Test
     fun `it should not validate the configuration if user is not admin`() {
+        setupService()
         every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(false)
         every { gitlabClient.getAllGroups() } returns getAllGroups()
 
         assertThrows<AccessLevelValidationFailed> {
-            validationService.validateConfiguration(getGitlabAssignment())
+            validationService!!.validateConfiguration(getGitlabAssignment())
         }
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
@@ -75,14 +75,34 @@ class ValidationServiceTest {
 
     @Test
     fun `it should not validate the configuration if group name is invalid`() {
+        setupService()
         every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
         every { gitlabClient.getAllGroups() } returns emptyList()
 
         assertThrows<OrgNameValidationFailed> {
-            validationService.validateConfiguration(getGitlabAssignment())
+            validationService!!.validateConfiguration(getGitlabAssignment())
         }
 
         verify(exactly = 1) { gitlabClient.getCurrentUser() }
         verify(exactly = 1) { gitlabClient.getAllGroups() }
+    }
+
+    @Test
+    fun `it should not validate the user if webhook url is blank`() {
+        setupService("")
+        every { gitlabClient.getAllGroups() } returns emptyList()
+
+        assertThrows<OrgNameValidationFailed> {
+            validationService!!.validateConfiguration(getGitlabAssignment())
+        }
+
+        verify(exactly = 0) { gitlabClient.getCurrentUser() }
+        verify(exactly = 1) { gitlabClient.getAllGroups() }
+    }
+
+    private fun setupService(webhookUrl: String = "webhook-url") {
+        validationService = ValidationService(gitlabFeignClientProvider, webhookUrl)
+        validationService!!.messageSource = messageSource
+        validationService!!.loggingService = loggingService
     }
 }
