@@ -63,7 +63,7 @@ Gitlab Scope  | VSM Usage
 For trialing the GitLab Integration you might start by a less permissive scheduled mode. For production rollout you might then want to reap the benefits from real-time updates i.e. webhooks. Below is what you'll need to do to transform your schedule-based setup to webhook-based.
 
 1. Stop the container running the schedule based configuration 
-2. Running the same docker command as under #1, but adding a valid `GITLAB_WEBHOOK_URL` 
+2. Running the same docker command as under #1, but adding a valid `GITLAB_WEBHOOK_URL` and providing a PAT (`GITLAB_TOKEN`) token with ADMIN rights / role (see [PAT token for webhook mode](#webhook-mode-recommended))
 example:
 ```
 docker run --pull=always --restart=always \
