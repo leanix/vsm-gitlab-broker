@@ -13,6 +13,7 @@ import net.leanix.vsm.gitlab.broker.shared.exception.AccessLevelValidationFailed
 import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
 import net.leanix.vsm.gitlab.broker.shared.exception.OrgNameValidationFailed
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.context.MessageSource
@@ -25,84 +26,93 @@ class ValidationServiceTest {
     private val gitlabFeignClientProvider = GitlabFeignClientProvider(gitlabClient)
     private var validationService: ValidationService? = null
 
-    @BeforeEach
-    fun setUp() {
+    fun setup(webhookUrl: String = "webhook-url") {
+        validationService = ValidationService(gitlabFeignClientProvider, webhookUrl)
+        validationService!!.messageSource = messageSource
+        validationService!!.loggingService = loggingService
         every { messageSource.getMessage(allAny(), allAny(), allAny()) } returns "mock-message"
         every { loggingService.sendAdminLog(any()) } returns Unit
         every { loggingService.sendStatusLog(any()) } returns Unit
         every { loggingService.sendIntegrationConfigLog(any()) } returns Unit
     }
 
-    @Test
-    fun `it should validate the current user and groups from configuration`() {
-        setupService()
-        every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
-        every { gitlabClient.getAllGroups() } returns getAllGroups()
+    @Nested
+    inner class ValidationServiceWithWebhookUrl {
 
-        validationService!!.validateConfiguration(getGitlabAssignment())
-
-        verify(exactly = 1) { gitlabClient.getCurrentUser() }
-        verify(exactly = 1) { gitlabClient.getAllGroups() }
-    }
-
-    @Test
-    fun `it should not validate the configuration if token is invalid`() {
-        setupService()
-        every { gitlabClient.getCurrentUser() } throws Exception()
-        every { gitlabClient.getAllGroups() } returns getAllGroups()
-
-        assertThrows<InvalidToken> {
-            validationService!!.validateConfiguration(getGitlabAssignment())
+        @BeforeEach
+        fun setUp() {
+            setup()
         }
 
-        verify(exactly = 1) { gitlabClient.getCurrentUser() }
-        verify(exactly = 0) { gitlabClient.getAllGroups() }
-    }
+        @Test
+        fun `it should validate the current user and groups from configuration`() {
+            every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
+            every { gitlabClient.getAllGroups() } returns getAllGroups()
 
-    @Test
-    fun `it should not validate the configuration if user is not admin`() {
-        setupService()
-        every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(false)
-        every { gitlabClient.getAllGroups() } returns getAllGroups()
-
-        assertThrows<AccessLevelValidationFailed> {
             validationService!!.validateConfiguration(getGitlabAssignment())
+
+            verify(exactly = 1) { gitlabClient.getCurrentUser() }
+            verify(exactly = 1) { gitlabClient.getAllGroups() }
         }
 
-        verify(exactly = 1) { gitlabClient.getCurrentUser() }
-        verify(exactly = 0) { gitlabClient.getAllGroups() }
-    }
+        @Test
+        fun `it should not validate the configuration if token is invalid`() {
+            every { gitlabClient.getCurrentUser() } throws Exception()
+            every { gitlabClient.getAllGroups() } returns getAllGroups()
 
-    @Test
-    fun `it should not validate the configuration if group name is invalid`() {
-        setupService()
-        every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
-        every { gitlabClient.getAllGroups() } returns emptyList()
+            assertThrows<InvalidToken> {
+                validationService!!.validateConfiguration(getGitlabAssignment())
+            }
 
-        assertThrows<OrgNameValidationFailed> {
-            validationService!!.validateConfiguration(getGitlabAssignment())
+            verify(exactly = 1) { gitlabClient.getCurrentUser() }
+            verify(exactly = 0) { gitlabClient.getAllGroups() }
         }
 
-        verify(exactly = 1) { gitlabClient.getCurrentUser() }
-        verify(exactly = 1) { gitlabClient.getAllGroups() }
-    }
+        @Test
+        fun `it should not validate the configuration if user is not admin`() {
+            every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(false)
+            every { gitlabClient.getAllGroups() } returns getAllGroups()
 
-    @Test
-    fun `it should not validate the user if webhook url is blank`() {
-        setupService("")
-        every { gitlabClient.getAllGroups() } returns emptyList()
+            assertThrows<AccessLevelValidationFailed> {
+                validationService!!.validateConfiguration(getGitlabAssignment())
+            }
 
-        assertThrows<OrgNameValidationFailed> {
-            validationService!!.validateConfiguration(getGitlabAssignment())
+            verify(exactly = 1) { gitlabClient.getCurrentUser() }
+            verify(exactly = 0) { gitlabClient.getAllGroups() }
         }
 
-        verify(exactly = 0) { gitlabClient.getCurrentUser() }
-        verify(exactly = 1) { gitlabClient.getAllGroups() }
+        @Test
+        fun `it should not validate the configuration if group name is invalid`() {
+            every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
+            every { gitlabClient.getAllGroups() } returns emptyList()
+
+            assertThrows<OrgNameValidationFailed> {
+                validationService!!.validateConfiguration(getGitlabAssignment())
+            }
+
+            verify(exactly = 1) { gitlabClient.getCurrentUser() }
+            verify(exactly = 1) { gitlabClient.getAllGroups() }
+        }
     }
 
-    private fun setupService(webhookUrl: String = "webhook-url") {
-        validationService = ValidationService(gitlabFeignClientProvider, webhookUrl)
-        validationService!!.messageSource = messageSource
-        validationService!!.loggingService = loggingService
+    @Nested
+    inner class ValidationServiceWithoutWebhookUrl {
+
+        @BeforeEach
+        fun setUp() {
+            setup("")
+        }
+
+        @Test
+        fun `it should not validate the user if webhook url is blank`() {
+            every { gitlabClient.getAllGroups() } returns emptyList()
+
+            assertThrows<OrgNameValidationFailed> {
+                validationService!!.validateConfiguration(getGitlabAssignment())
+            }
+
+            verify(exactly = 0) { gitlabClient.getCurrentUser() }
+            verify(exactly = 1) { gitlabClient.getAllGroups() }
+        }
     }
 }
