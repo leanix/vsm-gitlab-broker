@@ -23,7 +23,7 @@ on premise deployments that are not publicly accessible from the internet.
 
 ## Usage
 
-> ⚠️ The current setup only allows for one running container replica. To prevent any unintended data interferences in your workpsace, please only run a single instance of the container at any point.
+> ⚠️ The current setup only allows for one running container replica. To prevent any unintended data interferences in your workspace, please only run a single instance of the container at any point.
 
 The VSM GitLab Broker is published as a Docker image. The configuration is performed with environment variables as
 described below.
@@ -36,15 +36,47 @@ To use the Broker client with a GitLab Enterprise deployment, run `docker pull l
 - `GITLAB_URL` - the hostname of your GitLab deployment, such as `https://gl.domain.com`. This must include the protocol of the GitLab deployment (http vs https), default is `http`.
 - `GITLAB_WEBHOOK_URL` - public endpoint which resolves to gitlab-on-prem-broker. When not set, the broker won't place any webhooks.
 
-### Personal Access Token
-As part of the setup the vsm-broker requires a personal access token (PAT) with according rights to run effectively. For more details on how to create the PAT, see [GitLab's documentation](https://docs.gitlab.com/16.1/ee/user/profile/personal_access_tokens.html#personal-access-token-scopes).
-**It is important to note that the PAT must belong to a user with admin access as this is necessary for the broker to create webhooks.**
+## Webhook mode (recommended)
+The `GITLAB_WEBHOOK_URL` is the callback URL for webhook events sent from the GitLab instance, it is the host address where the agent will be reachable in your network. Please make sure 
+### Personal Access Token 
+The PAT token requires the **ADMIN role** (i.e. the person creating the PAT token is admin), as we will register system hooks to allow us to listen to repo changes.
 
-The following scopes are required:
+The following scopes are required for the webhook mode:
 Gitlab Scope  | VSM Usage
 ------------- | -------------
 `api`    | To read repository data and manage the webhook on system-level
 `read_user`    | We validate the PAT token to come from an ADMIN to be able to create webhooks for all selected groups (e.g. we check `"is_admin":true` in this [endpoint](https://docs.gitlab.com/ee/api/users.html#for-administrators-free-self-2))
+
+## Without Webhooks (Scheduled)
+You can disable webhooks by leaving `GITLAB_WEBHOOK_URL` empty.
+In this mode the agent will only provide a (1x day) daily update of data to VSM.  Hence we encourage you to switch to the webhook-based setup eventually for production
+
+### Personal Access Token 
+The PAT token requires at least **XXX role**.
+The following scopes are required for the scheduled mode:
+Gitlab Scope  | VSM Usage
+------------- | -------------
+`api`    | To read repository data and manage the webhook on system-level
+`read_user`    | We validate the PAT token to come from an ADMIN to be able to create webhooks for all selected groups (e.g. we check `"is_admin":true` in this [endpoint](https://docs.gitlab.com/ee/api/users.html#for-administrators-free-self-2))
+
+### Switching from Scheduled Mode to Webhook mode
+For trialing the GitLab Integration you might start by a less permissive scheduled mode. For production rollout you might then want to reap the benefits from real-time updates i.e. webhooks. Below is what you'll need to do to transform your schedule-based setup to webhook-based.
+
+1. Stop the container running the schedule based configuration 
+2. Running the same docker command as under #1, but adding a valid `GITLAB_WEBHOOK_URL` 
+example:
+```
+docker run --pull=always --restart=always \
+           -p 8080:8080 \
+           -e LEANIX_DOMAIN=<region>.leanix.net \
+           -e LEANIX_TECHNICAL_USER_TOKEN=<technical_user-token>\
+           -e GITLAB_TOKEN=<secret-gitlab-token> \
+           -e GITLAB_URL=<GitLab base URL(https://gl.domain.com)> \
+           -e GITLAB_WEBHOOK_URL= https://acme.vsm-gitlab-broker:7000 \
+        leanixacrpublic.azurecr.io/vsm-gitlab-broker
+```
+
+
 
 > ℹ️ **[Group Access Tokens](https://docs.gitlab.com/ee/user/group/settings/group_access_tokens.html)** <br>
 Today we do not support [Group Access tokens](https://docs.gitlab.com/ee/user/group/settings/group_access_tokens.html). So the only way to set up the integration is via a PAT token as described above. Should you see the need for Group Access Token, feel free to reach out with your use case.
@@ -60,7 +92,7 @@ docker run --pull=always --restart=always \
            -e LEANIX_DOMAIN=<region>.leanix.net \
            -e LEANIX_TECHNICAL_USER_TOKEN=<technical_user-token>\
            -e GITLAB_TOKEN=<secret-gitlab-token> \
-           -e GITLAB_URL=<GitLab Ent URL(https://gl.domain.com)> \
+           -e GITLAB_URL=<GitLab base URL(https://gl.domain.com)> \
            -e GITLAB_WEBHOOK_URL=<GitLab Broker URL> \
         leanixacrpublic.azurecr.io/vsm-gitlab-broker
 ```
