@@ -44,7 +44,7 @@ The following scopes are required:
 Gitlab Scope  | VSM Usage
 ------------- | -------------
 `api`    | To read repository data and manage the webhook on system-level
-`read_user`    | To verify the current user's permissions
+`read_user`    | We validate the PAT token to come from an ADMIN to be able to create webhooks for all selected groups (e.g. we check `"is_admin":true` in this [endpoint](https://docs.gitlab.com/ee/api/users.html#for-administrators-free-self-2))
 
 > ℹ️ **[Group Access Tokens](https://docs.gitlab.com/ee/user/group/settings/group_access_tokens.html)** <br>
 Today we do not support [Group Access tokens](https://docs.gitlab.com/ee/user/group/settings/group_access_tokens.html). So the only way to set up the integration is via a PAT token as described above. Should you see the need for Group Access Token, feel free to reach out with your use case.
