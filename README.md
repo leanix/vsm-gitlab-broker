@@ -46,6 +46,10 @@ Gitlab Scope  | VSM Usage
 `api`    | To read repository data and manage the webhook on system-level
 `read_user`    | To verify the current user's permissions
 
+> ℹ️ **[Group Access Tokens](https://docs.gitlab.com/ee/user/group/settings/group_access_tokens.html)** <br>
+Today we do not support [Group Access tokens](https://docs.gitlab.com/ee/user/group/settings/group_access_tokens.html). So the only way to set up the integration is via a PAT token as described above. Should you see the need for Group Access Token, feel free to reach out with your use case.
+
+
 ### Command-line arguments
 
 You can run the docker container by providing the relevant configuration:
