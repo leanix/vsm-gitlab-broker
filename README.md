@@ -10,8 +10,8 @@ on premise deployments that are not publicly accessible from the internet.
 <h2 align="center">Table of Contents </h2>
 
 1. [Usage](#usage)
-   1. [Personal Access Token](#personal-access-token)
-   2. [Command-line arguments](#command-line-arguments)
+   1. [Webhook mode](#webhook-mode-recommended)
+   2. [Schedule mode](#without-webhooks-scheduled)
 2. [Troubleshooting](#troubleshooting)
    1. [Using a Proxy](#using-over-a-http-proxy-system)
    2. [Using with M1 chips](#using-amd64-images-on-apple-m1)
@@ -35,6 +35,9 @@ To use the Broker client with a GitLab Enterprise deployment, run `docker pull l
 - `GITLAB_TOKEN` - a [personal access token](#personal-access-token) with `api` scope.
 - `GITLAB_URL` - the hostname of your GitLab deployment, such as `https://gl.domain.com`. This must include the protocol of the GitLab deployment (http vs https), default is `http`.
 - `GITLAB_WEBHOOK_URL` - public endpoint which resolves to gitlab-on-prem-broker. When not set, the broker won't place any webhooks.
+
+## Supported GitLab Releases
+We support [GitLab Releases](https://about.gitlab.com/releases/categories/releases/) >= 15.
 
 ## Webhook mode (recommended)
 The `GITLAB_WEBHOOK_URL` is the callback URL for webhook events sent from the GitLab instance, it is the host address where the agent will be reachable in your network. Please make sure 
