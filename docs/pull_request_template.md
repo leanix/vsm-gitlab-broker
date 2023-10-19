@@ -13,8 +13,8 @@ Please describe the tests that you ran to verify your changes.
 
 - [ ] Test A
 - [ ] Test B
-- [ ] 👌No tests required
-- [ ] 🚨No tests Deployed
+- [ ] 👌 No tests required
+- [ ] 🚨 No tests Deployed
 
 ## 🏎 Checklist:
 - [ ] My code follows the style guidelines
