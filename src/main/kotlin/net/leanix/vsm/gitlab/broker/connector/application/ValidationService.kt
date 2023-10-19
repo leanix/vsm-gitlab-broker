@@ -34,7 +34,7 @@ class ValidationService(
     }
 
     private fun validateGroupPath(fullPath: String) {
-        if (gitlabClientProvider.getGroupByFullPath(fullPath) == null) throw OrgNameValidationFailed()
+        if (gitlabClientProvider.getGroupByFullPath(fullPath) == null) throw OrgNameValidationFailed(fullPath)
     }
 
     private fun handleExceptions(
