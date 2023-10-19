@@ -2,7 +2,6 @@ package net.leanix.vsm.gitlab.broker.connector.adapter.feign
 
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.GitlabUser
 import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
-import net.leanix.vsm.gitlab.broker.shared.exception.OrgNameValidationFailed
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -26,5 +25,4 @@ class GitlabFeignClientProvider(
         gitlabClient
             .getAllGroups()
             .firstOrNull { it.fullPath == fullPath }
-            ?: throw OrgNameValidationFailed()
 }
