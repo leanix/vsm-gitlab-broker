@@ -43,11 +43,12 @@ class WebhookConsumerService(
 
     private fun processProject(payload: String) {
         val project = mapper.readValue<ProjectChange>(payload)
-        val repository = gitlabProvider.getRepositoryByPath(project.pathWithNamespace)
+
 
         AssignmentsCache.get(project.getNamespace())
             ?.also { gitlabAssignment ->
                 runCatching {
+                    val repository = gitlabProvider.getRepositoryByPath(project.pathWithNamespace)
                     if (repository.isArchived()) {
                         repositoryProvider.delete(
                             repositoryId = repository.id,
@@ -57,8 +58,9 @@ class WebhookConsumerService(
                         repositoryProvider.save(repository, gitlabAssignment, EventType.CHANGE)
                         doraService.generateDoraEvents(repository, gitlabAssignment)
                     }
+                    repository
                 }.onSuccess {
-                    if (repository.isArchived()) {
+                    if (it.isArchived()) {
                         logInfoMessages("vsm.repos.deleted", arrayOf(project.pathWithNamespace), gitlabAssignment)
                     } else {
                         logInfoMessages("vsm.repos.imported", arrayOf(project.pathWithNamespace), gitlabAssignment)
