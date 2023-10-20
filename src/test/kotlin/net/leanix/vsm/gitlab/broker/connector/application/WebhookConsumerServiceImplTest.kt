@@ -144,19 +144,39 @@ class WebhookConsumerServiceImplTest {
         }
     }
 
+    @Test
+    fun `should call repositoryProvider delete when namespace matches any org name in AssignmentCache and archived`() {
+        val gitlabAssignment = GitLabAssignment(randomUUID(), randomUUID(), randomUUID(), GitLabConfiguration("cider"))
+
+        AssignmentsCache.deleteAll()
+        AssignmentsCache.addAll(listOf(gitlabAssignment))
+
+        val repository = getRepository(archived = true)
+        every { gitlabGraphqlProvider.getRepositoryByPath("cider/ops/ahmed-test-2") } returns repository
+
+        subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectPayload())
+
+        verify(exactly = 1) { repositoryProvider.delete(repository.id, gitlabAssignment.connectorConfiguration.orgName) }
+        verify(exactly = 1) {
+            subject.logInfoMessages(eq("vsm.repos.imported"), arrayOf("cider/ops/ahmed-test-2"), gitlabAssignment)
+        }
+    }
+
     private fun getProjectPayload() = this::class.java.getResource("/webhook_calls/project_created.json")!!.readText()
 }
 
-fun getRepository() = Repository(
+fun getRepository(
+    archived: Boolean = false
+) = Repository(
     id = "21",
     name = "ahmed-test-2",
     description = "",
-    archived = false,
+    archived = archived,
     url = "",
     visibility = "private",
     languages = emptyList(),
     tags = emptyList(),
     defaultBranch = "empty-branch",
     groupName = "cider/ops/",
-    path = "ahmed-test-2"
+    path = "ahmed-test-2",
 )
