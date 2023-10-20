@@ -156,7 +156,12 @@ class WebhookConsumerServiceImplTest {
 
         subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectPayload())
 
-        verify(exactly = 1) { repositoryProvider.delete(repository.id, gitlabAssignment.connectorConfiguration.orgName) }
+        verify(exactly = 1) {
+            repositoryProvider.delete(
+                repository.id,
+                gitlabAssignment.connectorConfiguration.orgName
+            )
+        }
         verify(exactly = 1) {
             subject.logInfoMessages(eq("vsm.repos.imported"), arrayOf("cider/ops/ahmed-test-2"), gitlabAssignment)
         }
