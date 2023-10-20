@@ -10,7 +10,7 @@ class InvalidToken : VsmException()
 
 class AccessLevelValidationFailed : VsmException()
 
-class OrgNameValidationFailed(orgName: String) : VsmException("Invalid organization name: $orgName")
+class OrgNameValidationFailed(orgName: String) : VsmException("Invalid group name: $orgName")
 
 class GitlabTokenException(token: String?) : VsmException(message = "Invalid gitlab payload token: $token")
 
