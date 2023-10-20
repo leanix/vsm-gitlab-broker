@@ -4,8 +4,8 @@ import feign.FeignException
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabClientProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.shared.exception.AccessLevelValidationFailed
+import net.leanix.vsm.gitlab.broker.shared.exception.GroupNameValidationFailed
 import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
-import net.leanix.vsm.gitlab.broker.shared.exception.OrgNameValidationFailed
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
@@ -34,7 +34,7 @@ class ValidationService(
     }
 
     private fun validateGroupPath(fullPath: String) {
-        if (gitlabClientProvider.getGroupByFullPath(fullPath) == null) throw OrgNameValidationFailed(fullPath)
+        if (gitlabClientProvider.getGroupByFullPath(fullPath) == null) throw GroupNameValidationFailed(fullPath)
     }
 
     private fun handleExceptions(
@@ -51,9 +51,9 @@ class ValidationService(
                 logFailedMessages("vsm.configuration.access_level", arrayOf(orgName), gitLabAssignment)
             }
 
-            is OrgNameValidationFailed -> {
+            is GroupNameValidationFailed -> {
                 logFailedMessages("vsm.configuration.invalid_org_name", arrayOf(orgName), gitLabAssignment)
-                logIntegrationConfigError("orgNames", "Invalid organization name: $orgName", gitLabAssignment)
+                logIntegrationConfigError("orgNames", "Invalid group name: $orgName", gitLabAssignment)
             }
 
             is FeignException -> {
