@@ -163,7 +163,7 @@ class WebhookConsumerServiceImplTest {
             )
         }
         verify(exactly = 1) {
-            subject.logInfoMessages(eq("vsm.repos.imported"), arrayOf("cider/ops/ahmed-test-2"), gitlabAssignment)
+            subject.logInfoMessages(eq("vsm.repos.deleted"), arrayOf("cider/ops/ahmed-test-2"), gitlabAssignment)
         }
     }
 
