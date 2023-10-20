@@ -18,18 +18,39 @@ jobs:
       image-tag: ${{ steps.build-and-deploy.outputs.tag }}
 
     steps:
-      - name: Checkout Git Repository 🕝
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: LeanIX Secrets 🔒
+      - name: Inject secret store credentials
         uses: leanix/secrets-action@master
         with:
           secret-store-credentials: ${{ secrets.INJECTED_SECRET_STORE_CREDENTIALS }}
+
+      - name: Set deployment targets
+        if: github.ref=='refs/heads/main'
+        uses: leanix/infrastructure-regions@main
+        id: set-targets
+        with:
+          github-token: ${{ env.GITHUB_TOKEN }}
 
       - name: Publish integration configuration
         id: vsm_integration_config
         uses: leanix/vsm-discovery-publish-action@main
 
+      - name: Publish integration configuration to all prod regions
+        id: vsm_integration_config_prod
+        uses: leanix/vsm-discovery-publish-action@main
+        if: github.ref=='refs/heads/main'
         with:
           integration-json: integration-configuration/integration-configuration.json
           assets-folder: integration-configuration/images
+
+      - name: Publish integration configuration to test
+        id: vsm_integration_config_test
+        continue-on-error: true
+        uses: leanix/vsm-discovery-publish-action@main
+        if: github.ref!='refs/heads/main'
+        with:
+          integration-json: integration-configuration/integration-configuration.json
+          assets-folder: integration-configuration/images
+          deploy-test: 'true'
