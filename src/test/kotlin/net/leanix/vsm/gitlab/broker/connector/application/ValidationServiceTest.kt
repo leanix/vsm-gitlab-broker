@@ -10,8 +10,8 @@ import net.leanix.vsm.gitlab.broker.connector.shared.getGitlabAssignment
 import net.leanix.vsm.gitlab.broker.connector.shared.getGitlabCurrentUser
 import net.leanix.vsm.gitlab.broker.logs.application.LoggingService
 import net.leanix.vsm.gitlab.broker.shared.exception.AccessLevelValidationFailed
-import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
 import net.leanix.vsm.gitlab.broker.shared.exception.GroupNameValidationFailed
+import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
