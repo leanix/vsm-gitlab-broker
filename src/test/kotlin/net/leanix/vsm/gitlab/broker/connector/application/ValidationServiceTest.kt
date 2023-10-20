@@ -10,8 +10,8 @@ import net.leanix.vsm.gitlab.broker.connector.shared.getGitlabAssignment
 import net.leanix.vsm.gitlab.broker.connector.shared.getGitlabCurrentUser
 import net.leanix.vsm.gitlab.broker.logs.application.LoggingService
 import net.leanix.vsm.gitlab.broker.shared.exception.AccessLevelValidationFailed
+import net.leanix.vsm.gitlab.broker.shared.exception.GroupNameValidationFailed
 import net.leanix.vsm.gitlab.broker.shared.exception.InvalidToken
-import net.leanix.vsm.gitlab.broker.shared.exception.OrgNameValidationFailed
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -86,7 +86,7 @@ class ValidationServiceTest {
             every { gitlabClient.getCurrentUser() } returns getGitlabCurrentUser(true)
             every { gitlabClient.getAllGroups() } returns emptyList()
 
-            assertThrows<OrgNameValidationFailed> {
+            assertThrows<GroupNameValidationFailed> {
                 validationService!!.validateConfiguration(getGitlabAssignment())
             }
 
@@ -107,7 +107,7 @@ class ValidationServiceTest {
         fun `it should not validate the user if webhook url is blank`() {
             every { gitlabClient.getAllGroups() } returns emptyList()
 
-            assertThrows<OrgNameValidationFailed> {
+            assertThrows<GroupNameValidationFailed> {
                 validationService!!.validateConfiguration(getGitlabAssignment())
             }
 
