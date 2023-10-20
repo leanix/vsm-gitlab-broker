@@ -11,6 +11,7 @@ import net.leanix.vsm.gitlab.broker.connector.domain.ProjectChange
 import net.leanix.vsm.gitlab.broker.connector.domain.RepositoryProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.WebhookEventType
 import net.leanix.vsm.gitlab.broker.connector.domain.getNamespace
+import net.leanix.vsm.gitlab.broker.connector.domain.isArchived
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabPayloadNotSupportedException
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabTokenException
@@ -46,9 +47,16 @@ class WebhookConsumerService(
         AssignmentsCache.get(project.getNamespace())
             ?.also { gitlabAssignment ->
                 runCatching {
-                    gitlabProvider.getRepositoryByPath(project.pathWithNamespace)
-                        .also { repositoryProvider.save(it, gitlabAssignment, EventType.CHANGE) }
-                        .also { doraService.generateDoraEvents(it, gitlabAssignment) }
+                    val repository = gitlabProvider.getRepositoryByPath(project.pathWithNamespace)
+                    if (repository.isArchived()) {
+                        repositoryProvider.delete(
+                            repositoryId = repository.id,
+                            organization = gitlabAssignment.connectorConfiguration.orgName
+                        )
+                    } else {
+                        repositoryProvider.save(repository, gitlabAssignment, EventType.CHANGE)
+                        doraService.generateDoraEvents(repository, gitlabAssignment)
+                    }
                 }.onSuccess {
                     logInfoMessages("vsm.repos.imported", arrayOf(project.pathWithNamespace), gitlabAssignment)
                 }.onFailure {

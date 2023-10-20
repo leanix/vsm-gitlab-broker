@@ -1,6 +1,7 @@
 package net.leanix.vsm.gitlab.broker.connector.adapter.feign
 
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.CommandRequest
+import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.DeleteServiceRequest
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.DoraRequest
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.ServiceRequest
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.UpdateRunStateRequest
@@ -9,6 +10,7 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitLabHeartbeatResponse
 import net.leanix.vsm.gitlab.broker.shared.Constants.EVENT_TYPE_HEADER
 import net.leanix.vsm.gitlab.broker.shared.auth.adapter.feign.config.MtmFeignClientConfiguration
 import org.springframework.cloud.openfeign.FeignClient
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -55,4 +57,7 @@ interface VsmClient {
 
     @PostMapping("/dora")
     fun saveDora(doraRequest: DoraRequest)
+
+    @DeleteMapping("/services")
+    fun deleteService(@RequestBody deleteServiceRequest: DeleteServiceRequest)
 }

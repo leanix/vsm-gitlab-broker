@@ -4,7 +4,7 @@ leanix:
     interval: ${LEANIX_HEARTBEAT_INTERVAL:300000} #  5 minutes
   vsm:
     events-broker:
-      base-url: http://localhost:8083
+      base-url: ${EVENT_BROKER_BASE_URL:http://localhost:8083}
     auth:
       access-token-uri: https://test-app-1.leanix.net/services/mtm/v1
   gitlab:
