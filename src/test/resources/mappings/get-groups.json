@@ -50,7 +50,6 @@
                   }
                 ],
                 "repository": {
-                  "codeOwnersPath": null,
                   "diskPath": null,
                   "rootRef": "main"
                 },
@@ -86,7 +85,6 @@
                 "lastActivityAt": "2023-03-22T00:11:40Z",
                 "languages": [],
                 "repository": {
-                  "codeOwnersPath": null,
                   "diskPath": null,
                   "rootRef": "main"
                 },
@@ -131,7 +129,6 @@
                   }
                 ],
                 "repository": {
-                  "codeOwnersPath": "/gitlab-org/terraform-provider-gitlab/-/blob/main/.gitlab/CODEOWNERS",
                   "diskPath": null,
                   "rootRef": "main"
                 },
@@ -172,7 +169,6 @@
                   }
                 ],
                 "repository": {
-                  "codeOwnersPath": null,
                   "diskPath": null,
                   "rootRef": "main"
                 },
@@ -197,7 +193,6 @@
                   }
                 ],
                 "repository": {
-                  "codeOwnersPath": null,
                   "diskPath": null,
                   "rootRef": "main"
                 },
