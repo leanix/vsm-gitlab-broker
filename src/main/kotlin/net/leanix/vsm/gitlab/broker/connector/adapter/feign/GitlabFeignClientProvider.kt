@@ -24,5 +24,5 @@ class GitlabFeignClientProvider(
     ) =
         gitlabClient
             .getAllGroups()
-            .firstOrNull { it.fullPath == fullPath }
+            .firstOrNull { it.fullPath.equals(fullPath, true) }
 }
