@@ -22,7 +22,6 @@ query AllGroupsQuery($group: ID!, $pageCount: Int!, $cursor: String) {
                     share
                 }
                 repository {
-                    codeOwnersPath
                     diskPath
                     rootRef
                 }
