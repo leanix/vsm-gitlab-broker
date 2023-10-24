@@ -58,7 +58,8 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
                 return Result.failure(GraphqlException(makeErrorString(response.errors!!)))
             } else {
                 repositories += parseProjects(
-                    response.data?.group?.projects
+                    repositories = response.data?.group?.projects,
+                    assignment = assignment
                 )
                 hasNext = response.data?.group?.projects?.pageInfo?.hasNextPage ?: false
                 cursor = response.data?.group?.projects?.pageInfo?.endCursor
@@ -69,12 +70,13 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
     }
 
     override fun getRepositoryByPath(
-        nameWithNamespace: String
+        nameWithNamespace: String,
+        gitlabAssignment: GitLabAssignment
     ) =
         executeQuery(ProjectByPathQuery(ProjectByPathQuery.Variables(fullPath = nameWithNamespace)))
             .data
             ?.project
-            ?.toRepository()
+            ?.toRepository(gitlabAssignment)
             ?: throw GraphqlException("No gitlab project found at path: $nameWithNamespace")
 
     override fun getMergeRequestsForRepository(
@@ -96,7 +98,8 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
             ?: throw GraphqlException("No gitlab project found at path: ${repository.groupName}/${repository.path}")
 
     private fun parseProjects(
-        repositories: ProjectConnection?
+        repositories: ProjectConnection?,
+        assignment: GitLabAssignment
     ): List<Repository> {
         return if (repositories?.nodes != null && repositories.nodes.isNotEmpty()) {
             repositories.nodes.filterNotNull()
@@ -111,7 +114,7 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
                         languages = LanguageParser.parse(project.languages),
                         tags = project.topics,
                         defaultBranch = project.repository?.rootRef ?: "empty-branch",
-                        groupName = project.group!!.fullPath,
+                        groupName = assignment.connectorConfiguration.orgName,
                         path = project.path
                     )
                 }
@@ -128,7 +131,7 @@ class GitlabGraphqlProvider(private val gitLabOnPremProperties: GitLabOnPremProp
     }
 }
 
-fun Project.toRepository() = Repository(
+fun Project.toRepository(gitlabAssignment: GitLabAssignment) = Repository(
     id = id,
     name = name,
     description = description,
@@ -138,7 +141,7 @@ fun Project.toRepository() = Repository(
     languages = languages?.map { Language(it.name, it.name, it.share!!) },
     tags = topics,
     defaultBranch = repository?.rootRef ?: "empty-branch",
-    groupName = group!!.fullPath,
+    groupName = gitlabAssignment.connectorConfiguration.orgName,
     path = path
 )
 

@@ -33,7 +33,7 @@ class InitialStateServiceTest {
     fun `should send correct command for successful and failed assignments`() {
         val assignmentToSucceed = getGitlabAssignment()
         val assignmentToFail = getGitlabAssignment()
-        val repository = getRepository()
+        val repository = getRepository(assignmentToSucceed.connectorConfiguration.orgName)
 
         every { repositoryService.importAllRepositories(assignmentToFail) } throws Exception("some error")
         every { repositoryService.importAllRepositories(assignmentToSucceed) } returns listOf(repository)

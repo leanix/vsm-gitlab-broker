@@ -133,8 +133,13 @@ class WebhookConsumerServiceImplTest {
         AssignmentsCache.deleteAll()
         AssignmentsCache.addAll(listOf(gitlabAssignment))
 
-        val repository = getRepository()
-        every { gitlabGraphqlProvider.getRepositoryByPath("cider/ops/ahmed-test-2") } returns repository
+        val repository = getRepository(gitlabAssignment.connectorConfiguration.orgName)
+        every {
+            gitlabGraphqlProvider.getRepositoryByPath(
+                "cider/ops/ahmed-test-2",
+                gitlabAssignment
+            )
+        } returns repository
 
         subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectPayload())
 
@@ -152,8 +157,13 @@ class WebhookConsumerServiceImplTest {
         AssignmentsCache.deleteAll()
         AssignmentsCache.addAll(listOf(gitlabAssignment))
 
-        val repository = getRepository()
-        every { gitlabGraphqlProvider.getRepositoryByPath("cider/ops/ahmed-test-2") } returns repository
+        val repository = getRepository(gitlabAssignment.connectorConfiguration.orgName)
+        every {
+            gitlabGraphqlProvider.getRepositoryByPath(
+                "cider/ops/ahmed-test-2",
+                gitlabAssignment
+            )
+        } returns repository
 
         subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectDeletedPayload())
 
@@ -176,6 +186,7 @@ class WebhookConsumerServiceImplTest {
 }
 
 fun getRepository(
+    sourceInstance: String,
     archived: Boolean = false
 ) = Repository(
     id = "21",
@@ -187,6 +198,6 @@ fun getRepository(
     languages = emptyList(),
     tags = emptyList(),
     defaultBranch = "empty-branch",
-    groupName = "cider/ops/",
-    path = "ahmed-test-2",
+    groupName = sourceInstance,
+    path = "ahmed-test-2"
 )
