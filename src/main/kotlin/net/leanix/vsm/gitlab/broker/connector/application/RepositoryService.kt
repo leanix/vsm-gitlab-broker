@@ -6,7 +6,6 @@ import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitlabProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.Repository
 import net.leanix.vsm.gitlab.broker.connector.domain.RepositoryProvider
-import net.leanix.vsm.gitlab.broker.connector.domain.isArchived
 import net.leanix.vsm.gitlab.broker.logs.domain.LogStatus
 import net.leanix.vsm.gitlab.broker.shared.exception.NoRepositoriesFound
 import org.springframework.beans.factory.annotation.Value
@@ -45,7 +44,6 @@ class RepositoryService(
 
     fun saveAll(repositories: List<Repository>, assignment: GitLabAssignment, eventType: EventType) {
         repositories
-            .filter { !it.isArchived() }
             .chunked(batchSize)
             .forEach { batch ->
                 runCatching {

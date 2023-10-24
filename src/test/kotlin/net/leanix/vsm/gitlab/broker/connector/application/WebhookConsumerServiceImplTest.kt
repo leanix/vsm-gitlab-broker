@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.GitlabGraphqlProvider
 import net.leanix.vsm.gitlab.broker.connector.application.WebhookConsumerService.Companion.computeWebhookEventType
 import net.leanix.vsm.gitlab.broker.connector.domain.EventType
@@ -145,29 +146,33 @@ class WebhookConsumerServiceImplTest {
     }
 
     @Test
-    fun `should call repositoryProvider delete when namespace matches any org name in AssignmentCache and archived`() {
+    fun `should call repositoryProvider delete when namespace matches any org name in AssignmentCache and deleted`() {
         val gitlabAssignment = GitLabAssignment(randomUUID(), randomUUID(), randomUUID(), GitLabConfiguration("cider"))
 
         AssignmentsCache.deleteAll()
         AssignmentsCache.addAll(listOf(gitlabAssignment))
 
-        val repository = getRepository(archived = true)
+        val repository = getRepository()
         every { gitlabGraphqlProvider.getRepositoryByPath("cider/ops/ahmed-test-2") } returns repository
 
-        subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectPayload())
+        subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectDeletedPayload())
 
-        verify(exactly = 1) {
+        verifyOrder {
             repositoryProvider.delete(
-                repository.id,
+                "gid://gitlab/Project/${repository.id}",
                 gitlabAssignment.connectorConfiguration.orgName
             )
-        }
-        verify(exactly = 1) {
-            subject.logInfoMessages(eq("vsm.repos.deleted"), arrayOf("cider/ops/ahmed-test-2"), gitlabAssignment)
+            subject.logInfoMessages(
+                eq("vsm.repos.deleted"),
+                arrayOf("cider/ahmed-delete-test-1-deleted-29"),
+                gitlabAssignment
+            )
         }
     }
 
     private fun getProjectPayload() = this::class.java.getResource("/webhook_calls/project_created.json")!!.readText()
+    private fun getProjectDeletedPayload() =
+        this::class.java.getResource("/webhook_calls/project_deleted.json")!!.readText()
 }
 
 fun getRepository(

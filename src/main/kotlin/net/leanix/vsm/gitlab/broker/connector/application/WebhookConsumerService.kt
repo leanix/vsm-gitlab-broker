@@ -11,7 +11,6 @@ import net.leanix.vsm.gitlab.broker.connector.domain.ProjectChange
 import net.leanix.vsm.gitlab.broker.connector.domain.RepositoryProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.WebhookEventType
 import net.leanix.vsm.gitlab.broker.connector.domain.getNamespace
-import net.leanix.vsm.gitlab.broker.connector.domain.isArchived
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabPayloadNotSupportedException
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabTokenException
@@ -19,7 +18,9 @@ import net.leanix.vsm.gitlab.broker.shared.exception.NamespaceNotMatchException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
-val PROJECT_EVENTS = listOf("project_create", "project_update", "project_rename", "project_transfer")
+const val PROJECT_DESTROY_WEBHOOK_EVENT_NAME = "project_destroy"
+val PROJECT_EVENTS =
+    listOf("project_create", "project_update", "project_rename", "project_transfer", PROJECT_DESTROY_WEBHOOK_EVENT_NAME)
 val mapper: ObjectMapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
 @Service
@@ -44,23 +45,21 @@ class WebhookConsumerService(
     private fun processProject(payload: String) {
         val project = mapper.readValue<ProjectChange>(payload)
 
-
         AssignmentsCache.get(project.getNamespace())
             ?.also { gitlabAssignment ->
                 runCatching {
-                    val repository = gitlabProvider.getRepositoryByPath(project.pathWithNamespace)
-                    if (repository.isArchived()) {
+                    if (project.eventName == PROJECT_DESTROY_WEBHOOK_EVENT_NAME) {
                         repositoryProvider.delete(
-                            repositoryId = repository.id,
+                            repositoryId = "gid://gitlab/Project/${project.id}",
                             organization = gitlabAssignment.connectorConfiguration.orgName
                         )
                     } else {
+                        val repository = gitlabProvider.getRepositoryByPath(project.pathWithNamespace)
                         repositoryProvider.save(repository, gitlabAssignment, EventType.CHANGE)
                         doraService.generateDoraEvents(repository, gitlabAssignment)
                     }
-                    repository
                 }.onSuccess {
-                    if (it.isArchived()) {
+                    if (project.eventName == PROJECT_DESTROY_WEBHOOK_EVENT_NAME) {
                         logInfoMessages("vsm.repos.deleted", arrayOf(project.pathWithNamespace), gitlabAssignment)
                     } else {
                         logInfoMessages("vsm.repos.imported", arrayOf(project.pathWithNamespace), gitlabAssignment)

@@ -1,0 +1,38 @@
+{
+  "event_name": "project_destroy",
+  "created_at": "2023-10-24T07:51:04Z",
+  "updated_at": "2023-10-24T08:19:53Z",
+  "name": "ahmed-delete-test-1-deleted-29",
+  "path": "ahmed-delete-test-1-deleted-29",
+  "path_with_namespace": "cider/ahmed-delete-test-1-deleted-29",
+  "project_id": 21,
+  "owner_name": "cider",
+  "owner_email": "",
+  "owners": [
+    {
+      "name": "Administrator",
+      "email": "[REDACTED]"
+    },
+    {
+      "name": "Alfredo",
+      "email": "[REDACTED]"
+    },
+    {
+      "name": "owner",
+      "email": "[REDACTED]"
+    },
+    {
+      "name": "owner-token-api-readApi",
+      "email": "[REDACTED]"
+    },
+    {
+      "name": "owner-all",
+      "email": "[REDACTED]"
+    },
+    {
+      "name": "henrique",
+      "email": "[REDACTED]"
+    }
+  ],
+  "project_visibility": "private"
+}

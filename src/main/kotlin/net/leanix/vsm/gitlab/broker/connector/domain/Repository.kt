@@ -13,5 +13,3 @@ data class Repository(
     val groupName: String,
     val path: String
 )
-
-fun Repository.isArchived() = archived ?: false
