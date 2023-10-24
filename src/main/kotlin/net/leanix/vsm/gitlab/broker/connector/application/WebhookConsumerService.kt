@@ -11,6 +11,8 @@ import net.leanix.vsm.gitlab.broker.connector.domain.ProjectChange
 import net.leanix.vsm.gitlab.broker.connector.domain.RepositoryProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.WebhookEventType
 import net.leanix.vsm.gitlab.broker.connector.domain.getNamespace
+import net.leanix.vsm.gitlab.broker.shared.Constants.PROJECT_DESTROY_WEBHOOK_EVENT_NAME
+import net.leanix.vsm.gitlab.broker.shared.Constants.PROJECT_EVENTS
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabPayloadNotSupportedException
 import net.leanix.vsm.gitlab.broker.shared.exception.GitlabTokenException
@@ -18,9 +20,6 @@ import net.leanix.vsm.gitlab.broker.shared.exception.NamespaceNotMatchException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
-const val PROJECT_DESTROY_WEBHOOK_EVENT_NAME = "project_destroy"
-val PROJECT_EVENTS =
-    listOf("project_create", "project_update", "project_rename", "project_transfer", PROJECT_DESTROY_WEBHOOK_EVENT_NAME)
 val mapper: ObjectMapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
 @Service
