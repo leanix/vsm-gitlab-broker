@@ -53,7 +53,7 @@ class WebhookConsumerService(
                             organization = gitlabAssignment.connectorConfiguration.orgName
                         )
                     } else {
-                        val repository = gitlabProvider.getRepositoryByPath(project.pathWithNamespace)
+                        val repository = gitlabProvider.getRepositoryByPath(project.pathWithNamespace, gitlabAssignment)
                         repositoryProvider.save(repository, gitlabAssignment, EventType.CHANGE)
                         doraService.generateDoraEvents(repository, gitlabAssignment)
                     }
@@ -78,7 +78,7 @@ class WebhookConsumerService(
         val mergeRequest = mapper.readValue<MergeRequest>(payload)
         AssignmentsCache.get(mergeRequest.project.getNamespace())
             ?.also { gitlabAssignment ->
-                gitlabProvider.getRepositoryByPath(mergeRequest.project.pathWithNamespace)
+                gitlabProvider.getRepositoryByPath(mergeRequest.project.pathWithNamespace, gitlabAssignment)
                     .also { doraService.generateDoraEvents(it, gitlabAssignment) }
             }
             ?: throw NamespaceNotMatchException(mergeRequest.project.getNamespace())
