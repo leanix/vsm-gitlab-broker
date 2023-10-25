@@ -33,16 +33,17 @@ class DoraService(
                 }
         }.onFailure {
             logger.error { "Failed to generate DORA for repository: ${repository.name}: ${it.message}" }
+            val reason = it.message ?: "unknown reason"
             logFailedMessages(
                 code = "vsm.dora.failed",
-                arguments = arrayOf(assignment.runId, assignment.configurationId),
+                arguments = arrayOf(repository.name, reason),
                 assignment = assignment
             )
         }.onSuccess {
             logger.info { "DORA generated for repository ${repository.name}" }
             logInfoMessages(
                 code = "vsm.dora.success",
-                arguments = arrayOf(assignment.runId, assignment.configurationId),
+                arguments = arrayOf(repository.name),
                 assignment = assignment
             )
         }
