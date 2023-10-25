@@ -24,6 +24,7 @@ class ValidationService(
             validateGroupPath(orgName)
         }.onSuccess {
             logInfoMessages("vsm.configuration.validation.successful", arrayOf(orgName), gitLabAssignment)
+            logIntegrationConfigSuccess(gitLabAssignment)
         }.onFailure { exception ->
             handleExceptions(exception, orgName, gitLabAssignment)
         }
