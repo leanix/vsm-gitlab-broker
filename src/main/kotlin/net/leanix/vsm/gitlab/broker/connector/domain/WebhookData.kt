@@ -21,20 +21,6 @@ data class ProjectChange(
 
 fun ProjectChange.getNamespace() = pathWithNamespace.substringBefore("/$path")
 
-fun ProjectChange.toRepository(gitlabUrl: String) = Repository(
-    id = id.toString(),
-    name = name,
-    description = null,
-    archived = false,
-    url = "$gitlabUrl/$pathWithNamespace",
-    visibility = projectVisibility,
-    languages = null,
-    tags = null,
-    defaultBranch = "empty-branch",
-    groupName = getNamespace(),
-    path = path
-)
-
 data class MergeRequest(
     val project: Project,
     @JsonProperty("object_attributes")

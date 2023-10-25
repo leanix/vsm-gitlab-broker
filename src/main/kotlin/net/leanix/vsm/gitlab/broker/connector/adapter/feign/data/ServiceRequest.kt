@@ -44,3 +44,9 @@ data class Tag(
     val id: String,
     val name: String
 )
+
+data class DeleteServiceRequest(
+    val serviceId: String,
+    val source: String,
+    val organizationName: String
+)

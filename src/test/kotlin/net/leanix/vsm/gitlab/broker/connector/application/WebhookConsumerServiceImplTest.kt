@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import net.leanix.vsm.gitlab.broker.connector.adapter.graphql.GitlabGraphqlProvider
 import net.leanix.vsm.gitlab.broker.connector.application.WebhookConsumerService.Companion.computeWebhookEventType
 import net.leanix.vsm.gitlab.broker.connector.domain.EventType
@@ -144,19 +145,48 @@ class WebhookConsumerServiceImplTest {
         }
     }
 
+    @Test
+    fun `should call repositoryProvider delete when namespace matches any org name in AssignmentCache and deleted`() {
+        val gitlabAssignment = GitLabAssignment(randomUUID(), randomUUID(), randomUUID(), GitLabConfiguration("cider"))
+
+        AssignmentsCache.deleteAll()
+        AssignmentsCache.addAll(listOf(gitlabAssignment))
+
+        val repository = getRepository()
+        every { gitlabGraphqlProvider.getRepositoryByPath("cider/ops/ahmed-test-2") } returns repository
+
+        subject.consumeWebhookEvent(PAYLOAD_TOKEN, getProjectDeletedPayload())
+
+        verifyOrder {
+            repositoryProvider.delete(
+                "gid://gitlab/Project/${repository.id}",
+                gitlabAssignment.connectorConfiguration.orgName
+            )
+            subject.logInfoMessages(
+                eq("vsm.repos.deleted"),
+                arrayOf("cider/ahmed-delete-test-1-deleted-29"),
+                gitlabAssignment
+            )
+        }
+    }
+
     private fun getProjectPayload() = this::class.java.getResource("/webhook_calls/project_created.json")!!.readText()
+    private fun getProjectDeletedPayload() =
+        this::class.java.getResource("/webhook_calls/project_deleted.json")!!.readText()
 }
 
-fun getRepository() = Repository(
+fun getRepository(
+    archived: Boolean = false
+) = Repository(
     id = "21",
     name = "ahmed-test-2",
     description = "",
-    archived = false,
+    archived = archived,
     url = "",
     visibility = "private",
     languages = emptyList(),
     tags = emptyList(),
     defaultBranch = "empty-branch",
     groupName = "cider/ops/",
-    path = "ahmed-test-2"
+    path = "ahmed-test-2",
 )
