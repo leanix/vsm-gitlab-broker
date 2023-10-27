@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verifyOrder
+import net.leanix.vsm.gitlab.broker.connector.adapter.feign.GitlabClientProvider
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandEventAction
 import net.leanix.vsm.gitlab.broker.connector.domain.CommandProvider
 import net.leanix.vsm.gitlab.broker.connector.shared.getGitlabAssignment
@@ -16,17 +17,26 @@ class InitialStateServiceTest {
     private val commandProvider = mockk<CommandProvider>()
     private val doraService = mockk<DoraService>()
     private val validationService = mockk<ValidationService>()
+    private val gitlabClientProvider = mockk<GitlabClientProvider>()
     private val initialStateService =
         spyk<InitialStateService>(
-            InitialStateService(repositoryService, commandProvider, doraService, validationService)
+            InitialStateService(
+                repositoryService,
+                commandProvider,
+                doraService,
+                validationService,
+                gitlabClientProvider
+            )
         )
 
     @BeforeEach
     fun setup() {
         every { initialStateService.logFailedStatus(any(), any()) } returns Unit
+        every { initialStateService.exit() } returns Unit
         every { commandProvider.sendCommand(any(), any()) } returns Unit
         every { doraService.generateDoraEvents(any(), any()) } returns Unit
         every { validationService.validateConfiguration(any()) } returns Unit
+        every { gitlabClientProvider.getVersion() } returns "15.0.0"
     }
 
     @Test
@@ -47,6 +57,23 @@ class InitialStateServiceTest {
 
             commandProvider.sendCommand(assignmentToSucceed, CommandEventAction.FINISHED)
             commandProvider.sendCommand(assignmentToFail, CommandEventAction.FAILED)
+        }
+    }
+
+    @Test
+    fun `should exit application if gitlab version less than 15`() {
+        every { gitlabClientProvider.getVersion() } returns "14.2.1-ee"
+
+        val assignment = getGitlabAssignment()
+        initialStateService.initState(listOf(assignment))
+
+        verifyOrder {
+            initialStateService.logFailedStatus(
+                eq("GitLab version 14.2.1-ee is not supported. Version 15.0 and onwards are supported. " +
+                        "Broker will shut down now."),
+                assignment
+            )
+            initialStateService.exit()
         }
     }
 }

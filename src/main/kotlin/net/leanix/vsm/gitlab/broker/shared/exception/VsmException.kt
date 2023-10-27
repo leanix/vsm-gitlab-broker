@@ -19,3 +19,9 @@ class GitlabPayloadNotSupportedException :
 
 class NamespaceNotMatchException(namespace: String) :
     VsmException(message = "Namespace '$namespace' does not match any group in AssignmentCache")
+
+class GitlabVersionNotSupportedException(gitlabVersion: String) :
+    VsmException(
+        message = "GitLab version $gitlabVersion is not supported. Version 15.0 and onwards are supported. " +
+                "Broker will shut down now."
+    )
