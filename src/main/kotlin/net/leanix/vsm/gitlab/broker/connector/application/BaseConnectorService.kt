@@ -4,10 +4,12 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.logs.application.LoggingService
 import net.leanix.vsm.gitlab.broker.logs.domain.AdminLog
+import net.leanix.vsm.gitlab.broker.logs.domain.ConfigFieldError
 import net.leanix.vsm.gitlab.broker.logs.domain.IntegrationConfigLog
 import net.leanix.vsm.gitlab.broker.logs.domain.LogLevel
 import net.leanix.vsm.gitlab.broker.logs.domain.LogStatus
 import net.leanix.vsm.gitlab.broker.logs.domain.StatusLog
+import net.leanix.vsm.gitlab.broker.logs.domain.TestResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import java.util.Locale
@@ -25,14 +27,14 @@ open class BaseConnectorService {
     fun logFailedStatus(message: String? = "empty message", assignment: GitLabAssignment) {
         logger.error { message }
         loggingService.sendStatusLog(
-            StatusLog(assignment.runId, assignment.configurationId, LogStatus.FAILED, message)
+            StatusLog(assignment.runId, assignment.configurationId, LogStatus.FAILED, message),
         )
     }
 
     fun logInfoStatus(message: String? = "", status: LogStatus, assignment: GitLabAssignment) {
         logger.info { message }
         loggingService.sendStatusLog(
-            StatusLog(assignment.runId, assignment.configurationId, status, message)
+            StatusLog(assignment.runId, assignment.configurationId, status, message),
         )
     }
 
@@ -40,7 +42,7 @@ open class BaseConnectorService {
         val message = messageSource.getMessage(
             code,
             arguments,
-            Locale.ENGLISH
+            Locale.ENGLISH,
         )
         loggingService.sendAdminLog(
             AdminLog(
@@ -48,8 +50,8 @@ open class BaseConnectorService {
                 configurationId = assignment.configurationId,
                 subject = LogLevel.INFO.toString(),
                 level = LogLevel.INFO,
-                message = message
-            )
+                message = message,
+            ),
         )
     }
 
@@ -57,7 +59,7 @@ open class BaseConnectorService {
         val message = messageSource.getMessage(
             code,
             arguments,
-            Locale.ENGLISH
+            Locale.ENGLISH,
         )
         loggingService.sendAdminLog(
             AdminLog(
@@ -65,23 +67,40 @@ open class BaseConnectorService {
                 configurationId = assignment.configurationId,
                 subject = LogLevel.ERROR.toString(),
                 level = LogLevel.ERROR,
-                message = message
-            )
+                message = message,
+            ),
         )
     }
 
     fun logIntegrationConfigError(
         field: String,
         error: String,
-        assignment: GitLabAssignment
+        assignment: GitLabAssignment,
     ) {
         loggingService.sendIntegrationConfigLog(
             IntegrationConfigLog(
                 runId = assignment.runId,
                 configurationId = assignment.configurationId,
-                field,
-                error
-            )
+                errors = listOf(
+                    ConfigFieldError(
+                        field,
+                        error,
+                    ),
+                ),
+                status = TestResult.FAILED,
+            ),
+        )
+    }
+
+    fun logIntegrationConfigSuccess(
+        assignment: GitLabAssignment,
+    ) {
+        loggingService.sendIntegrationConfigLog(
+            IntegrationConfigLog(
+                runId = assignment.runId,
+                configurationId = assignment.configurationId,
+                status = TestResult.SUCCESSFUL,
+            ),
         )
     }
 }

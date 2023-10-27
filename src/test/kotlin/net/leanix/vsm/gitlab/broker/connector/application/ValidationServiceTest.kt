@@ -53,6 +53,7 @@ class ValidationServiceTest {
 
             verify(exactly = 1) { gitlabClient.getCurrentUser() }
             verify(exactly = 1) { gitlabClient.getAllGroups() }
+            verify(exactly = 1) { loggingService.sendIntegrationConfigLog(any()) }
         }
 
         @Test
@@ -92,6 +93,7 @@ class ValidationServiceTest {
 
             verify(exactly = 1) { gitlabClient.getCurrentUser() }
             verify(exactly = 1) { gitlabClient.getAllGroups() }
+            verify(exactly = 1) { loggingService.sendIntegrationConfigLog(any()) }
         }
     }
 
