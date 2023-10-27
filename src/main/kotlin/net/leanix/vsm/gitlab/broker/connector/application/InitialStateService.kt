@@ -32,7 +32,7 @@ class InitialStateService(
             runCatching {
                 logger.info {
                     "Received assignment for ${assignment.connectorConfiguration.orgName} " +
-                            "with configuration id: ${assignment.configurationId} and with run id: ${assignment.runId}"
+                        "with configuration id: ${assignment.configurationId} and with run id: ${assignment.runId}"
                 }
                 validationService.validateConfiguration(assignment)
                 repositoryService
@@ -44,13 +44,13 @@ class InitialStateService(
                 successAssignments.add(assignment)
                 logger.info {
                     "Successfully processed assignment => " +
-                            "configurationId: ${assignment.configurationId}, runId: ${assignment.runId}"
+                        "configurationId: ${assignment.configurationId}, runId: ${assignment.runId}"
                 }
             }.onFailure { e ->
                 failedAssignments.add(assignment)
                 logger.error(e) {
                     "Failed to process assignment => " +
-                            "configurationId: ${assignment.configurationId}, runId: ${assignment.runId}: ${e.message}"
+                        "configurationId: ${assignment.configurationId}, runId: ${assignment.runId}: ${e.message}"
                 }
                 logFailedStatus("Failed to get initial state. Error: ${e.message}", assignment)
             }

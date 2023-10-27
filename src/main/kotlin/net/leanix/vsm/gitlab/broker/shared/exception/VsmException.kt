@@ -23,5 +23,5 @@ class NamespaceNotMatchException(namespace: String) :
 class GitlabVersionNotSupportedException(gitlabVersion: String) :
     VsmException(
         message = "GitLab version $gitlabVersion is not supported. Version 15.0 and onwards are supported. " +
-                "Broker will shut down now."
+            "Broker will shut down now."
     )

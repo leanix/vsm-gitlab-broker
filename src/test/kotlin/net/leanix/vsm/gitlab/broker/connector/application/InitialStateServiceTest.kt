@@ -69,8 +69,10 @@ class InitialStateServiceTest {
 
         verifyOrder {
             initialStateService.logFailedStatus(
-                eq("GitLab version 14.2.1-ee is not supported. Version 15.0 and onwards are supported. " +
-                        "Broker will shut down now."),
+                eq(
+                    "GitLab version 14.2.1-ee is not supported. Version 15.0 and onwards are supported. " +
+                        "Broker will shut down now."
+                ),
                 assignment
             )
             initialStateService.exit()
