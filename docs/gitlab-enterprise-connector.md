@@ -62,6 +62,10 @@ docker run --pull=always --restart=always \
         leanixacrpublic.azurecr.io/vsm-gitlab-broker
 ```
 
+#### Limitations on Running Multiple Instances of GitLab Broker
+
+We only support a single broker instance to be run at any given time. Any additional instance trying to communicate with VSM will be rejected to prevent race conditions. Please ensure a single instance is running at any time for optimal performance.
+
 ## Multi-group support
 
 VSM allows you to scan multiple GitHub groups with the VSM GitLab broker. 
