@@ -16,7 +16,7 @@ class AssignmentService(
     fun getAssignments(): List<GitLabAssignment>? {
         kotlin.runCatching {
             val assignments = assignmentProvider.getAssignments().onFailure {
-                logger.error(it) { "Failed to retrieve assignment list: ${it.message}" }
+                logger.error { "Failed to retrieve assignment list, please make sure you are running one instance of GitLab Broker" }
             }.onSuccess {
                 logger.info { "Assignment list retrieved with success with ${it.size} assignments" }
             }.getOrThrow()
