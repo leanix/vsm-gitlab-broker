@@ -18,7 +18,7 @@ class AssignmentService(
             val assignments = assignmentProvider.getAssignments().onFailure {
                 logger.error {
                     "Failed to retrieve assignment list, " +
-                        "please make sure you are running one instance of GitLab Broker"
+                        "please make sure you are running only one instance of GitLab Broker"
                 }
             }.onSuccess {
                 logger.info { "Assignment list retrieved with success with ${it.size} assignments" }
