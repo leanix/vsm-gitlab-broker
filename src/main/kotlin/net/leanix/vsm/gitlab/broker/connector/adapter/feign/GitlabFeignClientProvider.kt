@@ -25,4 +25,9 @@ class GitlabFeignClientProvider(
         gitlabClient
             .getAllGroups()
             .firstOrNull { it.fullPath.equals(fullPath, true) }
+
+    override fun getVersion() =
+        gitlabClient
+            .getVersion()
+            .version
 }
