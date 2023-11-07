@@ -19,7 +19,7 @@ interface GitlabClient {
 
     @GetMapping("/groups")
     fun getAllGroups(
-            @RequestParam("top_level_only") topLevelOnly: Boolean = true
+        @RequestParam("top_level_only") topLevelOnly: Boolean = true
     ): List<GitlabGroup>
 
     @GetMapping("/version")
