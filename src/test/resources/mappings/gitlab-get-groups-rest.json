@@ -1,6 +1,6 @@
 {
   "request": {
-    "url": "/api/v4/groups",
+    "url": "/api/v4/groups?top_level_only=true",
     "method": "GET"
   },
   "response": {
