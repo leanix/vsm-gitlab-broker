@@ -12,4 +12,4 @@ The following table details the versions of the gitlab-broker that are currently
 ## Reporting a Vulnerability
 
 If you think you have found a security vulnerability, please DO NOT disclose it publicly until we’ve had a chance to fix it.
-Please don’t report security vulnerabilities using GitHub issues, instead sends us an Email with the details.
+Please don’t report security vulnerabilities using GitHub issues, instead email us with the details.
