@@ -5,6 +5,7 @@ import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.DeleteServiceRe
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.DoraRequest
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.ServiceRequest
 import net.leanix.vsm.gitlab.broker.connector.adapter.feign.data.UpdateRunStateRequest
+import net.leanix.vsm.gitlab.broker.connector.application.DummyRequest
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabAssignment
 import net.leanix.vsm.gitlab.broker.connector.domain.GitLabHeartbeatResponse
 import net.leanix.vsm.gitlab.broker.shared.Constants.EVENT_TYPE_HEADER
@@ -37,6 +38,12 @@ interface VsmClient {
         @RequestHeader(name = EVENT_TYPE_HEADER) eventType: String,
         @RequestBody serviceRequest: ServiceRequest,
     )
+
+    @PostMapping("/v2/services")
+    fun saveServiceV2(
+        @RequestHeader(name = EVENT_TYPE_HEADER) eventType: String,
+        @RequestBody dummyRequest: DummyRequest,
+    ): String?
 
     @PostMapping("/services/bulk")
     fun bulkSaveServices(

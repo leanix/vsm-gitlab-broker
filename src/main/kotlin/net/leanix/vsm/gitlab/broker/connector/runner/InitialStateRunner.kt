@@ -3,6 +3,7 @@ package net.leanix.vsm.gitlab.broker.connector.runner
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.leanix.vsm.gitlab.broker.connector.application.AssignmentService
 import net.leanix.vsm.gitlab.broker.connector.application.InitialStateService
+import net.leanix.vsm.gitlab.broker.connector.application.WebsocketMessageConsumerService
 import net.leanix.vsm.gitlab.broker.shared.cache.AssignmentsCache
 import net.leanix.vsm.gitlab.broker.webhook.domain.WebhookService
 import org.springframework.beans.factory.annotation.Value
@@ -16,6 +17,7 @@ class InitialStateRunner(
     private val assignmentService: AssignmentService,
     private val initialStateService: InitialStateService,
     private val webhookService: WebhookService,
+    private val websocketMessageConsumerService: WebsocketMessageConsumerService
 ) : ApplicationRunner {
 
     private val logger = KotlinLogging.logger {}
@@ -29,7 +31,10 @@ class InitialStateRunner(
     private fun fetchAssignments() {
         runCatching {
             assignmentService.getAssignments()?.let {
-                initialStateService.initState(it)
+//                initialStateService.initState(it)
+                it.forEach {
+                    websocketMessageConsumerService.dummy(it)
+                }
             }
         }.onSuccess {
             logger.info { "Cached ${AssignmentsCache.getAll().size} assignments" }

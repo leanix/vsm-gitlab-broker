@@ -3,7 +3,6 @@ package net.leanix.vsm.gitlab.broker.connector.adapter.graphql
 import com.expediagroup.graphql.client.spring.GraphQLWebClient
 import com.expediagroup.graphql.client.types.GraphQLClientRequest
 import com.fasterxml.jackson.databind.ObjectMapper
-import jakarta.annotation.PostConstruct
 import kotlinx.coroutines.runBlocking
 import net.leanix.vsm.gitlab.broker.shared.properties.GitLabOnPremProperties
 import org.springframework.http.HttpHeaders
@@ -24,58 +23,10 @@ class BasicGraphQLClient(private val gitLabOnPremProperties: GitLabOnPremPropert
             }
     )
 
-    @PostConstruct
-    fun dummy() {
-        execute(
-            query = """
-                query AllGroupsQuery(${'$'}group: ID!, ${'$'}pageCount: Int!, ${'$'}cursor: String) {
-                    group(fullPath: ${'$'}group) {
-                        id
-                        name
-                        projects(first: ${'$'}pageCount, after: ${'$'}cursor, includeSubgroups: true) {
-                            pageInfo {
-                                hasNextPage
-                                endCursor
-                            }
-                            nodes {
-                                name
-                                path
-                                id
-                                archived
-                                visibility
-                                topics
-                                webUrl
-                                description
-                                lastActivityAt
-                                languages {
-                                    name
-                                    share
-                                }
-                                repository {
-                                    diskPath
-                                    rootRef
-                                }
-                                group {
-                                    fullPath
-                                }
-                            }
-                        }
-                    }
-                }
-            """.trimIndent(),
-            variables = mapOf(
-                "pageCount" to 10,
-                "cursor" to null,
-                "group" to "cider"
-            )
-        )
-    }
-
-
-    fun execute(
+    fun query(
         query: String,
         variables: Map<String, Any?>
-    ): Any? {
+    ): Pair<Any?, Boolean> {
         val pagingNeeded = variables.containsKey("pageCount")
         var cursor: String? = null
         val resultList = mutableListOf<Any?>()
@@ -100,13 +51,15 @@ class BasicGraphQLClient(private val gitLabOnPremProperties: GitLabOnPremPropert
                     .readTree(objectMapper.writeValueAsString(result.data))
                     .findValue("pageInfo")
                 hasNextPage = pageInfoNode.get("hasNextPage").booleanValue()
-                cursor = pageInfoNode.get("hasNextPage").textValue()
+                cursor = pageInfoNode.get("endCursor").textValue()
             }
 
             resultList.add(result.data)
         } while (hasNextPage)
 
-        return if (pagingNeeded) resultList else resultList.get(0)
+        return if (pagingNeeded)
+            resultList to true
+        else resultList.get(0) to false
     }
 }
 

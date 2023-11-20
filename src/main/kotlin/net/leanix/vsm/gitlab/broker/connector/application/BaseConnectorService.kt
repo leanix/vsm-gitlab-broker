@@ -38,12 +38,12 @@ open class BaseConnectorService {
         )
     }
 
-    fun logInfoMessages(code: String, arguments: Array<Any>, assignment: GitLabAssignment) {
-        val message = messageSource.getMessage(
-            code,
-            arguments,
-            Locale.ENGLISH,
-        )
+    fun logInfoMessages(
+        code: String? = null,
+        arguments: Array<Any>,
+        assignment: GitLabAssignment,
+        message: String = messageSource.getMessage(code!!, arguments, Locale.ENGLISH)
+    ) {
         loggingService.sendAdminLog(
             AdminLog(
                 runId = assignment.runId,
