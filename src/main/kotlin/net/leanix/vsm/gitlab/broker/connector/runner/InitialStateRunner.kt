@@ -33,7 +33,7 @@ class InitialStateRunner(
             assignmentService.getAssignments()?.let {
 //                initialStateService.initState(it)
                 it.forEach {
-                    websocketMessageConsumerService.dummy(it)
+                    websocketMessageConsumerService.consume(it)
                 }
             }
         }.onSuccess {

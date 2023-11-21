@@ -29,20 +29,21 @@ class WebsocketMessageConsumerService(
     private val logger = KotlinLogging.logger {}
 
     fun consume(
-        messageData: WebSocketMessageData,
         assignment: GitLabAssignment
     ) {
-        logger.info { "Processing message of type ${messageData.type}" }
+        if (assignment.webSocketMessageData == null) return
+
+        logger.info { "Processing message of type ${assignment.webSocketMessageData.type}" }
         // improvement may want to add some validations here before executing query
 
-        logInfoStatusIfNeeded(messageData.statusLoggingEnabled, assignment)
-        val queryResult = executeQuery(messageData.query, messageData.variables)
+        logInfoStatusIfNeeded(assignment.webSocketMessageData.statusLoggingEnabled, assignment)
+        val queryResult = executeQuery(assignment.webSocketMessageData.query, assignment.webSocketMessageData.variables)
 
         queryResult
             .getOrNull()
             ?.let {
                 if (it.second) {
-                    it.first as List<Any>
+                    it.first as List<*>
                 } else {
                     listOf(it.first)
                 }
@@ -52,7 +53,7 @@ class WebsocketMessageConsumerService(
                 vsmClient.saveServiceV2(
                     eventType = EventType.STATE.type,
                     dummyRequest = DummyRequest(
-                        type = messageData.type,
+                        type = assignment.webSocketMessageData.type,
                         orgName = assignment.connectorConfiguration.orgName,
                         runId = assignment.runId,
                         configurationId = assignment.configurationId,
@@ -66,10 +67,10 @@ class WebsocketMessageConsumerService(
 
         performResultLogging(
             queryResult,
-            messageData.statusLoggingEnabled,
-            messageData.adminLoggingEnabled,
-            messageData.successMessage,
-            messageData.failureMessage,
+            assignment.webSocketMessageData.statusLoggingEnabled,
+            assignment.webSocketMessageData.adminLoggingEnabled,
+            assignment.webSocketMessageData.successMessage,
+            assignment.webSocketMessageData.failureMessage,
             assignment
         )
     }
@@ -116,63 +117,6 @@ class WebsocketMessageConsumerService(
                 logInfoStatus(assignment = assignment, status = LogStatus.SUCCESSFUL)
             }
         }
-    }
-
-    //    @PostConstruct
-    fun dummy(
-        gitLabAssignment: GitLabAssignment
-    ) {
-        consume(
-            WebSocketMessageData(
-                type = "GET_ALL_REPOS",
-                statusLoggingEnabled = true,
-                adminLoggingEnabled = true,
-                variables = mapOf(
-                    "pageCount" to 10,
-                    "cursor" to null,
-                    "group" to "cider"
-                ),
-                failureMessage = "",
-                successMessage = "",
-                query = """
-                    query AllGroupsQuery(${'$'}group: ID!, ${'$'}pageCount: Int!, ${'$'}cursor: String) {
-                        group(fullPath: ${'$'}group) {
-                            id
-                            name
-                            projects(first: ${'$'}pageCount, after: ${'$'}cursor, includeSubgroups: true) {
-                                pageInfo {
-                                    hasNextPage
-                                    endCursor
-                                }
-                                nodes {
-                                    name
-                                    path
-                                    id
-                                    archived
-                                    visibility
-                                    topics
-                                    webUrl
-                                    description
-                                    lastActivityAt
-                                    languages {
-                                        name
-                                        share
-                                    }
-                                    repository {
-                                        diskPath
-                                        rootRef
-                                    }
-                                    group {
-                                        fullPath
-                                    }
-                                }
-                            }
-                        }
-                    }
-                """.trimIndent()
-            ),
-            gitLabAssignment,
-        )
     }
 }
 
