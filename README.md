@@ -17,6 +17,7 @@ on premise deployments that are not publicly accessible from the internet.
    2. [Using with M1 chips](#using-amd64-images-on-apple-m1)
 3. [Release Process](#release-process)
 4. [Broker Architecture](#broker-architecture)
+5. [Contributing](#contributing)
 
 ---
 
@@ -157,3 +158,15 @@ Should there be any open questions feel free to open an [issue](https://github.c
    - as stated under 3) the service will listen to webhook events after the initial setup
 
    - to account for any intermittent interruptions (e.g. network issues, docker container failure etc.) between the agent and the GitLab instance, the service will do a full scan every week to ensure eventual consistency in VSM
+
+## Contributing
+
+We welcome contributions to the VSM GitLab Broker project. If you're looking to contribute:
+
+1. **Issues**: Feel free to open an [issue](https://github.com/leanix/vsm-gitlab-broker/issues) if you find a bug or want to suggest an enhancement. Please provide as much context as possible.
+
+2. **Pull requests**: If you'd like to contribute code, make sure to read our [Contribution Guidelines](./CONTRIBUTING.md) before submitting a pull request.
+
+3. **Security**: If you find a vulnerability, please review our [Security Policy](./SECURITY.md) on how to report it.
+
+Thank you for your interest in contributing to our project!
