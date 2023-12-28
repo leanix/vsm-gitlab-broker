@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.6"
-    id("io.spring.dependency-management") version "1.1.2"
-    id("io.gitlab.arturbosch.detekt") version "1.23.0"
-    id("org.cyclonedx.bom") version "1.7.4"
-    id("com.expediagroup.graphql") version "6.4.0"
-    kotlin("jvm") version "1.8.21"
-    kotlin("plugin.spring") version "1.8.21"
+    id("org.springframework.boot") version "3.2.0"
+    id("io.spring.dependency-management") version "1.1.4"
+    id("io.gitlab.arturbosch.detekt") version "1.23.4"
+    id("org.cyclonedx.bom") version "1.8.1"
+    id("com.expediagroup.graphql") version "7.0.2"
+    kotlin("jvm") version "1.9.21"
+    kotlin("plugin.spring") version "1.9.21"
     id("jacoco")
 }
 
@@ -22,7 +22,7 @@ repositories {
     mavenCentral()
 }
 
-val springCloudVersion: String by extra("2022.0.3")
+val springCloudVersion: String by extra("2023.0.0")
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -31,8 +31,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("com.expediagroup:graphql-kotlin-spring-client:6.4.0")
+    implementation("com.expediagroup:graphql-kotlin-spring-client:7.0.2")
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
+    // Explicitly fetching transitive dependencies to avoid known vulnerabilities
+    implementation("ch.qos.logback:logback-core:1.4.14")
+    implementation("ch.qos.logback:logback-classic:1.4.14")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
     testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
@@ -63,7 +67,7 @@ detekt {
     parallel = true
     buildUponDefaultConfig = true
     dependencies {
-        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.0")
+        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
     }
 }
 
@@ -80,7 +84,7 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
         xml.required.set(true)
-        xml.outputLocation.set(File("${project.buildDir}/jacocoXml/jacocoTestReport.xml"))
+        xml.outputLocation.set(File("${projectDir}/build/jacocoXml/jacocoTestReport.xml"))
     }
 }
 
@@ -95,5 +99,12 @@ graphql {
         schemaFile = file("${project.projectDir}/src/main/resources/schemas/gitlab_schema.graphql")
         packageName = "net.leanix.gitlabbroker.connector.adapter.graphql.data"
         queryFileDirectory = "${project.projectDir}/src/main/resources/queries"
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("ch.qos.logback:logback-core:1.4.14")
+        force("ch.qos.logback:logback-classic:1.4.14")
     }
 }
