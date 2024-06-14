@@ -22,7 +22,7 @@ repositories {
     mavenCentral()
 }
 
-val springCloudVersion: String by extra("2023.0.0")
+val springCloudVersion: String by extra("2023.0.2")
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -106,7 +106,6 @@ configurations.all {
     resolutionStrategy {
         force("ch.qos.logback:logback-core:1.4.14")
         force("ch.qos.logback:logback-classic:1.4.14")
-        force("org.springframework.cloud:spring-cloud-starter-openfeign:4.1.2")
         force("org.bouncycastle:bcprov-jdk18on:1.78")
     }
 }
