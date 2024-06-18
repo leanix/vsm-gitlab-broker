@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.2.3"
+    id("org.springframework.boot") version "3.2.6"
     id("io.spring.dependency-management") version "1.1.4"
     id("io.gitlab.arturbosch.detekt") version "1.23.4"
     id("org.cyclonedx.bom") version "1.8.1"
@@ -22,7 +22,7 @@ repositories {
     mavenCentral()
 }
 
-val springCloudVersion: String by extra("2023.0.0")
+val springCloudVersion: String by extra("2023.0.2")
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -106,5 +106,6 @@ configurations.all {
     resolutionStrategy {
         force("ch.qos.logback:logback-core:1.4.14")
         force("ch.qos.logback:logback-classic:1.4.14")
+        force("org.bouncycastle:bcprov-jdk18on:1.78")
     }
 }
