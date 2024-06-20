@@ -1,3 +1,5 @@
+[![REUSE status](https://api.reuse.software/badge/github.com/leanix/vsm-gitlab-broker)](https://api.reuse.software/info/github.com/leanix/vsm-gitlab-broker)
+
 # vsm-gitlab-broker
 
 >💡 **Early Access** <br>
